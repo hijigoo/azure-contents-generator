@@ -137,10 +137,22 @@ jobs:
       - name: Compute release directory (KST timestamp)
         id: release
         env:
-          SOURCE:       ${{ github.event.inputs.source || 'samples' }}
+          INPUT_SOURCE: ${{ github.event.inputs.source }}
           INPUT_TARGET: ${{ github.event.inputs.target_file }}
         run: |
           set -euo pipefail
+          SOURCE="${INPUT_SOURCE:-}"
+          # cron 또는 빈 입력 → releases/ 가 있으면 자동으로 가장 최신 릴리즈 기준,
+          # 없으면 samples 로 폴백
+          if [ -z "$SOURCE" ]; then
+            if [ -n "$(ls -1dt releases/*/ 2>/dev/null | head -n1)" ]; then
+              SOURCE=latest_release
+              echo "[release] 입력 없음 → latest_release 자동 선택"
+            else
+              SOURCE=samples
+              echo "[release] 입력 없음 + releases/ 비어있음 → samples 폴백"
+            fi
+          fi
           case "$SOURCE" in
             samples)
               TARGET="${INPUT_TARGET:-samples/Microsoft Foundry를 활용한 Agentic AI.pptx}"

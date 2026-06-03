@@ -45,10 +45,20 @@ jobs:
       - name: Pick target deck
         id: pick
         env:
-          SOURCE:       ${{ github.event.inputs.source || 'samples' }}
+          INPUT_SOURCE: ${{ github.event.inputs.source }}
           INPUT_TARGET: ${{ github.event.inputs.target }}
         run: |
           set -euo pipefail
+          SOURCE="${INPUT_SOURCE:-}"
+          if [ -z "$SOURCE" ]; then
+            if [ -n "$(ls -1dt releases/*/ 2>/dev/null | head -n1)" ]; then
+              SOURCE=latest_release
+              echo "[pick] 입력 없음 → latest_release 자동 선택"
+            else
+              SOURCE=samples
+              echo "[pick] 입력 없음 + releases/ 비어있음 → samples 폴백"
+            fi
+          fi
           case "$SOURCE" in
             samples)
               TARGET="${INPUT_TARGET:-samples/Microsoft Foundry를 활용한 Agentic AI.pptx}"
