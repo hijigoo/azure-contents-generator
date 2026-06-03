@@ -55,10 +55,15 @@ jobs:
           cache: "pip"
           cache-dependency-path: scripts/requirements.txt
 
-      - name: Install system dependencies (LibreOffice, poppler)
+      - name: Install system dependencies (LibreOffice, poppler, CJK fonts)
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libreoffice poppler-utils
+          sudo apt-get install -y --no-install-recommends \
+            libreoffice poppler-utils \
+            fonts-noto-cjk fonts-noto-cjk-extra fonts-nanum fonts-nanum-coding fonts-nanum-extra \
+            fonts-noto-color-emoji
+          # 폰트 캐시 갱신 — LibreOffice 가 새 한글 폰트를 인식하도록
+          fc-cache -f -v >/dev/null 2>&1 || true
 
       - name: Install Python dependencies
         run: pip install -r scripts/requirements.txt
