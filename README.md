@@ -132,7 +132,7 @@ API 키가 있는 경우 `ANTHROPIC_API_KEY` 를 설정하고 `scripts/update_pp
 
 - `.github/workflows/update-ppt.yml` — 주간 cron + 수동 실행 워크플로
 - `scripts/fetch_azure_updates.py` — Azure RSS/문서 수집
-- `scripts/update_ppt.py` — Anthropic PPT skill 호출 및 슬라이드 반영
+- `scripts/update_ppt.py` *(로컬 개발용, optional)* — Anthropic SDK 직접 호출 버전. CI에서는 `anthropics/claude-code-action` 을 사용하므로 필요 없음.
 - `scripts/render_ppt_previews.py` — PPT → PDF/PNG 미리보기 생성
 - `.skills/` *(gitignore)* — `anthropics/skills` sparse-checkout 캐시
 - `samples/` — 테스트용 PPT
