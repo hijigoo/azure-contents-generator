@@ -11,11 +11,19 @@ on:
         required: false
         default: "samples/Microsoft Foundry를 활용한 Agentic AI.pptx"
       use_llm:
-        description: "GitHub Models (코파일럿)로 본문 요약 생성"
+        description: "LLM 사용 여부 (false면 RSS 원문 bullet)"
         required: false
         default: "true"
         type: choice
         options: ["true", "false"]
+      engine:
+        description: "LLM 엔진 선택"
+        required: false
+        default: "models"
+        type: choice
+        # models  = GitHub Models (GITHUB_TOKEN 만, 무료/엔터프라이즈 공통)
+        # copilot = GitHub Copilot CLI 자율 에이전트 (Enterprise/Business/Pro+ + COPILOT_GITHUB_TOKEN 시크릿 필요)
+        options: ["models", "copilot"]
 
 jobs:
   update-ppt:
@@ -28,6 +36,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -56,8 +66,8 @@ jobs:
           mkdir -p .cache
           python scripts/fetch_azure_updates.py --out .cache/updates.json
 
-      - name: Summarize via GitHub Models (Copilot)
-        if: ${{ github.event.inputs.use_llm != 'false' }}
+      - name: Summarize via GitHub Models
+        if: ${{ github.event.inputs.use_llm != 'false' && (github.event.inputs.engine || 'models') == 'models' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -66,45 +76,98 @@ jobs:
             --skill   .skills/skills/pptx \
             --out     .cache/summary.md
 
+      - name: Summarize via GitHub Copilot CLI (Cloud Agent)
+        if: ${{ github.event.inputs.use_llm != 'false' && github.event.inputs.engine == 'copilot' }}
+        env:
+          # Copilot CLI 는 기본 GITHUB_TOKEN 으로는 동작하지 않음.
+          # 'Copilot Requests' 권한이 있는 PAT 를 COPILOT_GITHUB_TOKEN 시크릿에 등록해 두세요.
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$COPILOT_GITHUB_TOKEN" ]; then
+            echo "::error::COPILOT_GITHUB_TOKEN 시크릿이 비어 있습니다. Settings → Secrets → Actions 에서 등록하세요." >&2
+            exit 1
+          fi
+          curl -fsSL https://gh.io/copilot-install | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
+          mkdir -p .cache
+          PROMPT_FILE=".cache/copilot_prompt.txt"
+          cat > "$PROMPT_FILE" <<'EOF'
+          당신은 Azure 컨텐츠 큐레이터입니다. 다음 파일들을 읽으세요:
+            - .cache/updates.json   : Azure / Microsoft 최신 업데이트 RSS 결과
+            - .skills/skills/pptx/SKILL.md       : Anthropic pptx skill 작성 규칙
+            - .skills/skills/pptx/editing.md     : 편집 가이드
+          그 후 한국어로 8개 이하의 핵심 업데이트를 마크다운 bullet 으로 요약하여
+          .cache/summary.md 파일에 저장하세요. 각 bullet 은 한 줄, 80자 이내,
+          제품명/기능명을 굵게(`**...**`) 표기합니다. 외부 호출/추가 다운로드 금지.
+          작업 후 .cache/summary.md 의 내용을 표준출력으로 출력하세요.
+          EOF
+          copilot --prompt "$(cat $PROMPT_FILE)" --model gpt-4.1 --yes
+          test -s .cache/summary.md || { echo "::error::Copilot CLI 가 summary.md 를 생성하지 못했습니다." >&2; exit 1; }
+
+      - name: Compute release directory (KST timestamp)
+        id: release
+        run: |
+          TARGET="${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}"
+          STEM="$(basename "$TARGET" .pptx)"
+          TS="$(TZ=Asia/Seoul date +'%Y%m%d-%H%M%S')"
+          REL_DIR="releases/${TS}-${STEM}"
+          mkdir -p "$REL_DIR"
+          echo "target=$TARGET"   >> "$GITHUB_OUTPUT"
+          echo "stem=$STEM"       >> "$GITHUB_OUTPUT"
+          echo "ts=$TS"           >> "$GITHUB_OUTPUT"
+          echo "dir=$REL_DIR"     >> "$GITHUB_OUTPUT"
+
       - name: Inject latest updates into PPT (via pptx skill)
         run: |
           SUMMARY_OPT=""
           if [ -f .cache/summary.md ]; then SUMMARY_OPT="--summary .cache/summary.md"; fi
           python scripts/update_ppt.py \
-            --input  "${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}" \
+            --input   "${{ steps.release.outputs.target }}" \
             --updates .cache/updates.json \
             --skill   .skills/skills/pptx \
+            --output  "${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pptx" \
             $SUMMARY_OPT
 
-      - name: Render PPT previews (PDF + PNG)
+      - name: Render PPT previews (PDF + PNG) into release dir
         run: |
-          TARGET="${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}"
-          STEM="$(basename "$TARGET" .pptx)"
           python scripts/render_ppt_previews.py \
-            --input "$TARGET" \
-            --out   "previews/$STEM"
+            --input "${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pptx" \
+            --out   "${{ steps.release.outputs.dir }}"
+
+      - name: Stash summary into release dir (if any)
+        run: |
+          if [ -f .cache/summary.md ]; then
+            cp .cache/summary.md "${{ steps.release.outputs.dir }}/summary.md"
+          fi
+          if [ -f .cache/updates.json ]; then
+            cp .cache/updates.json "${{ steps.release.outputs.dir }}/updates.json"
+          fi
+
+      - name: Update releases index & root README
+        run: python scripts/update_releases_index.py
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "chore(ppt): Azure 최신 정보 반영"
+          commit-message: "chore(ppt): release ${{ steps.release.outputs.ts }}"
           branch: auto/ppt-update-${{ github.run_id }}
-          title: "📊 Azure PPT 자동 업데이트 (${{ github.run_id }})"
+          title: "📊 Azure PPT 자동 업데이트 — ${{ steps.release.outputs.ts }} KST"
           body: |
             Anthropic pptx skill (오픈소스 스크립트) + GitHub Models(코파일럿 모델 인프라)
             로 자동 생성된 업데이트입니다. **별도 토큰 없이** `GITHUB_TOKEN` 만으로 동작합니다.
 
-            - 소스: Azure Updates / Microsoft 블로그 RSS
+            - 릴리즈 폴더: [`${{ steps.release.outputs.dir }}/`](./${{ steps.release.outputs.dir }})
+            - 원본 PPT: `${{ steps.release.outputs.target }}` *(이 PR에서 원본은 변경되지 않습니다)*
             - 본문 요약: GitHub Models (`openai/gpt-4o-mini`, 변경 가능)
-            - 트리거: `${{ github.event_name }}`
-            - 실행 ID: `${{ github.run_id }}`
+            - 트리거: `${{ github.event_name }}` / 실행 ID: `${{ github.run_id }}`
 
-            ### 📎 미리보기
-            - PDF / 슬라이드별 PNG: [`previews/`](./previews) 폴더 참고
-            - PR의 **Files changed** 탭에서 PDF는 인라인 렌더링되며,
-              PNG는 `previews/<파일명>/README.md`에서 슬라이드 단위로 확인할 수 있습니다.
+            ### 📎 GitHub에서 바로 보기
+            - 🖼 슬라이드 미리보기: [`${{ steps.release.outputs.dir }}/README.md`](./${{ steps.release.outputs.dir }}/README.md)
+            - 📄 PDF 인라인: [`${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pdf`](./${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pdf)
+            - 📊 PPTX 다운로드: `${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pptx`
 
-            머지 전에 슬라이드 내용을 검토해 주세요.
+            루트 [`README.md`](./README.md) 의 **최근 업데이트** 표도 함께 갱신되었습니다.
           labels: |
             automated
             ppt-update

@@ -1,7 +1,7 @@
 .DS_Store
 .cache/
 .skills/
-# previews/ 는 GitHub에서 PPT 미리보기로 사용하므로 커밋한다.
+# releases/ 는 워크플로가 생성하는 실행별 결과물(PPTX/PDF/PNG)을 커밋한다.
 __pycache__/
 *.pyc
 *.bak.pptx
