@@ -299,7 +299,7 @@ def main() -> None:
     items = data.get("items", [])
 
     prs = Presentation(input_path)
-    if len(prs.slides) == 0:
+    if not prs.slides:
         sys.exit("프레젠테이션에 슬라이드가 없어 업데이트할 수 없습니다.")
     removed_inserts = remove_previous_insert_slides(prs)
     update_cover_if_slot_exists(prs)
