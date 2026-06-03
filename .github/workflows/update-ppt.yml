@@ -204,6 +204,10 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
+          # 우선 user PAT 가 있으면 사용 (조직 정책상 Actions 의 PR 생성이 막혀 있을 때).
+          # 없으면 기본 GITHUB_TOKEN 사용 — 이 경우 레포 Settings → Actions → General →
+          # "Allow GitHub Actions to create and approve pull requests" 가 켜져 있어야 합니다.
+          token: ${{ secrets.PR_CREATE_PAT || secrets.GITHUB_TOKEN }}
           commit-message: "chore(ppt): release ${{ steps.release.outputs.ts }}"
           branch: auto/ppt-update-${{ github.run_id }}
           title: "📊 Azure PPT 자동 업데이트 — ${{ steps.release.outputs.ts }} KST"
