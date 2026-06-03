@@ -50,7 +50,7 @@ FALLBACK_BULLETS = {
 }
 
 
-def load_skill_context(skill_dir: Path) -> None:
+def validate_skill_context(skill_dir: Path) -> None:
     for name in ("SKILL.md", "editing.md"):
         path = skill_dir / name
         if not path.exists():
@@ -171,7 +171,7 @@ def add_updates_slide(prs: Presentation, bullets: list[tuple[str, str]], items: 
         name_run.font.bold = True
         name_run.font.size = Pt(17)
         desc_run = paragraph.add_run()
-        desc_run.text = f" {desc}".rstrip()
+        desc_run.text = f" {desc.strip()}" if desc else ""
         desc_run.font.size = Pt(17)
 
     notes_tf = slide.notes_slide.notes_text_frame
@@ -230,7 +230,7 @@ def main() -> None:
     if input_path.resolve() == output_path.resolve():
         sys.exit("samples 원본 덮어쓰기는 허용되지 않습니다. --output 에 새 경로를 지정하세요.")
 
-    load_skill_context(skill_dir)
+    validate_skill_context(skill_dir)
     data = json.loads(updates_path.read_text(encoding="utf-8"))
     selected_items = select_items(data.get("items", []), args.limit)
     bullets = build_bullets(selected_items, summary_path)
