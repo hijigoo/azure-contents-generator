@@ -17,6 +17,8 @@ from update_ppt import dedupe_pptx_zip
 
 AUTO_DATE = "2026-06-04"
 AUTO_MARKER = f"[auto-update:{AUTO_DATE}]"
+MAX_INSERT_SUMMARY_LINES = 3
+DEFAULT_ANCHOR_SLIDE_IDX = 9
 
 
 @dataclass
@@ -131,7 +133,7 @@ def clean_title(title: str) -> str:
 def split_summary(summary: str) -> list[str]:
     raw = re.sub(r"\s+", " ", summary or "").strip()
     parts = [s.strip(" .") for s in re.split(r"[.!?]\s+", raw) if s.strip()]
-    return parts[:3] if parts else ["관련 서비스 업데이트가 발표되었습니다."]
+    return parts[:MAX_INSERT_SUMMARY_LINES] if parts else ["관련 서비스 업데이트가 발표되었습니다."]
 
 
 def fill_insert_slide(slide, item: dict) -> None:
@@ -310,7 +312,11 @@ def main() -> None:
             counts["SKIP"] += 1
             continue
 
-        anchor_idx = find_anchor_slide(slide_texts, decision.keywords, default_idx=min(9, len(prs.slides) - 1))
+        anchor_idx = find_anchor_slide(
+            slide_texts,
+            decision.keywords,
+            default_idx=min(DEFAULT_ANCHOR_SLIDE_IDX, len(prs.slides) - 1),
+        )
 
         if decision.action == "REPLACE":
             target_slide = prs.slides[anchor_idx]
