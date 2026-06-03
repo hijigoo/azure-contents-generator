@@ -54,12 +54,17 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r scripts/requirements.txt
 
-      - name: Fetch Anthropic pptx skill (sparse checkout, no auth)
+      - name: (Optional) Fetch Anthropic pptx skill for runtime reference
+        # 본 레포의 skills/pptx-local 이 1차 컨텍스트. anthropic skill 은 라이선스상
+        # 레포 커밋이 금지되므로 매 실행마다 sparse-checkout (Services 사용 중 임시 복사).
+        # 실패해도 워크플로는 계속 진행 (로컬 skill 만으로 충분).
         run: |
           rm -rf .skills
           git clone --depth 1 --filter=blob:none --sparse \
-            https://github.com/anthropics/skills.git .skills
-          git -C .skills sparse-checkout set skills/pptx
+            https://github.com/anthropics/skills.git .skills || true
+          if [ -d .skills ]; then
+            git -C .skills sparse-checkout set skills/pptx || true
+          fi
 
       - name: Fetch latest Azure updates
         run: |
@@ -73,7 +78,7 @@ jobs:
         run: |
           python scripts/llm_summarize.py \
             --updates .cache/updates.json \
-            --skill   .skills/skills/pptx \
+            --skill   skills/pptx-local \
             --out     .cache/summary.md \
             --pr-body .cache/pr_body.md
 
@@ -96,8 +101,10 @@ jobs:
           cat > "$PROMPT_FILE" <<'EOF'
           당신은 Azure 컨텐츠 큐레이터이자 PR 작성자입니다. 다음 파일들을 읽으세요:
             - .cache/updates.json                : Azure / Microsoft 최신 업데이트 RSS 결과
-            - .skills/skills/pptx/SKILL.md       : Anthropic pptx skill 작성 규칙
-            - .skills/skills/pptx/editing.md     : 편집 가이드
+            - skills/pptx-local/SKILL.md         : 본 레포의 PPT 작성 규칙 (1차 컨텍스트)
+            - skills/pptx-local/editing.md       : 본 레포의 편집 가이드
+            - .skills/skills/pptx/SKILL.md       : (있으면 참고용) Anthropic 의 pptx skill
+            - .skills/skills/pptx/editing.md     : (있으면 참고용)
 
           ① 한국어로 8개 이하의 핵심 업데이트를 마크다운 bullet 으로 요약하여
              .cache/summary.md 에 저장합니다. 각 bullet 한 줄 80자 이내,
@@ -131,14 +138,14 @@ jobs:
           echo "ts=$TS"           >> "$GITHUB_OUTPUT"
           echo "dir=$REL_DIR"     >> "$GITHUB_OUTPUT"
 
-      - name: Inject latest updates into PPT (via pptx skill)
+      - name: Inject latest updates into PPT (via skills/pptx-local)
         run: |
           SUMMARY_OPT=""
           if [ -f .cache/summary.md ]; then SUMMARY_OPT="--summary .cache/summary.md"; fi
           python scripts/update_ppt.py \
             --input   "${{ steps.release.outputs.target }}" \
             --updates .cache/updates.json \
-            --skill   .skills/skills/pptx \
+            --skill   skills/pptx-local \
             --output  "${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pptx" \
             $SUMMARY_OPT
 
