@@ -57,6 +57,7 @@ def main() -> None:
     ap.add_argument("--updates", required=True, help="fetch_azure_updates.py 산출물 (JSON)")
     ap.add_argument("--skill", required=True, help="anthropics/skills/skills/pptx 디렉터리")
     ap.add_argument("--out", required=True, help="요약 마크다운 출력 경로")
+    ap.add_argument("--pr-body", default=None, help="PR 본문 마크다운 출력 경로 (선택)")
     ap.add_argument("--model", default=os.environ.get("GH_MODELS_MODEL", DEFAULT_MODEL))
     ap.add_argument("--limit", type=int, default=8)
     args = ap.parse_args()
@@ -98,6 +99,32 @@ def main() -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(summary, encoding="utf-8")
     print(f"[llm_summarize] {len(items)}건 요약 → {out} ({len(summary)}자)")
+
+    if args.pr_body:
+        pr_user = {
+            "task": (
+                "방금 생성한 슬라이드 요약을 바탕으로, GitHub Pull Request 본문을 "
+                "작성하라. 리뷰어가 머지 전에 변경 사항을 빠르게 파악할 수 있어야 한다."
+            ),
+            "requirements": [
+                "한국어 마크다운",
+                "맨 위에 2~3문장의 변경 개요(TL;DR)",
+                "그 아래 '주요 업데이트' 섹션에 bullet 5개 이내",
+                "그 아래 '리뷰 체크리스트' 섹션 (제품명 정확성, 한국어 표기, 출처 링크 등 3~5개 항목)",
+                "마지막에 '데이터 소스' 1줄 (RSS / Microsoft Learn)",
+                "이모지는 섹션 제목에만 1개씩",
+            ],
+            "slide_summary_markdown": summary,
+            "items": items,
+        }
+        pr_body = call_github_models(
+            token=token, model=args.model, system=system,
+            user=json.dumps(pr_user, ensure_ascii=False),
+        )
+        pr_path = Path(args.pr_body)
+        pr_path.parent.mkdir(parents=True, exist_ok=True)
+        pr_path.write_text(pr_body, encoding="utf-8")
+        print(f"[llm_summarize] PR 본문 → {pr_path} ({len(pr_body)}자)")
 
 
 if __name__ == "__main__":

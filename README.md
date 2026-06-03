@@ -1,11 +1,53 @@
 # Azure Contents Generator
 
 Azure 관련 PPT 자료를 **최신 정보로 자동 업데이트**하는 CI/CD 파이프라인 프로젝트입니다.
-업데이트 본문은 **GitHub Models (GitHub Copilot이 사용하는 모델 인프라)** 가
+업데이트 본문과 **PR 설명까지** **GitHub Models** 또는 **GitHub Copilot CLI (Cloud Agent)** 가
 Anthropic 의 오픈소스 [pptx skill](https://github.com/anthropics/skills/tree/main/skills/pptx)
-가이드라인을 따라 작성하며, **별도 API 키 없이 `GITHUB_TOKEN` 만으로** 동작합니다.
+가이드라인을 따라 작성합니다. 기본 옵션은 **별도 API 키 없이 `GITHUB_TOKEN` 만으로** 동작합니다.
 
 자세한 설계는 [`setup.md`](./setup.md) 참고.
+
+---
+
+## 🧭 동작 방식 한눈에 보기
+
+```mermaid
+flowchart LR
+    A([cron 또는 수동 실행]) --> B[Checkout<br/>+ LFS]
+    B --> C[Anthropic pptx skill<br/>sparse-checkout]
+    C --> D[Azure RSS 수집<br/>fetch_azure_updates.py]
+    D --> E{LLM 엔진}
+    E -- models 기본<br/>GITHUB_TOKEN --> F1[GitHub Models 호출<br/>llm_summarize.py]
+    E -- copilot 옵션<br/>COPILOT_GITHUB_TOKEN --> F2[GitHub Copilot CLI<br/>cloud agent]
+    F1 --> G[summary.md + pr_body.md]
+    F2 --> G
+    G --> H[python-pptx 로 슬라이드 삽입<br/>update_ppt.py]
+    H --> I[LibreOffice + poppler<br/>PDF/PNG 미리보기]
+    I --> J[releases/&lt;timestamp&gt;/ 에 모두 누적<br/>PPTX · PDF · PNG · summary · pr_body]
+    J --> K[update_releases_index.py<br/>루트 README 자동 갱신]
+    K --> L[peter-evans/create-pull-request<br/>본문 = pr_body.md]
+    L --> M([📬 PR 생성 - 검토 후 머지])
+```
+
+### 단계별 핵심
+| 단계 | 무엇이 | 어디에 |
+|------|--------|--------|
+| 수집 | Microsoft 공식 RSS 20건 | `.cache/updates.json` |
+| 요약 | LLM 이 한국어 슬라이드 본문 + PR 설명 작성 | `.cache/summary.md` · `.cache/pr_body.md` |
+| 편집 | `python-pptx` 로 'Latest Azure Updates' 슬라이드 추가/교체 | `releases/<TS>-<자료명>/*.pptx` |
+| 시각화 | LibreOffice 로 PDF, poppler 로 슬라이드별 PNG | 같은 릴리즈 폴더 |
+| 가시화 | 루트 README 의 `LATEST` / `RELEASES` 블록을 자동 교체 | `README.md` |
+| 검토 | LLM 이 쓴 본문으로 PR 생성, 라벨 `automated`, `ppt-update` | GitHub PR |
+
+> 원본 `samples/*.pptx` 는 **절대 덮어쓰지 않습니다.** 매 실행마다 새 `releases/<timestamp>-<자료명>/` 폴더가 만들어지고, 모든 산출물이 그 안에 모입니다.
+
+### LLM 엔진 선택
+| 엔진 | 권한·시크릿 | 특징 |
+|------|-------------|------|
+| `models` *(기본)* | `permissions: { models: read }` + `GITHUB_TOKEN` | **추가 설정 0**. 무료 티어/엔터프라이즈 공통 |
+| `copilot` | `COPILOT_GITHUB_TOKEN` 시크릿 (PAT, *Copilot Requests: Read*) | **Copilot Enterprise/Business/Pro+** 가 있다면 실제 Copilot 에이전트가 skill 파일을 직접 읽고 다중 단계로 작업 |
+
+두 엔진 모두 같은 출력 인터페이스(`summary.md` + `pr_body.md`)를 만들기 때문에, 이후 단계(슬라이드 편집·미리보기·PR 생성)는 동일합니다.
 
 ---
 

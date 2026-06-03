@@ -66,7 +66,7 @@ jobs:
           mkdir -p .cache
           python scripts/fetch_azure_updates.py --out .cache/updates.json
 
-      - name: Summarize via GitHub Models
+      - name: Summarize via GitHub Models (+ PR body)
         if: ${{ github.event.inputs.use_llm != 'false' && (github.event.inputs.engine || 'models') == 'models' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,9 +74,10 @@ jobs:
           python scripts/llm_summarize.py \
             --updates .cache/updates.json \
             --skill   .skills/skills/pptx \
-            --out     .cache/summary.md
+            --out     .cache/summary.md \
+            --pr-body .cache/pr_body.md
 
-      - name: Summarize via GitHub Copilot CLI (Cloud Agent)
+      - name: Summarize via GitHub Copilot CLI (Cloud Agent, + PR body)
         if: ${{ github.event.inputs.use_llm != 'false' && github.event.inputs.engine == 'copilot' }}
         env:
           # Copilot CLI 는 기본 GITHUB_TOKEN 으로는 동작하지 않음.
@@ -93,17 +94,29 @@ jobs:
           mkdir -p .cache
           PROMPT_FILE=".cache/copilot_prompt.txt"
           cat > "$PROMPT_FILE" <<'EOF'
-          당신은 Azure 컨텐츠 큐레이터입니다. 다음 파일들을 읽으세요:
-            - .cache/updates.json   : Azure / Microsoft 최신 업데이트 RSS 결과
+          당신은 Azure 컨텐츠 큐레이터이자 PR 작성자입니다. 다음 파일들을 읽으세요:
+            - .cache/updates.json                : Azure / Microsoft 최신 업데이트 RSS 결과
             - .skills/skills/pptx/SKILL.md       : Anthropic pptx skill 작성 규칙
             - .skills/skills/pptx/editing.md     : 편집 가이드
-          그 후 한국어로 8개 이하의 핵심 업데이트를 마크다운 bullet 으로 요약하여
-          .cache/summary.md 파일에 저장하세요. 각 bullet 은 한 줄, 80자 이내,
-          제품명/기능명을 굵게(`**...**`) 표기합니다. 외부 호출/추가 다운로드 금지.
-          작업 후 .cache/summary.md 의 내용을 표준출력으로 출력하세요.
+
+          ① 한국어로 8개 이하의 핵심 업데이트를 마크다운 bullet 으로 요약하여
+             .cache/summary.md 에 저장합니다. 각 bullet 한 줄 80자 이내,
+             제품명/기능명은 굵게(`**...**`) 표기합니다.
+
+          ② summary.md 를 바탕으로 GitHub Pull Request 본문을
+             .cache/pr_body.md 에 저장합니다. 구성:
+               - TL;DR (2~3문장)
+               - '## 🆕 주요 업데이트' bullet 5개 이내
+               - '## ✅ 리뷰 체크리스트' 3~5개 항목
+               - '## 🔗 데이터 소스' 1줄
+             이모지는 섹션 제목에만 1개씩.
+
+          외부 호출/추가 다운로드는 금지합니다.
+          작업 후 두 파일이 모두 비어있지 않은지 확인하세요.
           EOF
           copilot --prompt "$(cat $PROMPT_FILE)" --model gpt-4.1 --yes
           test -s .cache/summary.md || { echo "::error::Copilot CLI 가 summary.md 를 생성하지 못했습니다." >&2; exit 1; }
+          test -s .cache/pr_body.md || { echo "::error::Copilot CLI 가 pr_body.md 를 생성하지 못했습니다." >&2; exit 1; }
 
       - name: Compute release directory (KST timestamp)
         id: release
@@ -135,10 +148,13 @@ jobs:
             --input "${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pptx" \
             --out   "${{ steps.release.outputs.dir }}"
 
-      - name: Stash summary into release dir (if any)
+      - name: Stash artifacts into release dir
         run: |
           if [ -f .cache/summary.md ]; then
             cp .cache/summary.md "${{ steps.release.outputs.dir }}/summary.md"
+          fi
+          if [ -f .cache/pr_body.md ]; then
+            cp .cache/pr_body.md "${{ steps.release.outputs.dir }}/pr_body.md"
           fi
           if [ -f .cache/updates.json ]; then
             cp .cache/updates.json "${{ steps.release.outputs.dir }}/updates.json"
@@ -147,27 +163,44 @@ jobs:
       - name: Update releases index & root README
         run: python scripts/update_releases_index.py
 
+      - name: Prepare PR body (LLM-generated or fallback)
+        id: prbody
+        run: |
+          BODY=".cache/pr_body.md"
+          if [ ! -s "$BODY" ]; then
+            cat > "$BODY" <<EOF
+          ### 📊 Azure PPT 자동 업데이트
+
+          Anthropic pptx skill + RSS 만으로 생성된 결정론적 업데이트입니다.
+          LLM 요약이 비활성화되어 있어 PR 본문은 기본 템플릿으로 제공됩니다.
+          EOF
+          fi
+          # 공통 메타 정보 (릴리즈 위치, 미리보기 링크) 추가
+          cat >> "$BODY" <<EOF
+
+          ---
+
+          ### 📦 이번 릴리즈
+          - 폴더: [\`${{ steps.release.outputs.dir }}/\`](./${{ steps.release.outputs.dir }})
+          - 🖼 미리보기: [\`README.md\`](./${{ steps.release.outputs.dir }}/README.md)
+          - 📄 PDF: [\`${{ steps.release.outputs.stem }}.pdf\`](./${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pdf)
+          - 📊 PPTX: [\`${{ steps.release.outputs.stem }}.pptx\`](./${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pptx)
+
+          ### ⚙️ 실행 정보
+          - 트리거: \`${{ github.event_name }}\` · 실행 ID: \`${{ github.run_id }}\`
+          - 엔진: \`${{ github.event.inputs.engine || 'models' }}\` (LLM: \`${{ github.event.inputs.use_llm || 'true' }}\`)
+          - 원본 PPT 는 변경되지 않으며, 산출물은 모두 위 릴리즈 폴더에 누적됩니다.
+
+          머지하면 루트 [\`README.md\`](./README.md) 의 **🆕 최신 변경 내용** 표가 갱신됩니다.
+          EOF
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "chore(ppt): release ${{ steps.release.outputs.ts }}"
           branch: auto/ppt-update-${{ github.run_id }}
           title: "📊 Azure PPT 자동 업데이트 — ${{ steps.release.outputs.ts }} KST"
-          body: |
-            Anthropic pptx skill (오픈소스 스크립트) + GitHub Models(코파일럿 모델 인프라)
-            로 자동 생성된 업데이트입니다. **별도 토큰 없이** `GITHUB_TOKEN` 만으로 동작합니다.
-
-            - 릴리즈 폴더: [`${{ steps.release.outputs.dir }}/`](./${{ steps.release.outputs.dir }})
-            - 원본 PPT: `${{ steps.release.outputs.target }}` *(이 PR에서 원본은 변경되지 않습니다)*
-            - 본문 요약: GitHub Models (`openai/gpt-4o-mini`, 변경 가능)
-            - 트리거: `${{ github.event_name }}` / 실행 ID: `${{ github.run_id }}`
-
-            ### 📎 GitHub에서 바로 보기
-            - 🖼 슬라이드 미리보기: [`${{ steps.release.outputs.dir }}/README.md`](./${{ steps.release.outputs.dir }}/README.md)
-            - 📄 PDF 인라인: [`${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pdf`](./${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pdf)
-            - 📊 PPTX 다운로드: `${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pptx`
-
-            루트 [`README.md`](./README.md) 의 **최근 업데이트** 표도 함께 갱신되었습니다.
+          body-path: .cache/pr_body.md
           labels: |
             automated
             ppt-update
