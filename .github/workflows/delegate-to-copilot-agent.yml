@@ -109,8 +109,10 @@ jobs:
           @copilot Azure / Microsoft 공식 채널의 **최근 업데이트** 를 반영해서 PPT 자료를 새로 만들어 PR 로 올려주세요.
 
           ## 🎯 목표
-          \`$TARGET\` 의 마지막 슬라이드 자리에 **'Latest Azure Updates'** 슬라이드를 새로 추가/교체하고,
-          새로 만들어진 산출물을 \`releases/${TS}-${STEM}/\` 폴더에 모아 PR 을 생성합니다.
+          \`$TARGET\` 에 **발표 가능한 '최신 Azure 업데이트' 섹션을 통째로** 추가/갱신합니다.
+          단순히 마지막에 텍스트 슬라이드 한 장을 박는 것이 아니라, **발표자가 그대로 들고 나가
+          15~20분 동안 설명할 수 있는 다중 슬라이드 세트**를 만드는 것이 핵심입니다.
+          새로 만들어진 산출물은 \`releases/${TS}-${STEM}/\` 폴더에 모아 PR 을 생성합니다.
 
           ## 📐 반드시 따라야 할 작성 규칙
           작업을 시작하기 전에 아래 두 파일을 **먼저 읽고** 거기 적힌 트리거 규칙·편집 원칙·금지 사항을 그대로 따르세요.
@@ -144,26 +146,44 @@ jobs:
           \`scripts/update_ppt.py\` 를 그대로 호출하지 말고, 다음 흐름으로 새 파이썬
           코드(예: \`scripts/agent_apply_updates.py\`)를 작성해 실행하세요.
 
-          1. **컨텍스트 로드** — 아래 두 파일을 처음에 반드시 읽고 거기 적힌 트리거·작성 원칙·
-             편집 규칙·금지 사항을 그대로 따릅니다.
-             - \`skills/pptx-local/SKILL.md\`
-             - \`skills/pptx-local/editing.md\`
+          1. **컨텍스트 로드** — \`skills/pptx-local/SKILL.md\` + \`editing.md\` 를 먼저 읽고 거기 적힌 원칙을 그대로 따릅니다.
           2. **입력 / 출력**
              - 입력: \`$TARGET\` (원본은 **절대 수정 금지**, 새 파일로 출력)
              - 출력: \`\$REL/${STEM}.pptx\`
              - 데이터: \`.cache/updates.json\`
-          3. **멱등성** — 기존 PPT 의 끝부분에 같은 제목(\`Latest Azure Updates\`)
-             슬라이드가 이미 있으면 **제거 후 새로 추가**합니다.
-          4. **슬라이드 내용** — \`editing.md\` 가이드대로 *python-pptx* 로 직접 작성:
-             - 제목 \`Latest Azure Updates\`
-             - 본문: 한국어 bullet, 항목별로 굵은 제품/기능명 + 한 줄 설명
-             - 슬라이드 노트(\`notes_slide\`)에 원문 링크/발행일 첨부
-          5. **저장 후 zip dedupe** — \`python-pptx\` 가 가끔 같은 part 를 중복으로
-             기록해 LibreOffice 가 \`source file could not be loaded\` 로 거부합니다.
-             저장한 \`.pptx\` 의 zip entry 중 같은 이름은 마지막 것만 남기고 재압축하세요.
-             (참고 구현: \`scripts/update_ppt.py\` 안의 \`dedupe_pptx_zip\` 함수)
-          6. **결과 확인** — \`releases/.../\${STEM}.pptx\` 를 \`unzip -l\` 로 열어
-             \`ppt/slides/slideN.xml\` 중복이 없는지 확인합니다.
+          3. **레이아웃은 원본의 슬라이드 마스터를 재사용** — 새 레이아웃을 만들지 말고,
+             \`prs.slide_layouts\` 를 이름 기준 키워드 매칭으로 골라 쓰세요.
+             - 섹션 표지: 이름에 \`Section\` / \`Header\` / \`Divider\` / \`Title\` 이 포함된 layout
+             - 본문      : 이름에 \`Title and Content\` / \`Content\` 가 포함된 layout
+             - 못 찾으면 \`prs.slide_layouts[1]\` 폴백
+             이렇게 해야 원본 PPT 의 컬러·폰트·로고·푸터가 자동으로 적용됩니다.
+          4. **추가할 슬라이드 (반드시 다중 슬라이드 세트)** — 끝부분에 다음 순서로 추가:
+             1) **섹션 표지** — '🆕 최신 Azure 업데이트 · ${TODAY}' (Section/Header 레이아웃)
+             2) **TL;DR** — LLM 이 정한 핵심 5개 bullet (제품/기능명은 **굵게**)
+             3) **항목별 슬라이드 × N** (N=5~8) — **한 슬라이드당 항목 1개**, 발표용으로:
+                · 제목: 항목 이름 (110자 초과 시 축약)
+                · 상단 메타: \`📅 발행일   🏷 출처\`
+                · 본문: 2~3줄 설명 (왜 중요한지, 누가 쓰는지 위주)
+                · 하단: \`🔗 원문 링크\` (작은 글씨)
+                · 노트(\`notes_slide\`)에 원문 전체 요약 + 링크 (발표자 노트)
+             4) **데이터 소스** — 사용된 RSS 출처 dedup 목록 + 생성 시각
+             - 가능하면 가장 큰 변화 1~2건은 그래프/표 placeholder 가 있는 레이아웃에 배치해
+               시각적 강조 (옵션, 강제 아님).
+          5. **표지 슬라이드 갱신** — 원본의 첫 슬라이드(표지)에 'Updated YYYY-MM-DD' 가
+             들어갈 자리(부제목/푸터 placeholder)가 있다면 오늘 날짜로 갱신하세요.
+             기존 텍스트를 통째로 덮어쓰지는 마세요.
+          6. **멱등성** — 자동 생성한 슬라이드의 노트 첫 줄에
+             \`[auto-generated:azure-update]\` 마커를 넣고, 다음 실행에서는 그 마커가 있는
+             슬라이드를 모두 제거한 뒤 새로 추가하세요. (참고: \`scripts/update_ppt.py\`
+             안의 \`remove_auto_slides\` 패턴)
+          7. **저장 후 zip dedupe** — \`python-pptx\` 가 가끔 같은 part 를 중복 기록해
+             LibreOffice 가 \`source file could not be loaded\` 로 거부합니다. 저장한
+             \`.pptx\` 의 zip entry 중 같은 이름은 마지막 것만 남기고 재압축하세요.
+             (참고: 같은 파일의 \`dedupe_pptx_zip\` 함수)
+          8. **결과 확인** — 새로 만든 \`.pptx\` 를 열어 다음을 검증:
+             - 자동 생성 슬라이드가 **2장 이상**인가? (1장이면 실패로 간주)
+             - 표지의 디자인(폰트·색)이 원본과 동일한가?
+             - \`unzip -l\` 에 \`ppt/slides/slideN.xml\` 중복이 없는가?
 
           ### 5) 미리보기 / 인덱스 — 기존 스크립트 그대로
           \`\`\`bash
