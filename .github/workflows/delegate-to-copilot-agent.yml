@@ -72,7 +72,9 @@ jobs:
           - \`skills/pptx-local/editing.md\`
 
           ## 🛠 권장 실행 절차
-          이미 동일 작업을 자동화한 스크립트가 있습니다. 그대로 사용해도 좋고, 더 나은 결과를 위해 직접 수정해도 됩니다.
+          데이터 수집·미리보기·README 갱신은 기존 스크립트를 그대로 쓰되,
+          **PPT 편집(4단계) 만큼은 \`skills/pptx-local\` 의 규칙을 당신이 직접 읽고
+          \`python-pptx\` 로 작성**해 주세요. (이게 이 task 의 핵심입니다.)
 
           \`\`\`bash
           # 1) 의존성
@@ -86,18 +88,36 @@ jobs:
           # 3) 릴리즈 폴더 준비
           REL="releases/${TS}-${STEM}"
           mkdir -p "\$REL"
+          \`\`\`
 
-          # 4) PPT 에 업데이트 슬라이드 삽입 (원본 samples/ 보존)
-          python scripts/update_ppt.py \\
-            --input  "$TARGET" \\
-            --updates .cache/updates.json \\
-            --skill   skills/pptx-local \\
-            --output  "\$REL/${STEM}.pptx"
+          ### 4) PPT 편집 — **스크립트 호출 금지, 당신이 직접 작성**
+          \`scripts/update_ppt.py\` 를 그대로 호출하지 말고, 다음 흐름으로 새 파이썬
+          코드(예: \`scripts/agent_apply_updates.py\`)를 작성해 실행하세요.
 
-          # 5) PDF/PNG 미리보기 + 폴더별 README 생성
+          1. **컨텍스트 로드** — 아래 두 파일을 처음에 반드시 읽고 거기 적힌 트리거·작성 원칙·
+             편집 규칙·금지 사항을 그대로 따릅니다.
+             - \`skills/pptx-local/SKILL.md\`
+             - \`skills/pptx-local/editing.md\`
+          2. **입력 / 출력**
+             - 입력: \`$TARGET\` (원본은 **절대 수정 금지**, 새 파일로 출력)
+             - 출력: \`\$REL/${STEM}.pptx\`
+             - 데이터: \`.cache/updates.json\`
+          3. **멱등성** — 기존 PPT 의 끝부분에 같은 제목(\`Latest Azure Updates\`)
+             슬라이드가 이미 있으면 **제거 후 새로 추가**합니다.
+          4. **슬라이드 내용** — \`editing.md\` 가이드대로 *python-pptx* 로 직접 작성:
+             - 제목 \`Latest Azure Updates\`
+             - 본문: 한국어 bullet, 항목별로 굵은 제품/기능명 + 한 줄 설명
+             - 슬라이드 노트(\`notes_slide\`)에 원문 링크/발행일 첨부
+          5. **저장 후 zip dedupe** — \`python-pptx\` 가 가끔 같은 part 를 중복으로
+             기록해 LibreOffice 가 \`source file could not be loaded\` 로 거부합니다.
+             저장한 \`.pptx\` 의 zip entry 중 같은 이름은 마지막 것만 남기고 재압축하세요.
+             (참고 구현: \`scripts/update_ppt.py\` 안의 \`dedupe_pptx_zip\` 함수)
+          6. **결과 확인** — \`releases/.../\${STEM}.pptx\` 를 \`unzip -l\` 로 열어
+             \`ppt/slides/slideN.xml\` 중복이 없는지 확인합니다.
+
+          ### 5) 미리보기 / 인덱스 — 기존 스크립트 그대로
+          \`\`\`bash
           python scripts/render_ppt_previews.py --input "\$REL/${STEM}.pptx" --out "\$REL"
-
-          # 6) 루트 README 의 LATEST / RELEASES 블록 갱신
           cp .cache/updates.json "\$REL/" 2>/dev/null || true
           python scripts/update_releases_index.py
           \`\`\`
@@ -111,6 +131,7 @@ jobs:
 
           ## ⛔ 금지 사항
           - \`samples/*.pptx\` **수정 금지** (원본 보존)
+          - \`scripts/update_ppt.py\` **를 그대로 호출 금지** — 위 4단계는 당신이 \`skills/pptx-local\` 가이드를 직접 읽고 새 코드를 작성해야 합니다
           - 외부 유료 API/추가 클라우드 호출 금지
           - 이미 있는 릴리즈 폴더 \`releases/*\` 의 파일 수정 금지 (새 폴더만 추가)
           EOF
