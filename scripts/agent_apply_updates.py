@@ -326,7 +326,7 @@ def main() -> None:
             target_slide = prs.slides[anchor_idx]
             if apply_replace(target_slide, item):
                 counts["REPLACE"] += 1
-                key = id(target_slide)
+                key = target_slide.slide_id
                 changed_items_by_slide[key].append(item)
                 action_meta[key] = (target_slide, "REPLACE", decision.reason)
             else:
@@ -337,7 +337,7 @@ def main() -> None:
             target_slide = prs.slides[anchor_idx]
             if apply_augment(target_slide, item):
                 counts["AUGMENT"] += 1
-                key = id(target_slide)
+                key = target_slide.slide_id
                 changed_items_by_slide[key].append(item)
                 action_meta[key] = (target_slide, "AUGMENT", decision.reason)
             else:
@@ -351,7 +351,7 @@ def main() -> None:
             layout = pick_layout(prs, anchor_idx)
             inserted_slide = insert_slide_after(prs, anchor_idx, layout)
             fill_insert_slide(inserted_slide, item)
-            key = id(inserted_slide)
+            key = inserted_slide.slide_id
             changed_items_by_slide[key].append(item)
             action_meta[key] = (inserted_slide, "INSERT", decision.reason)
             inserted += 1
