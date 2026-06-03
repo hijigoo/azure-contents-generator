@@ -1,0 +1,98 @@
+name: Update Azure PPT
+
+on:
+  schedule:
+    # 매주 월요일 00:00 UTC (= 09:00 KST)
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+    inputs:
+      target_file:
+        description: "업데이트할 PPT 경로"
+        required: false
+        default: "samples/Microsoft Foundry를 활용한 Agentic AI.pptx"
+      dry_run:
+        description: "변경 사항 미리보기만 수행"
+        required: false
+        default: "false"
+
+jobs:
+  update-ppt:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install system dependencies (LibreOffice, poppler)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice poppler-utils
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Fetch Anthropic pptx skill (sparse checkout)
+        run: |
+          rm -rf .skills
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/anthropics/skills.git .skills
+          git -C .skills sparse-checkout set skills/pptx
+          echo "SKILL_PATH=$(pwd)/.skills/skills/pptx" >> "$GITHUB_ENV"
+
+      - name: Fetch latest Azure updates
+        run: |
+          mkdir -p .cache
+          python scripts/fetch_azure_updates.py --out .cache/updates.json
+
+      - name: Update PPT via Anthropic skill
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python scripts/update_ppt.py \
+            --input  "${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}" \
+            --updates .cache/updates.json \
+            --skill   "$SKILL_PATH" \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
+
+      - name: Render PPT previews (PDF + PNG)
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          TARGET="${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}"
+          STEM="$(basename "$TARGET" .pptx)"
+          python scripts/render_ppt_previews.py \
+            --input "$TARGET" \
+            --out   "previews/$STEM"
+
+      - name: Create Pull Request
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore(ppt): Azure 최신 정보 반영"
+          branch: auto/ppt-update-${{ github.run_id }}
+          title: "📊 Azure PPT 자동 업데이트 (${{ github.run_id }})"
+          body: |
+            Anthropic PPT skill로 자동 생성된 업데이트입니다.
+
+            - 소스: Microsoft Learn / Azure Updates
+            - 트리거: `${{ github.event_name }}`
+            - 실행 ID: `${{ github.run_id }}`
+
+            ### 📎 미리보기
+            - PDF / 슬라이드별 PNG: [`previews/`](./previews) 폴더 참고
+            - PR의 **Files changed** 탭에서 PDF는 인라인 렌더링되며,
+              PNG는 `previews/<파일명>/README.md`에서 슬라이드 단위로 확인할 수 있습니다.
+
+            머지 전에 슬라이드 내용을 검토해 주세요.
+          labels: |
+            automated
+            ppt-update
