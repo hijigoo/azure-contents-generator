@@ -13,7 +13,15 @@ Anthropic 의 오픈소스 [pptx skill](https://github.com/anthropics/skills/tre
 
 각 워크플로 실행은 `releases/<YYYYMMDD-HHMMSS>-<자료명>/` 폴더에
 업데이트된 **PPTX · PDF · 슬라이드별 PNG · 요약(summary.md)** 을 모아 저장합니다.
-아래 표는 자동 갱신됩니다 (편집하지 마세요).
+아래 두 블록은 자동 갱신됩니다 (편집하지 마세요).
+
+### 🆕 최신 변경 내용
+
+<!-- LATEST:START -->
+_아직 업데이트가 없습니다._
+<!-- LATEST:END -->
+
+### 🗂 전체 릴리즈 이력
 
 <!-- RELEASES:START -->
 _아직 자동 생성된 업데이트가 없습니다. 워크플로를 한 번 실행해 주세요._

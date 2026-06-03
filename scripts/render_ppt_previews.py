@@ -66,10 +66,13 @@ def main() -> None:
     if not pptx.exists():
         sys.exit(f"입력 PPT를 찾을 수 없습니다: {pptx}")
 
-    # 출력 폴더 초기화 (오래된 슬라이드 잔재 제거)
-    if out_dir.exists():
-        shutil.rmtree(out_dir)
-    out_dir.mkdir(parents=True)
+    # 기존 미리보기 산출물만 제거(폴더 전체를 지우면 같은 폴더의 PPTX/요약이 함께 사라짐)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for stale in list(out_dir.glob("slide-*.png")) + list(out_dir.glob("*.pdf")):
+        try:
+            stale.unlink()
+        except OSError:
+            pass
 
     pdf = pptx_to_pdf(pptx, out_dir)
     pngs = pdf_to_png(pdf, out_dir, dpi=args.dpi)
