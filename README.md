@@ -76,144 +76,144 @@ Copilot Coding Agent 가 할당 받으면 **자체 브랜치 → 커밋 → Draf
 ### 🆕 최신 변경 내용
 
 <!-- LATEST:START -->
-**🆕 2026-06-04 01:43:02 KST** — `Microsoft Foundry를 활용한 Agentic AI`
+**🆕 2026-06-04 01:50:50 KST** — `Microsoft Foundry를 활용한 Agentic AI`
 
-[🖼 전체 슬라이드 미리보기](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/README.md) · [📄 PDF](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pdf) · [📊 PPTX 다운로드](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pptx) · [📝 요약(summary.md)](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/summary.md)
+[🖼 전체 슬라이드 미리보기](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/README.md) · [📄 PDF](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pdf) · [📊 PPTX 다운로드](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pptx) · [📝 요약(summary.md)](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/summary.md)
 
 #### ✍️ LLM 요약
 
 <blockquote>
 
-Agentic AI 최신 업데이트
-- **Foundry Agent Service** 와 Voice Live 연동이 GA로 확장 (Azure Updates)
-- **Azure Cosmos DB Agent Kit** 가 GA로 개발 모범사례를 기본화 (Azure Updates)
-- **Foundry Agents** 관측 기능이 VS Code에서 미리보기 제공 (Azure Updates)
-- **Azure API Management** 가 멀티모델 통합 API를 미리보기 공개 (Azure Updates)
-- **Foundry Models** Model Router 거버넌스가 미리보기 확대 (Azure Updates)
+최신 Foundry·Azure AI 업데이트 한눈에 보기
+- **Foundry Agents in VS Code** 코드 중심 관찰성으로 평가·개선 루프를 에디터에서 실행 (Azure Updates)
+- **Azure Cosmos DB Agent Kit** AI 코딩 에이전트에 데이터 모델·쿼리 모범 사례를 내장 (Azure Updates)
+- **Azure API Management Unified Model API** 여러 모델 API 형식을 하나로 묶어 교체·거버넌스를 단순화 (Azure Updates)
+- **Foundry Models Model Router Policy** 모델 라우팅 기준을 Azure Policy로 중앙 통제 (Azure Updates)
+- **Voice Live + Foundry Agent Service** 음성 입출력을 별도 오디오 파이프라인 없이 바로 연결 (Azure Updates)
 
 </blockquote>
 
 #### 🆕 추가된 슬라이드
 
-![최신 추가 슬라이드](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-29.png)
+![최신 추가 슬라이드](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-29.png)
 
 <details><summary>📑 전체 슬라이드 펼쳐보기</summary>
 
 **Slide 1**
 
-![slide 1](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-1.png)
+![slide 1](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-01.png)
 
 **Slide 2**
 
-![slide 2](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-2.png)
+![slide 2](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-02.png)
 
 **Slide 3**
 
-![slide 3](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-3.png)
+![slide 3](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-03.png)
 
 **Slide 4**
 
-![slide 4](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-4.png)
+![slide 4](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-04.png)
 
 **Slide 5**
 
-![slide 5](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-5.png)
+![slide 5](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-05.png)
 
 **Slide 6**
 
-![slide 6](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-6.png)
+![slide 6](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-06.png)
 
 **Slide 7**
 
-![slide 7](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-7.png)
+![slide 7](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-07.png)
 
 **Slide 8**
 
-![slide 8](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-8.png)
+![slide 8](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-08.png)
 
 **Slide 9**
 
-![slide 9](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-9.png)
+![slide 9](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-09.png)
 
 **Slide 10**
 
-![slide 10](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-10.png)
+![slide 10](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-10.png)
 
 **Slide 11**
 
-![slide 11](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-11.png)
+![slide 11](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-11.png)
 
 **Slide 12**
 
-![slide 12](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-12.png)
+![slide 12](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-12.png)
 
 **Slide 13**
 
-![slide 13](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-13.png)
+![slide 13](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-13.png)
 
 **Slide 14**
 
-![slide 14](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-14.png)
+![slide 14](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-14.png)
 
 **Slide 15**
 
-![slide 15](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-15.png)
+![slide 15](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-15.png)
 
 **Slide 16**
 
-![slide 16](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-16.png)
+![slide 16](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-16.png)
 
 **Slide 17**
 
-![slide 17](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-17.png)
+![slide 17](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-17.png)
 
 **Slide 18**
 
-![slide 18](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-18.png)
+![slide 18](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-18.png)
 
 **Slide 19**
 
-![slide 19](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-19.png)
+![slide 19](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-19.png)
 
 **Slide 20**
 
-![slide 20](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-20.png)
+![slide 20](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-20.png)
 
 **Slide 21**
 
-![slide 21](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-21.png)
+![slide 21](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-21.png)
 
 **Slide 22**
 
-![slide 22](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-22.png)
+![slide 22](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-22.png)
 
 **Slide 23**
 
-![slide 23](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-23.png)
+![slide 23](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-23.png)
 
 **Slide 24**
 
-![slide 24](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-24.png)
+![slide 24](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-24.png)
 
 **Slide 25**
 
-![slide 25](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-25.png)
+![slide 25](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-25.png)
 
 **Slide 26**
 
-![slide 26](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-26.png)
+![slide 26](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-26.png)
 
 **Slide 27**
 
-![slide 27](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-27.png)
+![slide 27](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-27.png)
 
 **Slide 28**
 
-![slide 28](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-28.png)
+![slide 28](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-28.png)
 
 **Slide 29**
 
-![slide 29](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-29.png)
+![slide 29](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/slide-29.png)
 
 </details>
 
@@ -224,6 +224,7 @@ Agentic AI 최신 업데이트
 <!-- RELEASES:START -->
 | 시각 (KST) | 자료 | 슬라이드 | 보기 |
 |------------|------|----------|------|
+| `2026-06-04 01:50:50 KST` | Microsoft Foundry를 활용한 Agentic AI | 29장 | [🖼 미리보기](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/README.md) · [📄 PDF](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pdf) · [📊 PPTX](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pptx) |
 | `2026-06-04 01:43:02 KST` | Microsoft Foundry를 활용한 Agentic AI | 29장 | [🖼 미리보기](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/README.md) · [📄 PDF](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pdf) · [📊 PPTX](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pptx) |
 
 전체 이력: [`releases/`](./releases/)
