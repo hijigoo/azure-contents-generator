@@ -1,109 +1,100 @@
 # Azure Contents Generator
 
 Azure 관련 PPT 자료를 **최신 정보로 자동 업데이트**하는 CI/CD 파이프라인 프로젝트입니다.
-자세한 설계와 운영 가이드는 [`setup.md`](./setup.md)를 참고하세요.
+**외부 LLM API 인증이 전혀 필요 없습니다** — Anthropic의 오픈소스 [pptx skill](https://github.com/anthropics/skills/tree/main/skills/pptx) 의 스크립트와 `python-pptx` 만으로 동작합니다.
+
+자세한 설계는 [`setup.md`](./setup.md) 참고.
+
+---
+
+## ✨ 동작 요약
+
+1. 매주 월요일 (또는 수동 실행) GitHub Actions 가 트리거
+2. Azure Updates / Microsoft 블로그 **RSS 피드**에서 최신 항목 수집
+3. `anthropics/skills` 레포의 `skills/pptx` 를 sparse-checkout
+4. 대상 PPT의 마지막 슬라이드에 **"Latest Azure Updates"** 슬라이드를
+   기계적으로 삽입 (멱등 — 매번 같은 자리 갱신)
+5. 슬라이드를 **PDF + 슬라이드별 PNG** 로 변환해 `previews/` 에 저장
+6. 변경 사항을 PR로 자동 제출
+
+> 인증이 필요한 곳: **없음.** (`GITHUB_TOKEN` 은 GitHub Actions가 자동 발급)
+>
+> 만약 슬라이드 본문을 LLM으로 재작성하고 싶다면, 별도 Step에서
+> `anthropics/claude-code-action` 이나 `actions/ai-inference` 를 추가하면 됩니다.
+> 본 기본 구성은 그런 키 없이 RSS 데이터를 그대로 보여줍니다.
 
 ---
 
 ## 🚀 GitHub에 푸시하기 (최초 1회)
 
-이 디렉터리는 아직 git 저장소가 아니거나 원격이 연결되어 있지 않습니다.
-아래 순서대로 실행해 GitHub에 올립니다.
-
 ### 1) GitHub에서 빈 저장소 생성
 
-브라우저에서 https://github.com/new 로 이동해 다음과 같이 만듭니다.
-
+브라우저에서 https://github.com/new 로 이동:
 - Repository name: `azure-contents-generator`
-- README, .gitignore, license 체크 **모두 해제** (이미 로컬에 있음)
-- Private/Public는 자유
+- README/.gitignore/license 체크 **모두 해제**
 
-### 2) 로컬 초기화 & 첫 푸시
+### 2) 첫 푸시
 
 ```bash
 cd /Users/kichul/Documents/project/azure-contents-generator/azure-contents-generator
 
-git init -b main
-git add .
-git commit -m "chore: initial scaffold for Azure PPT auto-update pipeline"
+# (이미 git init + 첫 커밋은 완료되어 있음. 안전을 위해 확인)
+git status
+git log --oneline
 
 # 본인 GitHub 사용자명/조직으로 교체
 git remote add origin https://github.com/<USER>/azure-contents-generator.git
 git push -u origin main
 ```
 
-> 이미 위의 `git init` / `git commit` 까지는 CLI가 미리 수행해 두었습니다.
-> 그래도 안전을 위해 `git status` 로 한 번 확인 후 진행하세요.
+### 3) Actions 권한만 확인
 
-### 3) GitHub Secret 등록
+**Settings → Actions → General → Workflow permissions**:
+- `Read and write permissions`
+- `Allow GitHub Actions to create and approve pull requests`
 
-푸시한 저장소의 **Settings → Secrets and variables → Actions → New repository secret**:
-
-| Name | Value | 발급 방법 |
-|------|-------|-----------|
-| `CLAUDE_CODE_OAUTH_TOKEN` | Claude Code 구독 OAuth 토큰 | 로컬에서 `claude setup-token` 실행 → 발급된 토큰 복사 |
-
-> **Anthropic API 키는 필요하지 않습니다.** Claude Code 구독(Pro/Max)이 있으면
-> OAuth 토큰만으로 GitHub Actions에서 Claude를 호출할 수 있고,
-> `anthropics/claude-code-action` 이 자동으로 skills를 인식해 사용합니다.
-
-### 4) Actions 권한 확인
-
-**Settings → Actions → General → Workflow permissions** 에서
-`Read and write permissions` + `Allow GitHub Actions to create and approve pull requests`
-를 활성화합니다. (PR 자동 생성 권한 필요)
+→ 위 두 가지만 체크하면 끝. **Secret 등록 필요 없음.**
 
 ---
 
-## 🔁 PPT 업데이트 실행 & 결과 확인 방법
+## 🔁 PPT 업데이트 실행 & 결과 확인
 
 ### A. 자동 실행 (스케줄)
 
-`.github/workflows/update-ppt.yml` 에 정의된 cron 에 따라 **매주 월요일 09:00 KST**
-자동 실행됩니다. 실행 결과는 PR로 도착합니다.
+`.github/workflows/update-ppt.yml` 에 정의된 cron 에 따라
+**매주 월요일 09:00 KST** 자동 실행되어 PR을 생성합니다.
 
-### B. 수동 실행 (원할 때 바로)
+### B. 수동 실행
 
-1. GitHub 저장소 페이지 → 상단 **Actions** 탭
-2. 좌측 목록에서 **Update Azure PPT** 선택
-3. 우측 **Run workflow** ▼ 클릭
-4. 필요 시 `target_file`, `dry_run` 입력 후 **Run workflow**
-5. 잠시 후 워크플로 실행이 나타나고, 완료되면 **Pull requests** 탭에
-   `📊 Azure PPT 자동 업데이트 (...)` PR이 생성됨
+1. GitHub 저장소 → **Actions** 탭
+2. **Update Azure PPT** 워크플로 선택
+3. 우측 **Run workflow** ▼ → 필요 시 `target_file` 변경 → **Run workflow**
+4. 완료 후 **Pull requests** 탭에 `📊 Azure PPT 자동 업데이트 (...)` PR 생성
 
-### C. 업데이트된 PPT 파일 확인하기
+### C. 업데이트된 PPT를 GitHub에서 바로 보기
 
-GitHub는 `.pptx` 를 인라인 렌더링하지 않아, 워크플로가 자동으로
-**PDF + 슬라이드별 PNG** 미리보기를 함께 커밋합니다.
+GitHub는 `.pptx` 를 인라인 렌더링하지 않으므로,
+워크플로가 자동으로 **PDF + 슬라이드별 PNG** 미리보기를 함께 커밋합니다.
 
 | 보고 싶은 것 | 위치 / 방법 |
 |--------------|-------------|
-| 전체 슬라이드 한 페이지에 | PR에서 [`previews/<파일명>/README.md`](./previews) 클릭 → 모든 슬라이드 PNG가 한 화면에 렌더링 |
-| PDF 인라인 보기 | PR **Files changed** 탭에서 `previews/<파일명>/<파일명>.pdf` 클릭 (GitHub가 PDF 자동 렌더) |
-| 슬라이드별 이미지 | `previews/<파일명>/slide-*.png` 각각 클릭 |
-| 원본 .pptx 다운로드 | `samples/<파일명>.pptx` 의 **Download raw file** 버튼 |
-| PR diff (텍스트 변경) | PR **Files changed** 탭에 `.pptx` 는 바이너리로만 표시됨 → 위 PNG/PDF로 검토 |
+| 전체 슬라이드 한 페이지에 | [`previews/<파일명>/README.md`](./previews) 클릭 — 모든 슬라이드 PNG가 한 화면에 |
+| PDF 인라인 보기 | `previews/<파일명>/<파일명>.pdf` 클릭 (GitHub가 PDF 자동 렌더) |
+| 슬라이드별 이미지 | `previews/<파일명>/slide-*.png` |
+| 원본 .pptx 다운로드 | `samples/<파일명>.pptx` 의 **Download raw file** |
 
-### D. 머지 후 main에서 보기
-
-PR을 머지하면 `main` 의 `samples/` (원본) 와 `previews/` (미리보기)가
-함께 갱신됩니다. 저장소 메인 페이지에서 `previews/<파일명>/` 로 들어가면
-바로 슬라이드를 확인할 수 있습니다.
+PR을 머지하면 `main` 의 `samples/` 와 `previews/` 가 함께 갱신됩니다.
 
 ---
 
 ## 🧪 로컬에서 빠르게 시험
-
-로컬에서는 두 가지 방법 중 편한 쪽을 선택:
-
-**(A) Claude Code CLI 사용 — API 키 불필요, 구독만 있으면 됨**
 
 ```bash
 # 1. 의존성
 pip install -r scripts/requirements.txt
 # (macOS) brew install libreoffice poppler
 
-# 2. Anthropic 공식 pptx skill sparse-checkout
+# 2. Anthropic pptx skill 받기 (오픈소스, 인증 불필요)
 git clone --depth 1 --filter=blob:none --sparse \
   https://github.com/anthropics/skills.git .skills
 git -C .skills sparse-checkout set skills/pptx
@@ -111,20 +102,17 @@ git -C .skills sparse-checkout set skills/pptx
 # 3. Azure 업데이트 수집
 python scripts/fetch_azure_updates.py --out .cache/updates.json
 
-# 4. Claude Code CLI 로 갱신 (구독 로그인 상태)
-claude "samples/Microsoft Foundry를 활용한 Agentic AI.pptx 파일을 \
-.cache/updates.json 의 최신 Azure 정보로 갱신해줘. \
-.skills/skills/pptx 의 pptx skill을 사용해."
+# 4. PPT 에 업데이트 슬라이드 삽입
+python scripts/update_ppt.py \
+  --input  "samples/Microsoft Foundry를 활용한 Agentic AI.pptx" \
+  --updates .cache/updates.json \
+  --skill   .skills/skills/pptx
 
-# 5. 미리보기(PDF/PNG) 생성
+# 5. 미리보기 생성 (PDF + 슬라이드별 PNG)
 python scripts/render_ppt_previews.py \
   --input "samples/Microsoft Foundry를 활용한 Agentic AI.pptx" \
   --out   "previews/Microsoft Foundry를 활용한 Agentic AI"
 ```
-
-**(B) Anthropic API 직접 호출 — `scripts/update_ppt.py` 사용 (선택)**
-
-API 키가 있는 경우 `ANTHROPIC_API_KEY` 를 설정하고 `scripts/update_ppt.py` 실행.
 
 ---
 
@@ -132,14 +120,8 @@ API 키가 있는 경우 `ANTHROPIC_API_KEY` 를 설정하고 `scripts/update_pp
 
 - `.github/workflows/update-ppt.yml` — 주간 cron + 수동 실행 워크플로
 - `scripts/fetch_azure_updates.py` — Azure RSS/문서 수집
-- `scripts/update_ppt.py` *(로컬 개발용, optional)* — Anthropic SDK 직접 호출 버전. CI에서는 `anthropics/claude-code-action` 을 사용하므로 필요 없음.
+- `scripts/update_ppt.py` — pptx skill 활용해 'Latest Azure Updates' 슬라이드 삽입
 - `scripts/render_ppt_previews.py` — PPT → PDF/PNG 미리보기 생성
 - `.skills/` *(gitignore)* — `anthropics/skills` sparse-checkout 캐시
 - `samples/` — 테스트용 PPT
 - `previews/` — PPT 미리보기 (PDF + 슬라이드별 PNG)
-
-## Anthropic PPT Skill
-
-본 프로젝트는 [`anthropics/skills`](https://github.com/anthropics/skills) 레포의
-`skills/pptx/` 를 그대로 사용합니다. 우리 저장소에는 포함하지 않고
-CI(또는 로컬 setup)에서 sparse-checkout 으로 가져옵니다.

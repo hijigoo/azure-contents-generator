@@ -69,20 +69,22 @@ azure-contents-generator/
 
 ### 1. GitHub Secrets 등록
 
-| Secret 이름 | 용도 |
-|-------------|------|
-| `CLAUDE_CODE_OAUTH_TOKEN` | `anthropics/claude-code-action` 인증 (Claude Code 구독 OAuth 토큰, `claude setup-token` 으로 발급) |
-| `GITHUB_TOKEN` | (기본 제공) PR 생성용 |
+**기본 구성에서는 별도 Secret이 필요 없습니다.** 워크플로는
+`GITHUB_TOKEN`(자동 발급)만으로 동작합니다.
 
-> Anthropic **API 키는 필요하지 않습니다**. Claude Code 구독 OAuth 토큰으로 CI에서 Claude를 호출합니다.
+> 선택 사항: 슬라이드 본문을 LLM이 재작성하도록 확장하려면
+> - `CLAUDE_CODE_OAUTH_TOKEN` (Claude Code 구독 OAuth), 또는
+> - `actions/ai-inference` 사용 시 `GITHUB_TOKEN` (별도 secret 불필요)
+> 중 하나를 추가하면 됩니다.
 
 ### 2. Anthropic PPT Skill
 
 - [`anthropics/skills`](https://github.com/anthropics/skills) 공개 레포의
-  `skills/pptx/` 를 베이스로 사용합니다.
-- 우리 저장소에는 포함하지 않고, **CI 단계에서 sparse-checkout** 으로 받아
-  `.skills/skills/pptx` 경로에 둡니다 (라이선스: source-available).
-- Claude API가 이 skill 메타데이터/스크립트를 참조해 슬라이드를 갱신합니다.
+  `skills/pptx/` (Python 스크립트 + 가이드)를 베이스로 사용합니다.
+- CI 단계에서 sparse-checkout 으로 `.skills/skills/pptx` 에 받아오며,
+  **인증/토큰 없이** 누구나 사용 가능합니다.
+- 본 프로젝트는 이 skill 의 `python-pptx` 기반 유틸(`scripts/clean.py` 등)을
+  활용해 슬라이드를 결정론적으로 갱신합니다 — LLM 호출 없음.
 
 ### 3. 실행 환경
 

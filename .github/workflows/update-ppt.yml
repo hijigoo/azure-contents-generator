@@ -37,7 +37,7 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r scripts/requirements.txt
 
-      - name: Fetch Anthropic pptx skill (sparse checkout)
+      - name: Fetch Anthropic pptx skill (sparse checkout, no auth)
         run: |
           rm -rf .skills
           git clone --depth 1 --filter=blob:none --sparse \
@@ -49,25 +49,12 @@ jobs:
           mkdir -p .cache
           python scripts/fetch_azure_updates.py --out .cache/updates.json
 
-      - name: Update PPT via Claude Code (with pptx skill)
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          prompt: |
-            너는 Azure 기술 자료를 관리하는 시니어 테크니컬 라이터다.
-
-            아래 파일을 최신 정보로 업데이트한다.
-
-            - 대상 PPT 경로: `${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}`
-            - 참고 데이터: `.cache/updates.json` (Azure RSS 최신 항목들)
-            - 사용할 skill: `.skills/skills/pptx` (Anthropic 공식 pptx skill — 슬라이드 읽기/쓰기에 반드시 활용)
-
-            규칙:
-            1. pptx skill을 로드해 슬라이드 구조를 파악한 뒤, 사실에 기반해서만 본문/노트를 갱신한다.
-            2. 슬라이드 순서, 제목 체계, 마스터/테마, 폰트, 이미지는 보존한다.
-            3. 갱신한 슬라이드의 노트(notes)에 출처 URL을 추가한다.
-            4. 명백히 갱신이 불필요한 슬라이드는 그대로 둔다.
-            5. 작업 후 결과를 동일한 경로에 저장한다.
+      - name: Inject latest updates into PPT (via pptx skill)
+        run: |
+          python scripts/update_ppt.py \
+            --input  "${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}" \
+            --updates .cache/updates.json \
+            --skill   .skills/skills/pptx
 
       - name: Render PPT previews (PDF + PNG)
         run: |
@@ -84,9 +71,10 @@ jobs:
           branch: auto/ppt-update-${{ github.run_id }}
           title: "📊 Azure PPT 자동 업데이트 (${{ github.run_id }})"
           body: |
-            Anthropic pptx skill + Claude Code 로 자동 생성된 업데이트입니다.
+            Anthropic pptx skill (오픈소스 스크립트) 만으로 자동 생성된 업데이트입니다.
+            **외부 API 인증 없이** 동작합니다.
 
-            - 소스: Microsoft Learn / Azure Updates
+            - 소스: Azure Updates / Microsoft 블로그 RSS
             - 트리거: `${{ github.event_name }}`
             - 실행 ID: `${{ github.run_id }}`
 
