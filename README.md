@@ -225,6 +225,7 @@ Copilot Coding Agent 가 할당 받으면 **자체 브랜치 → 커밋 → Draf
 | 시각 (KST) | 자료 | 슬라이드 | 보기 |
 |------------|------|----------|------|
 | `2026-06-04 01:50:50 KST` | Microsoft Foundry를 활용한 Agentic AI | 29장 | [🖼 미리보기](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/README.md) · [📄 PDF](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pdf) · [📊 PPTX](./releases/20260604-015050-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pptx) |
+| `2026-06-04 01:43:02 KST` | Microsoft Foundry를 활용한 Agentic AI | 29장 | [🖼 미리보기](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/README.md) · [📄 PDF](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pdf) · [📊 PPTX](./releases/20260604-014302-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pptx) |
 
 전체 이력: [`releases/`](./releases/)
 <!-- RELEASES:END -->

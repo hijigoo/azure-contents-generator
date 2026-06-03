@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from pathlib import Path
 from urllib.parse import quote
 
@@ -15,6 +16,7 @@ ROOT_TABLE_START = "<!-- RELEASES:START -->"
 ROOT_TABLE_END = "<!-- RELEASES:END -->"
 ROOT_LATEST_START = "<!-- LATEST:START -->"
 ROOT_LATEST_END = "<!-- LATEST:END -->"
+SLIDE_SORT_FALLBACK = sys.maxsize
 
 
 def list_releases(releases_dir: Path) -> list[Path]:
@@ -32,6 +34,13 @@ def _link(label: str, path: str) -> str:
     return f"[{label}](./{_enc(path)})"
 
 
+def _slide_sort_key(path: Path) -> tuple[int, str]:
+    try:
+        return (int(path.stem.split("-")[-1]), path.name)
+    except ValueError:
+        return (SLIDE_SORT_FALLBACK, path.name)
+
+
 def _ts_display(name: str) -> str:
     m = re.match(r"^(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})", name)
     if not m:
@@ -43,7 +52,7 @@ def _ts_display(name: str) -> str:
 def render_release_row(rel_dir: Path, base_dir: Path) -> str:
     pptx = next(rel_dir.glob("*.pptx"), None)
     pdf = next(rel_dir.glob("*.pdf"), None)
-    pngs = sorted(rel_dir.glob("slide-*.png"))
+    pngs = sorted(rel_dir.glob("slide-*.png"), key=_slide_sort_key)
     readme = rel_dir / "README.md"
 
     ts_display = _ts_display(rel_dir.name)
@@ -82,7 +91,7 @@ def build_latest_section(latest: Path | None, base_dir: Path) -> str:
 
     pptx = next(latest.glob("*.pptx"), None)
     pdf = next(latest.glob("*.pdf"), None)
-    pngs = sorted(latest.glob("slide-*.png"))
+    pngs = sorted(latest.glob("slide-*.png"), key=_slide_sort_key)
     summary = latest / "summary.md"
     try:
         rel_path = latest.resolve().relative_to(base_dir.resolve()).as_posix()
@@ -146,7 +155,7 @@ def write_release_readme(rel_dir: Path) -> None:
     """각 릴리즈 폴더 README — 추가 슬라이드를 맨 앞으로, summary 인라인."""
     pptx = next(rel_dir.glob("*.pptx"), None)
     pdf = next(rel_dir.glob("*.pdf"), None)
-    pngs = sorted(rel_dir.glob("slide-*.png"))
+    pngs = sorted(rel_dir.glob("slide-*.png"), key=_slide_sort_key)
     summary = rel_dir / "summary.md"
 
     title = pptx.stem if pptx else rel_dir.name

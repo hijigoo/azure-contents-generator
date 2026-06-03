@@ -123,9 +123,13 @@ jobs:
           \`python-pptx\` 로 작성**해 주세요. (이게 이 task 의 핵심입니다.)
 
           \`\`\`bash
-          # 1) 의존성
+          # 1) 의존성 — 한글 PPT 렌더링용 CJK 폰트 반드시 포함
           pip install -r scripts/requirements.txt
-          sudo apt-get update && sudo apt-get install -y --no-install-recommends libreoffice poppler-utils
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+            libreoffice poppler-utils \
+            fonts-noto-cjk fonts-noto-cjk-extra fonts-nanum fonts-nanum-coding fonts-nanum-extra \
+            fonts-noto-color-emoji
+          fc-cache -f -v >/dev/null 2>&1 || true
 
           # 2) 최신 Azure 업데이트 수집
           mkdir -p .cache
