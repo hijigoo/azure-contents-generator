@@ -1,4 +1,4 @@
-"""skills/pptx-local 가이드를 직접 읽고 PPT에 최신 업데이트 슬라이드를 추가한다."""
+"""skills/pptx 가이드를 직접 읽고 PPT에 최신 업데이트 슬라이드를 추가한다."""
 from __future__ import annotations
 
 import argparse

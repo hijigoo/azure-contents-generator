@@ -124,12 +124,12 @@ jobs:
 
           ## 📐 반드시 따라야 할 작성 규칙
           작업을 시작하기 전에 아래 두 파일을 **먼저 읽고** 거기 적힌 트리거 규칙·편집 원칙·금지 사항을 그대로 따르세요.
-          - \`skills/pptx-local/SKILL.md\`
-          - \`skills/pptx-local/editing.md\`
+          - \`skills/pptx/SKILL.md\`
+          - \`skills/pptx/editing.md\`
 
           ## 🛠 권장 실행 절차
           데이터 수집·미리보기·README 갱신은 기존 스크립트를 그대로 쓰되,
-          **PPT 편집(4단계) 만큼은 \`skills/pptx-local\` 의 규칙을 당신이 직접 읽고
+          **PPT 편집(4단계) 만큼은 \`skills/pptx\` 의 규칙을 당신이 직접 읽고
           \`python-pptx\` 로 작성**해 주세요. (이게 이 task 의 핵심입니다.)
 
           \`\`\`bash
@@ -154,7 +154,7 @@ jobs:
           \`scripts/update_ppt.py\` 를 그대로 호출하지 말고, 다음 흐름으로 새 파이썬
           코드(예: \`scripts/agent_apply_updates.py\`)를 작성해 실행하세요.
 
-          1. **컨텍스트 로드** — \`skills/pptx-local/SKILL.md\` + \`editing.md\` 를 먼저 읽고 거기 적힌 원칙을 그대로 따릅니다.
+          1. **컨텍스트 로드** — \`skills/pptx/SKILL.md\` + \`editing.md\` 를 먼저 읽고 거기 적힌 원칙을 그대로 따릅니다.
           2. **입력 / 출력**
              - 입력: \`$TARGET\` (원본은 **절대 수정 금지**, 새 파일로 출력)
              - 출력: \`\$REL/${STEM}.pptx\`
@@ -223,7 +223,7 @@ jobs:
           - **'Latest Azure Updates' 같은 별도 요약 섹션을 끝에 박는 패턴 금지**
             (이번 task 의 핵심은 *기존 슬라이드를 직접 고치는 것*입니다)
           - 기존 슬라이드를 **통째로 새 슬라이드로 교체 금지** — run 단위로 텍스트만 수정
-          - \`scripts/update_ppt.py\` **를 그대로 호출 금지** — 위 단계는 당신이 \`skills/pptx-local\` 가이드를 읽고 새 코드를 작성해야 합니다 (단, \`dedupe_pptx_zip\` / \`remove_auto_slides\` 같은 헬퍼 함수는 import 해서 재사용해도 됩니다)
+          - \`scripts/update_ppt.py\` **를 그대로 호출 금지** — 위 단계는 당신이 \`skills/pptx\` 가이드를 읽고 새 코드를 작성해야 합니다 (단, \`dedupe_pptx_zip\` / \`remove_auto_slides\` 같은 헬퍼 함수는 import 해서 재사용해도 됩니다)
           - 외부 유료 API/추가 클라우드 호출 금지
           - 이미 있는 릴리즈 폴더 \`releases/*\` 의 파일 수정 금지 (새 폴더만 추가)
           EOF

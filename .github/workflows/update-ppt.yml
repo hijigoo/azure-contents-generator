@@ -69,7 +69,7 @@ jobs:
         run: pip install -r scripts/requirements.txt
 
       - name: (Optional) Fetch Anthropic pptx skill for runtime reference
-        # 본 레포의 skills/pptx-local 이 1차 컨텍스트. anthropic skill 은 라이선스상
+        # 본 레포의 skills/pptx 이 1차 컨텍스트. anthropic skill 은 라이선스상
         # 레포 커밋이 금지되므로 매 실행마다 sparse-checkout (Services 사용 중 임시 복사).
         # 실패해도 워크플로는 계속 진행 (로컬 skill 만으로 충분).
         run: |
@@ -92,7 +92,7 @@ jobs:
         run: |
           python scripts/llm_summarize.py \
             --updates .cache/updates.json \
-            --skill   skills/pptx-local \
+            --skill   skills/pptx \
             --out     .cache/summary.md \
             --pr-body .cache/pr_body.md
 
@@ -115,8 +115,8 @@ jobs:
           cat > "$PROMPT_FILE" <<'EOF'
           당신은 Azure 컨텐츠 큐레이터이자 PR 작성자입니다. 다음 파일들을 읽으세요:
             - .cache/updates.json                : Azure / Microsoft 최신 업데이트 RSS 결과
-            - skills/pptx-local/SKILL.md         : 본 레포의 PPT 작성 규칙 (1차 컨텍스트)
-            - skills/pptx-local/editing.md       : 본 레포의 편집 가이드
+            - skills/pptx/SKILL.md         : 본 레포의 PPT 작성 규칙 (1차 컨텍스트)
+            - skills/pptx/editing.md       : 본 레포의 편집 가이드
             - .skills/skills/pptx/SKILL.md       : (있으면 참고용) Anthropic 의 pptx skill
             - .skills/skills/pptx/editing.md     : (있으면 참고용)
 
@@ -198,14 +198,14 @@ jobs:
           echo "dir=$REL_DIR"     >> "$GITHUB_OUTPUT"
           echo "source=$SOURCE"   >> "$GITHUB_OUTPUT"
 
-      - name: Inject latest updates into PPT (via skills/pptx-local)
+      - name: Inject latest updates into PPT (via skills/pptx)
         run: |
           SUMMARY_OPT=""
           if [ -f .cache/summary.md ]; then SUMMARY_OPT="--summary .cache/summary.md"; fi
           python scripts/update_ppt.py \
             --input   "${{ steps.release.outputs.target }}" \
             --updates .cache/updates.json \
-            --skill   skills/pptx-local \
+            --skill   skills/pptx \
             --output  "${{ steps.release.outputs.dir }}/${{ steps.release.outputs.stem }}.pptx" \
             $SUMMARY_OPT
 
