@@ -41,7 +41,31 @@ flowchart LR
 
 > 원본 `samples/*.pptx` 는 **절대 덮어쓰지 않습니다.** 매 실행마다 새 `releases/<timestamp>-<자료명>/` 폴더가 만들어지고, 모든 산출물이 그 안에 모입니다.
 
-### LLM 엔진 선택
+## 🛤 두 가지 자동화 트랙
+
+이 레포에는 목적이 다른 워크플로가 **두 개** 있습니다. 둘 다 같은 PPT 산출물(`releases/<TS>-<자료명>/`)을 만들지만, **누가 슬라이드를 디자인하느냐** 가 다릅니다.
+
+| 트랙 | 워크플로 | 슬라이드를 누가 만드나? | `skills/pptx-local` 활용도 | 언제 좋은가 |
+|---|---|---|---|---|
+| **① Deterministic** | [`update-ppt.yml`](./.github/workflows/update-ppt.yml) | `scripts/update_ppt.py` — **결정론적 python-pptx 코드** | LLM 요약의 *system prompt* 로 간접 참고 | 매주 cron 으로 **항상 PR 이 보장**되어야 할 때. 무료, 안정적 |
+| **② Skills-driven** | [`delegate-to-copilot-agent.yml`](./.github/workflows/delegate-to-copilot-agent.yml) | **GitHub Copilot Coding Agent** 가 SKILL.md/editing.md 를 직접 읽고 자기 코드를 작성 | **1차 컨텍스트로 진정 활용** | 디자인 자유도/품질이 더 중요할 때. Coding Agent 활성화 필요 |
+
+> 두 트랙은 **공존 가능**합니다. ① 은 매주 자동, ② 는 필요할 때 수동 실행하면 됩니다.
+
+### ① Deterministic 트랙 (`update-ppt.yml`) 이 만드는 슬라이드 구조
+원본 PPT 의 슬라이드 마스터·테마·폰트를 그대로 유지한 채 **끝부분에 6장의 자동 섹션**을 추가합니다 (멱등 — 다음 실행 시 통째로 교체).
+
+1. **섹션 커버** — `🆕 최신 Azure 업데이트 · YYYY-MM-DD`
+2. **TL;DR** — LLM 요약 bullet 5~6개
+3~N. **항목별 슬라이드** — 한 슬라이드당 RSS 항목 하나 (제목 / 발행일·출처 / 설명 / 링크, 노트에 원문)
+N+1. **데이터 소스** — 사용된 RSS 출처 목록 + 생성 시각
+
+레이아웃은 PPT 안에 존재하는 마스터를 *키워드 매칭*으로 자동 선택 (Section/Header → 섹션 커버, Title and Content → 본문). 따라서 원본 디자인과 톤이 어우러집니다.
+
+### ② Skills-driven 트랙 (Copilot Coding Agent) 이 만드는 슬라이드 구조
+Copilot 이 issue 본문의 지침대로 `skills/pptx-local/{SKILL.md, editing.md}` 를 먼저 읽고 **자체 파이썬 코드**(예: `scripts/agent_apply_updates.py`)를 작성·실행해 슬라이드를 그립니다. 구체적인 레이아웃·문구·강조 방식은 Copilot 의 판단을 따르며, **`scripts/update_ppt.py` 호출은 금지**되어 있습니다.
+
+### LLM 엔진 선택 (트랙 ①의 텍스트 요약용)
 | 엔진 | 권한·시크릿 | 특징 |
 |------|-------------|------|
 | `models` *(기본)* | `permissions: { models: read }` + `GITHUB_TOKEN` | **추가 설정 0**. 무료 티어/엔터프라이즈 공통 |
@@ -49,21 +73,7 @@ flowchart LR
 
 두 엔진 모두 같은 출력 인터페이스(`summary.md` + `pr_body.md`)를 만들기 때문에, 이후 단계(슬라이드 편집·미리보기·PR 생성)는 동일합니다.
 
-### ⚡ 옵션: Copilot Coding Agent 에 통째로 위임 (워크플로 밖에서 PR 생성)
-
-[`.github/workflows/delegate-to-copilot-agent.yml`](./.github/workflows/delegate-to-copilot-agent.yml) 는
-매주(혹은 수동) **task issue 를 생성하고 GitHub Copilot Coding Agent 에 할당**합니다.
-이후 PR 작성·커밋은 Actions 가 아닌 **GitHub 호스팅 환경의 Copilot 이 직접** 수행합니다.
-
-| 항목 | 값 |
-|---|---|
-| 트리거 | `cron: "0 1 * * 1"` (매주 월 10:00 KST) + `workflow_dispatch` |
-| 필요한 권한 | `issues: write` (워크플로 기본 토큰) |
-| 사전 준비 | 레포 또는 조직 *Settings → Copilot → Coding agent* 에서 활성화 |
-| 시크릿 | 기본 `GITHUB_TOKEN` 시도, 조직 정책상 막혀 있으면 `COPILOT_AGENT_PAT` (issues:write PAT) |
-| 작업 지침 | issue 본문에 `skills/pptx-local/SKILL.md` 와 추천 실행 스크립트가 자동 포함됨 |
-
-Copilot Coding Agent 가 할당 받으면 **자체 브랜치 → 커밋 → Draft PR** 까지 자동으로 만들어 `Closes #N` 로 issue 와 연결합니다.
+> ②번 Skills-driven 트랙 사용법은 위 *🛤 두 가지 자동화 트랙* 표를 참고하세요. 별도 LLM 엔진 선택이 필요 없습니다 (Copilot 이 직접 모델 선택).
 
 ---
 
