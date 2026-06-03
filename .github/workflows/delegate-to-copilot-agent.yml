@@ -124,8 +124,15 @@ jobs:
 
           ## 📐 반드시 따라야 할 작성 규칙
           작업을 시작하기 전에 아래 두 파일을 **먼저 읽고** 거기 적힌 트리거 규칙·편집 원칙·금지 사항을 그대로 따르세요.
-          - \`skills/pptx/SKILL.md\`
+          - \`skills/pptx/SKILL.md\` ← **이게 1순위, 최종 기준**
           - \`skills/pptx/editing.md\`
+
+          > 📎 *(보조 참고용)* Anthropic 공식 PPTX skill —
+          > <https://github.com/anthropics/skills/tree/main/skills/pptx>
+          > 일반적인 \`python-pptx\` 모범 사례 확인용으로만 *읽기* 만 허용합니다.
+          > **이 레포로 코드/문서를 복사하거나 derivative 파일을 만드는 것은 라이선스 위반**
+          > 이므로 절대 금지입니다 (LICENSE.txt 참조).
+          > 충돌 시 위의 \`skills/pptx/SKILL.md\` 가 항상 우선합니다.
 
           ## 🛠 권장 실행 절차
           데이터 수집·미리보기·README 갱신은 기존 스크립트를 그대로 쓰되,
@@ -224,6 +231,7 @@ jobs:
             (이번 task 의 핵심은 *기존 슬라이드를 직접 고치는 것*입니다)
           - 기존 슬라이드를 **통째로 새 슬라이드로 교체 금지** — run 단위로 텍스트만 수정
           - \`scripts/update_ppt.py\` **를 그대로 호출 금지** — 위 단계는 당신이 \`skills/pptx\` 가이드를 읽고 새 코드를 작성해야 합니다 (단, \`dedupe_pptx_zip\` / \`remove_auto_slides\` 같은 헬퍼 함수는 import 해서 재사용해도 됩니다)
+          - **\`anthropics/skills\` 의 파일을 본 레포로 복사·이식·재배포 금지** — 라이선스 위반입니다. 외부 링크는 *읽기 참고* 까지만 허용
           - 외부 유료 API/추가 클라우드 호출 금지
           - 이미 있는 릴리즈 폴더 \`releases/*\` 의 파일 수정 금지 (새 폴더만 추가)
           EOF
