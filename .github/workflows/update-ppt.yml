@@ -6,8 +6,17 @@ on:
     - cron: "0 0 * * 1"
   workflow_dispatch:
     inputs:
+      source:
+        description: "업데이트 대상 소스"
+        required: false
+        default: "samples"
+        type: choice
+        options:
+          - samples
+          - latest_release
+          - custom
       target_file:
-        description: "업데이트할 PPT 경로"
+        description: "PPT 경로 — source=samples 면 기본 샘플, source=latest_release 면 무시, source=custom 이면 필수"
         required: false
         default: "samples/Microsoft Foundry를 활용한 Agentic AI.pptx"
       use_llm:
@@ -127,8 +136,41 @@ jobs:
 
       - name: Compute release directory (KST timestamp)
         id: release
+        env:
+          SOURCE:       ${{ github.event.inputs.source || 'samples' }}
+          INPUT_TARGET: ${{ github.event.inputs.target_file }}
         run: |
-          TARGET="${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}"
+          set -euo pipefail
+          case "$SOURCE" in
+            samples)
+              TARGET="${INPUT_TARGET:-samples/Microsoft Foundry를 활용한 Agentic AI.pptx}"
+              ;;
+            latest_release)
+              LATEST_DIR=$(ls -1dt releases/*/ 2>/dev/null | head -n1 || true)
+              if [ -z "$LATEST_DIR" ]; then
+                echo "::error::releases/ 폴더가 비어있습니다. source=samples 로 실행하세요." >&2
+                exit 1
+              fi
+              TARGET=$(find "$LATEST_DIR" -maxdepth 1 -name '*.pptx' | sort | head -n1)
+              if [ -z "$TARGET" ]; then
+                echo "::error::$LATEST_DIR 안에 .pptx 가 없습니다." >&2
+                exit 1
+              fi
+              echo "[release] latest_release 선택: $TARGET"
+              ;;
+            custom)
+              if [ -z "${INPUT_TARGET:-}" ]; then
+                echo "::error::source=custom 일 때는 target_file 입력이 필요합니다." >&2
+                exit 1
+              fi
+              TARGET="$INPUT_TARGET"
+              ;;
+            *)
+              echo "::error::알 수 없는 source: $SOURCE" >&2; exit 1 ;;
+          esac
+          if [ ! -f "$TARGET" ]; then
+            echo "::error::대상 파일을 찾을 수 없습니다: $TARGET" >&2; exit 1
+          fi
           STEM="$(basename "$TARGET" .pptx)"
           TS="$(TZ=Asia/Seoul date +'%Y%m%d-%H%M%S')"
           REL_DIR="releases/${TS}-${STEM}"
@@ -137,6 +179,7 @@ jobs:
           echo "stem=$STEM"       >> "$GITHUB_OUTPUT"
           echo "ts=$TS"           >> "$GITHUB_OUTPUT"
           echo "dir=$REL_DIR"     >> "$GITHUB_OUTPUT"
+          echo "source=$SOURCE"   >> "$GITHUB_OUTPUT"
 
       - name: Inject latest updates into PPT (via skills/pptx-local)
         run: |
