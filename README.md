@@ -14,7 +14,7 @@ Azure 관련 PPT 자료를 **최신 정보로 자동 업데이트**하는 CI/CD 
 ```mermaid
 flowchart LR
     A([cron 또는 수동 실행]) --> B[Checkout<br/>+ LFS]
-    B --> C[skills/pptx-local 로드<br/>(레포 내 자체 가이드)]
+    B --> C["skills/pptx-local 로드<br/>레포 내 자체 가이드"]
     C --> D[Azure RSS 수집<br/>fetch_azure_updates.py]
     D --> E{LLM 엔진}
     E -- models 기본<br/>GITHUB_TOKEN --> F1[GitHub Models 호출<br/>llm_summarize.py]
