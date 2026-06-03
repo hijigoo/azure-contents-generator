@@ -49,6 +49,22 @@ flowchart LR
 
 두 엔진 모두 같은 출력 인터페이스(`summary.md` + `pr_body.md`)를 만들기 때문에, 이후 단계(슬라이드 편집·미리보기·PR 생성)는 동일합니다.
 
+### ⚡ 옵션: Copilot Coding Agent 에 통째로 위임 (워크플로 밖에서 PR 생성)
+
+[`.github/workflows/delegate-to-copilot-agent.yml`](./.github/workflows/delegate-to-copilot-agent.yml) 는
+매주(혹은 수동) **task issue 를 생성하고 GitHub Copilot Coding Agent 에 할당**합니다.
+이후 PR 작성·커밋은 Actions 가 아닌 **GitHub 호스팅 환경의 Copilot 이 직접** 수행합니다.
+
+| 항목 | 값 |
+|---|---|
+| 트리거 | `cron: "0 1 * * 1"` (매주 월 10:00 KST) + `workflow_dispatch` |
+| 필요한 권한 | `issues: write` (워크플로 기본 토큰) |
+| 사전 준비 | 레포 또는 조직 *Settings → Copilot → Coding agent* 에서 활성화 |
+| 시크릿 | 기본 `GITHUB_TOKEN` 시도, 조직 정책상 막혀 있으면 `COPILOT_AGENT_PAT` (issues:write PAT) |
+| 작업 지침 | issue 본문에 `skills/pptx-local/SKILL.md` 와 추천 실행 스크립트가 자동 포함됨 |
+
+Copilot Coding Agent 가 할당 받으면 **자체 브랜치 → 커밋 → Draft PR** 까지 자동으로 만들어 `Closes #N` 로 issue 와 연결합니다.
+
 ---
 
 ## 📰 최근 업데이트

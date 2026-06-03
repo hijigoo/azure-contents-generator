@@ -1,0 +1,154 @@
+name: Delegate PPT update to Copilot Coding Agent
+
+# 정기적으로 "Azure PPT 를 최신 정보로 갱신해 PR 로 올려라" 라는 task issue 를 만들고
+# 그 issue 를 GitHub Copilot Coding Agent 에 할당한다.
+# 그러면 Copilot 이 GitHub 호스팅 환경에서 직접 브랜치/커밋/PR 을 만든다.
+#
+# ✅ 필요한 것:
+#   - 레포(또는 조직) 에서 Copilot Coding Agent 가 활성화되어 있어야 함
+#     (Settings → Copilot → Coding agent → Allow on this repository)
+#   - 액세스 토큰:
+#       · 기본은 ${{ secrets.GITHUB_TOKEN }} 으로 시도
+#       · 조직 정책에 따라 기본 토큰으로 Copilot 할당이 막혀 있다면
+#         COPILOT_AGENT_PAT (issues:write 권한 가진 user/Fine-grained PAT) 사용
+
+on:
+  schedule:
+    # 매주 월요일 10:00 KST (UTC 01:00) — update-ppt.yml 보다 1시간 늦게
+    - cron: "0 1 * * 1"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "업데이트 대상 PPT (samples/ 기준 상대경로). 빈 값이면 기본 샘플."
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  open-task:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick target deck
+        id: pick
+        run: |
+          TARGET="${{ github.event.inputs.target }}"
+          if [ -z "$TARGET" ]; then
+            TARGET="samples/Microsoft Foundry를 활용한 Agentic AI.pptx"
+          fi
+          echo "target=$TARGET"            >> "$GITHUB_OUTPUT"
+          echo "stem=$(basename "$TARGET" .pptx)" >> "$GITHUB_OUTPUT"
+          echo "ts=$(TZ=Asia/Seoul date +'%Y%m%d-%H%M%S')" >> "$GITHUB_OUTPUT"
+          echo "today=$(TZ=Asia/Seoul date +'%Y-%m-%d')"   >> "$GITHUB_OUTPUT"
+
+      - name: Create task issue and assign to Copilot
+        env:
+          GH_TOKEN: ${{ secrets.COPILOT_AGENT_PAT || secrets.GITHUB_TOKEN }}
+          OWNER:    ${{ github.repository_owner }}
+          REPO:     ${{ github.event.repository.name }}
+          TARGET:   ${{ steps.pick.outputs.target }}
+          STEM:     ${{ steps.pick.outputs.stem }}
+          TS:       ${{ steps.pick.outputs.ts }}
+          TODAY:    ${{ steps.pick.outputs.today }}
+        run: |
+          set -euo pipefail
+
+          TITLE="[Weekly] Azure 컨텐츠 PPT 자동 업데이트 ($TODAY)"
+          BODY_FILE="$(mktemp)"
+          cat > "$BODY_FILE" <<EOF
+          @copilot Azure / Microsoft 공식 채널의 **최근 업데이트** 를 반영해서 PPT 자료를 새로 만들어 PR 로 올려주세요.
+
+          ## 🎯 목표
+          \`$TARGET\` 의 마지막 슬라이드 자리에 **'Latest Azure Updates'** 슬라이드를 새로 추가/교체하고,
+          새로 만들어진 산출물을 \`releases/${TS}-${STEM}/\` 폴더에 모아 PR 을 생성합니다.
+
+          ## 📐 반드시 따라야 할 작성 규칙
+          작업을 시작하기 전에 아래 두 파일을 **먼저 읽고** 거기 적힌 트리거 규칙·편집 원칙·금지 사항을 그대로 따르세요.
+          - \`skills/pptx-local/SKILL.md\`
+          - \`skills/pptx-local/editing.md\`
+
+          ## 🛠 권장 실행 절차
+          이미 동일 작업을 자동화한 스크립트가 있습니다. 그대로 사용해도 좋고, 더 나은 결과를 위해 직접 수정해도 됩니다.
+
+          \`\`\`bash
+          # 1) 의존성
+          pip install -r scripts/requirements.txt
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends libreoffice poppler-utils
+
+          # 2) 최신 Azure 업데이트 수집
+          mkdir -p .cache
+          python scripts/fetch_azure_updates.py --out .cache/updates.json
+
+          # 3) 릴리즈 폴더 준비
+          REL="releases/${TS}-${STEM}"
+          mkdir -p "\$REL"
+
+          # 4) PPT 에 업데이트 슬라이드 삽입 (원본 samples/ 보존)
+          python scripts/update_ppt.py \\
+            --input  "$TARGET" \\
+            --updates .cache/updates.json \\
+            --skill   skills/pptx-local \\
+            --output  "\$REL/${STEM}.pptx"
+
+          # 5) PDF/PNG 미리보기 + 폴더별 README 생성
+          python scripts/render_ppt_previews.py --input "\$REL/${STEM}.pptx" --out "\$REL"
+
+          # 6) 루트 README 의 LATEST / RELEASES 블록 갱신
+          cp .cache/updates.json "\$REL/" 2>/dev/null || true
+          python scripts/update_releases_index.py
+          \`\`\`
+
+          ## 📝 PR 본문에 꼭 포함할 내용
+          - **TL;DR** (2~3문장)
+          - **🆕 주요 업데이트** bullet 5개 이내, 제품/기능명은 굵게
+          - **✅ 리뷰 체크리스트** 3~5개
+          - **🔗 데이터 소스** 한 줄
+          - 마지막 줄에 \`Closes #__ISSUE_NUMBER__\` (자동 닫힘)
+
+          ## ⛔ 금지 사항
+          - \`samples/*.pptx\` **수정 금지** (원본 보존)
+          - 외부 유료 API/추가 클라우드 호출 금지
+          - 이미 있는 릴리즈 폴더 \`releases/*\` 의 파일 수정 금지 (새 폴더만 추가)
+          EOF
+
+          echo "::group::issue body"
+          cat "$BODY_FILE"
+          echo "::endgroup::"
+
+          # 1) Issue 생성
+          ISSUE_URL=$(gh issue create \
+            --repo "$OWNER/$REPO" \
+            --title "$TITLE" \
+            --body-file "$BODY_FILE")
+          echo "Created: $ISSUE_URL"
+          ISSUE_NUM=${ISSUE_URL##*/}
+
+          ISSUE_NODE_ID=$(gh api graphql \
+            -f query='query($o:String!,$n:String!,$num:Int!){repository(owner:$o,name:$n){issue(number:$num){id}}}' \
+            -F o="$OWNER" -F n="$REPO" -F num="$ISSUE_NUM" \
+            -q .data.repository.issue.id)
+
+          # 2) Copilot bot 의 actor id 조회 (할당 가능한 actor 목록에서)
+          COPILOT_ID=$(gh api graphql \
+            -f query='query($o:String!,$n:String!){repository(owner:$o,name:$n){suggestedActors(capabilities:[CAN_BE_ASSIGNED], first:100){nodes{__typename ... on Bot{id login} ... on User{id login}}}}}' \
+            -F o="$OWNER" -F n="$REPO" \
+            -q '.data.repository.suggestedActors.nodes[] | select(.login=="copilot-swe-agent" or .login=="Copilot" or .login=="copilot") | .id' \
+            | head -n1)
+
+          if [ -z "$COPILOT_ID" ]; then
+            echo "::warning::Copilot Coding Agent 가 이 레포에서 활성화되어 있지 않거나 할당 대상에 노출되지 않습니다."
+            echo "::warning::Settings → Copilot → Coding agent 에서 활성화하거나, COPILOT_AGENT_PAT 시크릿을 등록하세요."
+            echo "Issue 는 생성되었습니다: $ISSUE_URL"
+            exit 0
+          fi
+
+          # 3) Issue 를 Copilot 에 할당 → Coding Agent 가 자동으로 브랜치/PR 생성
+          gh api graphql \
+            -f query='mutation($a:ID!,$id:ID!){replaceActorsForAssignable(input:{assignableId:$a, actorIds:[$id]}){assignable{... on Issue{number url assignees(first:5){nodes{login}}}}}}' \
+            -F a="$ISSUE_NODE_ID" -f id="$COPILOT_ID"
+
+          echo "✅ Copilot Coding Agent 에 할당 완료: $ISSUE_URL"
