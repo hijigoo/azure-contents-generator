@@ -10,6 +10,12 @@ on:
         description: "업데이트할 PPT 경로"
         required: false
         default: "samples/Microsoft Foundry를 활용한 Agentic AI.pptx"
+      use_llm:
+        description: "GitHub Models (코파일럿)로 본문 요약 생성"
+        required: false
+        default: "true"
+        type: choice
+        options: ["true", "false"]
 
 jobs:
   update-ppt:
@@ -17,6 +23,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      models: read
 
     steps:
       - name: Checkout repository
@@ -49,12 +56,25 @@ jobs:
           mkdir -p .cache
           python scripts/fetch_azure_updates.py --out .cache/updates.json
 
+      - name: Summarize via GitHub Models (Copilot)
+        if: ${{ github.event.inputs.use_llm != 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/llm_summarize.py \
+            --updates .cache/updates.json \
+            --skill   .skills/skills/pptx \
+            --out     .cache/summary.md
+
       - name: Inject latest updates into PPT (via pptx skill)
         run: |
+          SUMMARY_OPT=""
+          if [ -f .cache/summary.md ]; then SUMMARY_OPT="--summary .cache/summary.md"; fi
           python scripts/update_ppt.py \
             --input  "${{ github.event.inputs.target_file || 'samples/Microsoft Foundry를 활용한 Agentic AI.pptx' }}" \
             --updates .cache/updates.json \
-            --skill   .skills/skills/pptx
+            --skill   .skills/skills/pptx \
+            $SUMMARY_OPT
 
       - name: Render PPT previews (PDF + PNG)
         run: |
@@ -71,10 +91,11 @@ jobs:
           branch: auto/ppt-update-${{ github.run_id }}
           title: "📊 Azure PPT 자동 업데이트 (${{ github.run_id }})"
           body: |
-            Anthropic pptx skill (오픈소스 스크립트) 만으로 자동 생성된 업데이트입니다.
-            **외부 API 인증 없이** 동작합니다.
+            Anthropic pptx skill (오픈소스 스크립트) + GitHub Models(코파일럿 모델 인프라)
+            로 자동 생성된 업데이트입니다. **별도 토큰 없이** `GITHUB_TOKEN` 만으로 동작합니다.
 
             - 소스: Azure Updates / Microsoft 블로그 RSS
+            - 본문 요약: GitHub Models (`openai/gpt-4o-mini`, 변경 가능)
             - 트리거: `${{ github.event_name }}`
             - 실행 ID: `${{ github.run_id }}`
 

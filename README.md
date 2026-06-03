@@ -1,7 +1,9 @@
 # Azure Contents Generator
 
 Azure 관련 PPT 자료를 **최신 정보로 자동 업데이트**하는 CI/CD 파이프라인 프로젝트입니다.
-**외부 LLM API 인증이 전혀 필요 없습니다** — Anthropic의 오픈소스 [pptx skill](https://github.com/anthropics/skills/tree/main/skills/pptx) 의 스크립트와 `python-pptx` 만으로 동작합니다.
+업데이트 본문은 **GitHub Models (GitHub Copilot이 사용하는 모델 인프라)** 가
+Anthropic 의 오픈소스 [pptx skill](https://github.com/anthropics/skills/tree/main/skills/pptx)
+가이드라인을 따라 작성하며, **별도 API 키 없이 `GITHUB_TOKEN` 만으로** 동작합니다.
 
 자세한 설계는 [`setup.md`](./setup.md) 참고.
 
@@ -29,13 +31,14 @@ git remote add origin https://github.com/<USER>/azure-contents-generator.git
 git push -u origin main
 ```
 
-### 3) Actions 권한만 확인
+### 3) Actions 권한 확인
 
 **Settings → Actions → General → Workflow permissions**:
 - `Read and write permissions`
 - `Allow GitHub Actions to create and approve pull requests`
 
-→ 위 두 가지만 체크하면 끝. **Secret 등록 필요 없음.**
+GitHub Models 호출 권한은 워크플로의 `permissions: { models: read }` 로
+자동 부여됩니다. **별도 Secret 등록은 필요 없습니다.**
 
 ---
 
@@ -50,7 +53,10 @@ git push -u origin main
 
 1. GitHub 저장소 → **Actions** 탭
 2. **Update Azure PPT** 워크플로 선택
-3. 우측 **Run workflow** ▼ → 필요 시 `target_file` 변경 → **Run workflow**
+3. 우측 **Run workflow** ▼
+   - `target_file`: 업데이트할 PPT 경로
+   - `use_llm`: `true` (기본) 면 GitHub Models 로 한국어 요약 본문 생성,
+     `false` 면 RSS 원문을 그대로 bullet 으로 삽입
 4. 완료 후 **Pull requests** 탭에 `📊 Azure PPT 자동 업데이트 (...)` PR 생성
 
 ### C. 업데이트된 PPT를 GitHub에서 바로 보기
@@ -84,13 +90,21 @@ git -C .skills sparse-checkout set skills/pptx
 # 3. Azure 업데이트 수집
 python scripts/fetch_azure_updates.py --out .cache/updates.json
 
-# 4. PPT 에 업데이트 슬라이드 삽입
+# 4. (선택) GitHub Models 로 한국어 요약 생성 — Copilot 같은 동작
+export GITHUB_TOKEN=ghp_...   # repo / models:read 권한이 있는 토큰
+python scripts/llm_summarize.py \
+  --updates .cache/updates.json \
+  --skill   .skills/skills/pptx \
+  --out     .cache/summary.md
+
+# 5. PPT 에 업데이트 슬라이드 삽입 (요약이 있으면 본문에 사용)
 python scripts/update_ppt.py \
   --input  "samples/Microsoft Foundry를 활용한 Agentic AI.pptx" \
   --updates .cache/updates.json \
-  --skill   .skills/skills/pptx
+  --skill   .skills/skills/pptx \
+  --summary .cache/summary.md
 
-# 5. 미리보기 생성 (PDF + 슬라이드별 PNG)
+# 6. 미리보기 생성 (PDF + 슬라이드별 PNG)
 python scripts/render_ppt_previews.py \
   --input "samples/Microsoft Foundry를 활용한 Agentic AI.pptx" \
   --out   "previews/Microsoft Foundry를 활용한 Agentic AI"
@@ -102,7 +116,8 @@ python scripts/render_ppt_previews.py \
 
 - `.github/workflows/update-ppt.yml` — 주간 cron + 수동 실행 워크플로
 - `scripts/fetch_azure_updates.py` — Azure RSS/문서 수집
-- `scripts/update_ppt.py` — pptx skill 활용해 'Latest Azure Updates' 슬라이드 삽입
+- `scripts/llm_summarize.py` — **GitHub Models(코파일럿 모델)** 로 한국어 요약 생성. skill SKILL.md/editing.md 를 system prompt 로 주입
+- `scripts/update_ppt.py` — pptx skill 활용해 'Latest Azure Updates' 슬라이드 삽입 (LLM 요약 또는 RSS bullet)
 - `scripts/render_ppt_previews.py` — PPT → PDF/PNG 미리보기 생성
 - `.skills/` *(gitignore)* — `anthropics/skills` sparse-checkout 캐시
 - `samples/` — 테스트용 PPT

@@ -37,7 +37,7 @@ def remove_existing(prs: Presentation, title: str) -> None:
                 xml_slides.remove(slide_id)
 
 
-def add_updates_slide(prs: Presentation, items: list[dict], limit: int = 8) -> None:
+def add_updates_slide(prs: Presentation, items: list[dict], limit: int = 8, summary_text: str | None = None) -> None:
     layout = prs.slide_layouts[1]  # Title and Content
     slide = prs.slides.add_slide(layout)
     slide.shapes.title.text = SLIDE_TITLE
@@ -56,26 +56,38 @@ def add_updates_slide(prs: Presentation, items: list[dict], limit: int = 8) -> N
     tf.clear()
     tf.word_wrap = True
 
+    body_lines: list[str] = []
+    if summary_text:
+        # LLM(코파일럿)이 작성한 한국어 요약을 그대로 본문에 사용
+        body_lines.extend([ln for ln in summary_text.splitlines() if ln.strip()])
+    else:
+        for item in items[:limit]:
+            title = item.get("title", "").strip()
+            published = item.get("published", "").strip()
+            line = f"• {title}"
+            if published:
+                line += f"  ({published[:10]})"
+            body_lines.append(line)
+
+    if not body_lines:
+        body_lines = ["(no updates)"]
+
+    tf.text = body_lines[0]
+    for run in tf.paragraphs[0].runs:
+        run.font.size = Pt(14)
+    for line in body_lines[1:]:
+        p = tf.add_paragraph()
+        p.text = line
+        for run in p.runs:
+            run.font.size = Pt(14)
+
+    # 노트에는 항상 원문 RSS 메타데이터를 기록 (출처 추적용)
     notes_lines = [f"Updated: {datetime.utcnow().isoformat()}Z", ""]
-    for i, item in enumerate(items[:limit]):
+    for item in items[:limit]:
         title = item.get("title", "").strip()
         published = item.get("published", "").strip()
         link = item.get("link", "").strip()
         summary = item.get("summary", "").strip()
-
-        line = f"• {title}"
-        if published:
-            line += f"  ({published[:10]})"
-
-        if i == 0:
-            tf.text = line
-            p = tf.paragraphs[0]
-        else:
-            p = tf.add_paragraph()
-            p.text = line
-        for run in p.runs:
-            run.font.size = Pt(14)
-
         notes_lines.append(f"- {title}")
         if published:
             notes_lines.append(f"  published: {published}")
@@ -85,7 +97,6 @@ def add_updates_slide(prs: Presentation, items: list[dict], limit: int = 8) -> N
             short = summary if len(summary) < 240 else summary[:237] + "..."
             notes_lines.append(f"  summary: {short}")
         notes_lines.append("")
-
     slide.notes_slide.notes_text_frame.text = "\n".join(notes_lines)
 
 
@@ -112,6 +123,7 @@ def main() -> None:
     parser.add_argument("--updates", required=True, help="updates.json 경로")
     parser.add_argument("--skill", required=True, help="anthropics/skills/skills/pptx 디렉터리")
     parser.add_argument("--limit", type=int, default=8, help="삽입할 항목 수")
+    parser.add_argument("--summary", help="LLM(코파일럿) 생성 요약 마크다운 경로 (없으면 RSS bullet 사용)")
     parser.add_argument("--output", help="출력 경로 (기본: 원본 덮어쓰기)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -137,7 +149,13 @@ def main() -> None:
 
     prs = Presentation(pptx_path)
     remove_existing(prs, SLIDE_TITLE)
-    add_updates_slide(prs, items, limit=args.limit)
+    summary_text = None
+    if args.summary:
+        sp = Path(args.summary)
+        if sp.exists():
+            summary_text = sp.read_text(encoding="utf-8")
+            print(f"[update_ppt] LLM 요약 사용: {sp} ({len(summary_text)}자)")
+    add_updates_slide(prs, items, limit=args.limit, summary_text=summary_text)
     prs.save(output_path)
     print(f"[update_ppt] 저장 완료: {output_path}")
 
