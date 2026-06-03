@@ -71,9 +71,10 @@ azure-contents-generator/
 
 | Secret 이름 | 용도 |
 |-------------|------|
-| `ANTHROPIC_API_KEY` | Anthropic Claude API 호출 (PPT skill 실행) |
-| `AZURE_DOCS_SOURCE` *(선택)* | Azure 정보 소스 URL 또는 토큰 |
+| `CLAUDE_CODE_OAUTH_TOKEN` | `anthropics/claude-code-action` 인증 (Claude Code 구독 OAuth 토큰, `claude setup-token` 으로 발급) |
 | `GITHUB_TOKEN` | (기본 제공) PR 생성용 |
+
+> Anthropic **API 키는 필요하지 않습니다**. Claude Code 구독 OAuth 토큰으로 CI에서 Claude를 호출합니다.
 
 ### 2. Anthropic PPT Skill
 

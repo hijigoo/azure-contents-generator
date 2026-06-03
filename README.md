@@ -39,9 +39,13 @@ git push -u origin main
 
 푸시한 저장소의 **Settings → Secrets and variables → Actions → New repository secret**:
 
-| Name | Value |
-|------|-------|
-| `ANTHROPIC_API_KEY` | Anthropic 콘솔에서 발급한 API 키 |
+| Name | Value | 발급 방법 |
+|------|-------|-----------|
+| `CLAUDE_CODE_OAUTH_TOKEN` | Claude Code 구독 OAuth 토큰 | 로컬에서 `claude setup-token` 실행 → 발급된 토큰 복사 |
+
+> **Anthropic API 키는 필요하지 않습니다.** Claude Code 구독(Pro/Max)이 있으면
+> OAuth 토큰만으로 GitHub Actions에서 Claude를 호출할 수 있고,
+> `anthropics/claude-code-action` 이 자동으로 skills를 인식해 사용합니다.
 
 ### 4) Actions 권한 확인
 
@@ -90,33 +94,37 @@ PR을 머지하면 `main` 의 `samples/` (원본) 와 `previews/` (미리보기)
 
 ## 🧪 로컬에서 빠르게 시험
 
+로컬에서는 두 가지 방법 중 편한 쪽을 선택:
+
+**(A) Claude Code CLI 사용 — API 키 불필요, 구독만 있으면 됨**
+
 ```bash
 # 1. 의존성
 pip install -r scripts/requirements.txt
-# (macOS) brew install libreoffice poppler   # 미리보기 변환용
+# (macOS) brew install libreoffice poppler
 
 # 2. Anthropic 공식 pptx skill sparse-checkout
 git clone --depth 1 --filter=blob:none --sparse \
   https://github.com/anthropics/skills.git .skills
 git -C .skills sparse-checkout set skills/pptx
-export SKILL_PATH="$(pwd)/.skills/skills/pptx"
 
 # 3. Azure 업데이트 수집
 python scripts/fetch_azure_updates.py --out .cache/updates.json
 
-# 4. PPT 업데이트 (dry-run 으로 미리 확인)
-export ANTHROPIC_API_KEY=sk-ant-...
-python scripts/update_ppt.py \
-  --input  "samples/Microsoft Foundry를 활용한 Agentic AI.pptx" \
-  --updates .cache/updates.json \
-  --skill   "$SKILL_PATH" \
-  --dry-run
+# 4. Claude Code CLI 로 갱신 (구독 로그인 상태)
+claude "samples/Microsoft Foundry를 활용한 Agentic AI.pptx 파일을 \
+.cache/updates.json 의 최신 Azure 정보로 갱신해줘. \
+.skills/skills/pptx 의 pptx skill을 사용해."
 
 # 5. 미리보기(PDF/PNG) 생성
 python scripts/render_ppt_previews.py \
   --input "samples/Microsoft Foundry를 활용한 Agentic AI.pptx" \
   --out   "previews/Microsoft Foundry를 활용한 Agentic AI"
 ```
+
+**(B) Anthropic API 직접 호출 — `scripts/update_ppt.py` 사용 (선택)**
+
+API 키가 있는 경우 `ANTHROPIC_API_KEY` 를 설정하고 `scripts/update_ppt.py` 실행.
 
 ---
 
