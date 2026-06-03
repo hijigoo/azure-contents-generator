@@ -78,7 +78,20 @@ Copilot Coding Agent 가 할당 받으면 **자체 브랜치 → 커밋 → Draf
 <!-- LATEST:START -->
 **🆕 2026-06-04 01:59:19 KST** — `Microsoft Foundry를 활용한 Agentic AI`
 
-[🖼 전체 슬라이드 미리보기](./releases/20260604-015919-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/README.md) · [📄 PDF](./releases/20260604-015919-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pdf) · [📊 PPTX 다운로드](./releases/20260604-015919-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pptx)
+[🖼 전체 슬라이드 미리보기](./releases/20260604-015919-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/README.md) · [📄 PDF](./releases/20260604-015919-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pdf) · [📊 PPTX 다운로드](./releases/20260604-015919-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI.pptx) · [📝 요약(summary.md)](./releases/20260604-015919-Microsoft%20Foundry%EB%A5%BC%20%ED%99%9C%EC%9A%A9%ED%95%9C%20Agentic%20AI/summary.md)
+
+#### ✍️ LLM 요약
+
+<blockquote>
+
+Agentic AI 최신 업데이트
+- **Azure Monitor Simple Log Alerts** 가 GA로 전환되어 간단한 로그 알림 구성이 쉬워졌습니다. (Azure Updates)
+- **Foundry Agents in VS Code Observability** 가 Public Preview로 제공되어 코드 중심 추적이 강화되었습니다. (Azure Updates)
+- **Azure Cosmos DB Agent Kit** 이 GA로 제공되어 에이전트 개발 구현 패턴을 빠르게 적용할 수 있습니다. (Azure Updates)
+- **Azure SQL 업데이트(6월 초)** 가 Public Preview로 공개되어 데이터 워크로드 기능이 확장되었습니다. (Azure Updates)
+- **Azure Files on macOS with Entra ID** 가 Public Preview로 제공되어 보안 파일 접근 시나리오가 강화되었습니다. (Azure Updates)
+
+</blockquote>
 
 #### 🆕 추가된 슬라이드
 

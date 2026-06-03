@@ -13,12 +13,19 @@ from pptx.slide import SlideLayout
 from pptx.util import Pt
 
 SLIDE_TITLE = "Latest Azure Updates"
+BODY_FONT_SIZE = Pt(17)
+SUMMARY_MAX_LEN = 58
+FALLBACK_TEXTBOX = (Pt(36), Pt(108), Pt(620), Pt(320))
+STATUS_PREFIX_PATTERN = re.compile(r"^\[[^\]]+\]\s*")
 
 
-def load_skill_context(skill_dir: Path) -> tuple[str, str]:
+def validate_skill_context(skill_dir: Path) -> None:
     skill_md = skill_dir / "SKILL.md"
     editing_md = skill_dir / "editing.md"
-    return skill_md.read_text(encoding="utf-8"), editing_md.read_text(encoding="utf-8")
+    if not skill_md.exists() or not editing_md.exists():
+        raise SystemExit(f"Skill context files not found under: {skill_dir}")
+    skill_md.read_text(encoding="utf-8")
+    editing_md.read_text(encoding="utf-8")
 
 
 def remove_existing(prs: Presentation, title: str) -> int:
@@ -41,7 +48,7 @@ def choose_layout(prs: Presentation) -> SlideLayout:
 
 
 def split_title(title: str) -> tuple[str, str]:
-    cleaned = re.sub(r"^\[[^\]]+\]\s*", "", title).strip()
+    cleaned = STATUS_PREFIX_PATTERN.sub("", title).strip()
     if ":" in cleaned:
         head, tail = cleaned.split(":", 1)
         return head.strip(), tail.strip()
@@ -52,8 +59,8 @@ def summarize_kr(text: str) -> str:
     s = re.sub(r"\s+", " ", text or "").strip()
     if not s:
         return "업데이트가 공개되었습니다."
-    if len(s) > 58:
-        s = s[:57].rstrip() + "…"
+    if len(s) > SUMMARY_MAX_LEN:
+        s = s[: SUMMARY_MAX_LEN - 1].rstrip() + "…"
     return s
 
 
@@ -64,7 +71,7 @@ def populate_body(slide, items: list[dict], limit: int) -> None:
             body = shape
             break
     if body is None:
-        body = slide.shapes.add_textbox(Pt(36), Pt(108), Pt(620), Pt(320))
+        body = slide.shapes.add_textbox(*FALLBACK_TEXTBOX)
 
     tf = body.text_frame
     tf.clear()
@@ -76,7 +83,7 @@ def populate_body(slide, items: list[dict], limit: int) -> None:
         p.text = "업데이트 항목이 없습니다."
         p.level = 0
         for run in p.runs:
-            run.font.size = Pt(17)
+            run.font.size = BODY_FONT_SIZE
         return
 
     for idx, item in enumerate(selected):
@@ -92,11 +99,11 @@ def populate_body(slide, items: list[dict], limit: int) -> None:
         run_product = p.add_run()
         run_product.text = product
         run_product.font.bold = True
-        run_product.font.size = Pt(17)
+        run_product.font.size = BODY_FONT_SIZE
 
         run_desc = p.add_run()
         run_desc.text = f" — {line_desc} (Azure Updates)"
-        run_desc.font.size = Pt(17)
+        run_desc.font.size = BODY_FONT_SIZE
 
 
 def populate_notes(slide, items: list[dict], limit: int) -> None:
@@ -138,7 +145,7 @@ def dedupe_pptx_zip(pptx_path: Path) -> int:
 
 
 def build_slide(input_pptx: Path, output_pptx: Path, updates_path: Path, limit: int, skill_dir: Path) -> tuple[int, int]:
-    load_skill_context(skill_dir)
+    validate_skill_context(skill_dir)
 
     data = json.loads(updates_path.read_text(encoding="utf-8"))
     items = data.get("items", [])
