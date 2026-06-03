@@ -11,6 +11,7 @@ from pathlib import Path
 
 from pptx import Presentation
 from pptx.enum.shapes import PP_PLACEHOLDER
+from pptx.slide import Slide
 from pptx.text.text import TextFrame
 
 from update_ppt import dedupe_pptx_zip
@@ -236,10 +237,11 @@ def remove_previous_insert_slides(prs: Presentation) -> int:
         slide = prs.slides[idx]
         if not slide.has_notes_slide or not slide.notes_slide.notes_text_frame:
             continue
-        first_line = (slide.notes_slide.notes_text_frame.text or "").splitlines()[0:1]
-        if not first_line:
+        note_text = slide.notes_slide.notes_text_frame.text or ""
+        lines = note_text.splitlines()
+        if not lines:
             continue
-        header = first_line[0].strip()
+        header = lines[0].strip()
         if header.startswith("[auto-update:") and "ACTION=INSERT" in header:
             xml_slides.remove(list(xml_slides)[idx])
             removed += 1
@@ -297,12 +299,14 @@ def main() -> None:
     items = data.get("items", [])
 
     prs = Presentation(input_path)
+    if len(prs.slides) == 0:
+        sys.exit("프레젠테이션에 슬라이드가 없어 업데이트할 수 없습니다.")
     removed_inserts = remove_previous_insert_slides(prs)
     update_cover_if_slot_exists(prs)
 
     slide_texts = [collect_slide_text(slide) for slide in prs.slides]
     changed_items_by_slide: dict[int, list[dict]] = defaultdict(list)
-    action_meta: dict[int, tuple[object, str, str]] = {}
+    action_meta: dict[int, tuple[Slide, str, str]] = {}
     inserted = 0
     counts = defaultdict(int)
 
