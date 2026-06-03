@@ -117,6 +117,37 @@ def maybe_run_skill_clean(pptx: Path, skill_dir: Path) -> None:
         print(f"[update_ppt] skill clean.py 실패(무시): {exc.stderr.decode(errors='ignore')[:200]}")
 
 
+def dedupe_pptx_zip(pptx_path: Path) -> int:
+    """python-pptx 가 만든 .pptx 안에 같은 이름의 zip entry 가 여러 개 들어가는
+    경우가 있다 (원본 .pptx 의 손상된 master.rels 등이 원인). LibreOffice/Keynote
+    같은 엄격한 리더가 'source file could not be loaded' 로 거부하므로, 같은 이름은
+    **마지막** entry 만 남기고 재압축한다. 제거된 entry 개수를 반환."""
+    import shutil
+    import zipfile
+
+    with zipfile.ZipFile(pptx_path, "r") as zin:
+        infos = zin.infolist()
+        kept: dict[str, tuple[zipfile.ZipInfo, bytes]] = {}
+        for info in infos:
+            with zin.open(info) as fh:
+                data = fh.read()
+            kept[info.filename] = (info, data)
+        removed = len(infos) - len(kept)
+
+    if removed == 0:
+        return 0
+
+    tmp = pptx_path.with_suffix(pptx_path.suffix + ".dedup")
+    with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
+        for name, (info, data) in kept.items():
+            new_info = zipfile.ZipInfo(filename=name, date_time=info.date_time)
+            new_info.compress_type = zipfile.ZIP_DEFLATED
+            new_info.external_attr = info.external_attr
+            zout.writestr(new_info, data)
+    shutil.move(str(tmp), str(pptx_path))
+    return removed
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Azure 업데이트 슬라이드 기계 삽입")
     parser.add_argument("--input", required=True, help="원본 PPT 경로 (덮어씀)")
@@ -157,6 +188,9 @@ def main() -> None:
             print(f"[update_ppt] LLM 요약 사용: {sp} ({len(summary_text)}자)")
     add_updates_slide(prs, items, limit=args.limit, summary_text=summary_text)
     prs.save(output_path)
+    removed = dedupe_pptx_zip(output_path)
+    if removed:
+        print(f"[update_ppt] 중복 zip entry {removed}개 정리됨 (LibreOffice 호환)")
     print(f"[update_ppt] 저장 완료: {output_path}")
 
     maybe_run_skill_clean(output_path, skill_dir)
