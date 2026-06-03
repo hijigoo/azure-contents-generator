@@ -22,6 +22,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 EMU_PER_INCH = 914400
 DEFAULT_FONT = 18
+SLIDE_SORT_FALLBACK = sys.maxsize
 
 
 def require(cmd: str) -> str:
@@ -35,7 +36,7 @@ def slide_sort_key(path: Path) -> tuple[int, str]:
     try:
         return (int(path.stem.split("-")[-1]), path.name)
     except ValueError:
-        return (sys.maxsize, path.name)
+        return (SLIDE_SORT_FALLBACK, path.name)
 
 
 def pptx_to_pdf(pptx: Path, out_dir: Path) -> Path:
@@ -71,6 +72,8 @@ def pdf_to_png(pdf: Path, out_dir: Path, dpi: int = 110) -> list[Path]:
 
 
 def _relative_link(base_dir: Path, target: Path) -> str:
+    if target.parent.resolve() == base_dir.resolve():
+        return target.name
     return os.path.relpath(target.resolve(), start=base_dir.resolve()).replace("\\", "/")
 
 
@@ -107,7 +110,12 @@ def shape_box(shape, scale: float, offset_x: int = 0, offset_y: int = 0) -> tupl
     )
 
 
-def wrap_text(draw: ImageDraw.ImageDraw, text: str, font, max_width: int) -> list[str]:
+def wrap_text(
+    draw: ImageDraw.ImageDraw,
+    text: str,
+    font: ImageFont.FreeTypeFont | ImageFont.ImageFont,
+    max_width: int,
+) -> list[str]:
     if not text:
         return [""]
     lines: list[str] = []
@@ -117,7 +125,7 @@ def wrap_text(draw: ImageDraw.ImageDraw, text: str, font, max_width: int) -> lis
             candidate = current + ch
             if current and draw.textlength(candidate, font=font) > max_width:
                 lines.append(current.rstrip())
-                current = ch.lstrip()
+                current = "" if ch.isspace() else ch
             else:
                 current = candidate
         lines.append(current.rstrip() or raw_line.strip() or "")

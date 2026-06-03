@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from pathlib import Path
 from urllib.parse import quote
 
@@ -15,6 +16,7 @@ ROOT_TABLE_START = "<!-- RELEASES:START -->"
 ROOT_TABLE_END = "<!-- RELEASES:END -->"
 ROOT_LATEST_START = "<!-- LATEST:START -->"
 ROOT_LATEST_END = "<!-- LATEST:END -->"
+SLIDE_SORT_FALLBACK = sys.maxsize
 
 
 def list_releases(releases_dir: Path) -> list[Path]:
@@ -36,7 +38,7 @@ def _slide_sort_key(path: Path) -> tuple[int, str]:
     try:
         return (int(path.stem.split("-")[-1]), path.name)
     except ValueError:
-        return (10**9, path.name)
+        return (SLIDE_SORT_FALLBACK, path.name)
 
 
 def _ts_display(name: str) -> str:

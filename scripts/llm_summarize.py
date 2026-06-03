@@ -144,12 +144,12 @@ def build_local_summary(items: list[dict]) -> str:
 
 def ensure_issue_closure(body: str, issue_number: str | None) -> str:
     text = body.rstrip()
-    if not issue_number or f"Closes #{issue_number}" in text:
+    if issue_number is None or re.search(rf"closes\s*#\s*{re.escape(issue_number)}\b", text, flags=re.IGNORECASE):
         return text
     return f"{text}\n\nCloses #{issue_number}"
 
 
-def build_local_pr_body(items: list[dict], issue_number: str | None) -> str:
+def build_local_pr_body(items: list[dict]) -> str:
     bullets = [fallback_bullet(item) for item in pick_items(items, limit=5)]
     body = [
         "## TL;DR",
@@ -169,7 +169,7 @@ def build_local_pr_body(items: list[dict], issue_number: str | None) -> str:
         "## 🔗 데이터 소스",
         "- Microsoft Release Communications RSS, Azure Updates, Microsoft Tech Community RSS",
     ]
-    return ensure_issue_closure("\n".join(body), issue_number)
+    return "\n".join(body)
 
 
 def main() -> None:
@@ -257,7 +257,7 @@ def main() -> None:
             print(f"[llm_summarize] GitHub Models PR 본문 사용: {args.model}")
         except RuntimeError as exc:
             print(f"[llm_summarize] GitHub Models PR 본문 실패 → 로컬 폴백 사용: {exc}")
-            pr_body = build_local_pr_body(all_items, issue_number)
+            pr_body = build_local_pr_body(all_items)
         pr_body = ensure_issue_closure(pr_body, issue_number)
         pr_path = Path(args.pr_body)
         pr_path.parent.mkdir(parents=True, exist_ok=True)
