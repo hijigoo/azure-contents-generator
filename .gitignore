@@ -7,3 +7,5 @@ __pycache__/
 *.bak.pptx
 .venv/
 .env
+# Pages 빌드 산출물 (워크플로가 새로 생성)
+site/
