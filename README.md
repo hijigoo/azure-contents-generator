@@ -16,10 +16,15 @@ Azure 관련 PPT 자료를 **최신 정보로 자동 업데이트**하는 CI/CD 
 - 빌더: [`scripts/build_site.py`](./scripts/build_site.py) (외부 의존성 없는 순수 Python, 다크모드 자동)
 - PPTX·PDF 는 raw GitHub URL 로 링크 → Pages 아티팩트는 PNG + HTML 만 (가벼움)
 
-### 🔧 1회 설정 (Pages 활성화)
-1. Settings → **Pages** → *Build and deployment*
-2. **Source** 를 **`GitHub Actions`** 로 변경 (`Deploy from a branch` ❌)
-3. 다음 워크플로가 main 으로 들어가면 자동 배포 시작
+### 🔧 1회 설정 (Pages 활성화 — **필수**)
+
+> ⚠️ **GitHub 정책상 워크플로(`GITHUB_TOKEN`)는 Pages 를 자동 활성화할 수 없습니다.**
+> 아래 두 단계를 **한 번만** 수동으로 진행해 주세요. 그 이후로는 모두 자동입니다.
+
+1. 레포의 **Settings → Pages** 진입
+2. *Build and deployment* → **Source** 를 **`GitHub Actions`** 로 선택
+3. Actions 탭에서 *Publish GitHub Pages* 워크플로를 **Run workflow** (또는 main 에 아무 변경 push)
+4. 완료되면 같은 *Settings → Pages* 페이지 상단에 사이트 URL 표시 → 보통 `https://<owner>.github.io/<repo>/`
 
 > 로컬 미리보기: `python scripts/build_site.py --releases releases --out site && python -m http.server -d site 8000`
 
