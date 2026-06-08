@@ -9,24 +9,21 @@ Azure 관련 PPT 자료를 **최신 정보로 자동 업데이트**하는 CI/CD 
 
 ## 🌐 GitHub Pages — 릴리즈 카탈로그 사이트
 
-매 PR 머지 시 [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) 이 자동으로 사이트를 다시 빌드해 배포합니다.
+매 PR 머지 시 [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) 이 자동으로 사이트를 다시 빌드해 `docs/` 폴더에 커밋합니다. GitHub Pages 는 `main` 브랜치의 `/docs` 를 그대로 서빙합니다.
 
 - 사이트 URL: **`https://<owner>.github.io/<repo>/`** *(예: `https://hijigoo.github.io/azure-contents-generator/`)*
 - 보여주는 것: `releases/` 폴더 카드 목록 → 클릭 시 슬라이드 PNG 갤러리 + PPTX/PDF 다운로드 버튼
 - 빌더: [`scripts/build_site.py`](./scripts/build_site.py) (외부 의존성 없는 순수 Python, 다크모드 자동)
-- PPTX·PDF 는 raw GitHub URL 로 링크 → Pages 아티팩트는 PNG + HTML 만 (가벼움)
+- `docs/` 에는 PNG + HTML 만 커밋, PPTX·PDF 는 raw GitHub URL 로 링크 (저장소 가벼움)
 
-### 🔧 1회 설정 (Pages 활성화 — **필수**)
-
-> ⚠️ **GitHub 정책상 워크플로(`GITHUB_TOKEN`)는 Pages 를 자동 활성화할 수 없습니다.**
-> 아래 두 단계를 **한 번만** 수동으로 진행해 주세요. 그 이후로는 모두 자동입니다.
+### 🔧 1회 설정 (Pages 활성화)
 
 1. 레포의 **Settings → Pages** 진입
-2. *Build and deployment* → **Source** 를 **`GitHub Actions`** 로 선택
-3. Actions 탭에서 *Publish GitHub Pages* 워크플로를 **Run workflow** (또는 main 에 아무 변경 push)
-4. 완료되면 같은 *Settings → Pages* 페이지 상단에 사이트 URL 표시 → 보통 `https://<owner>.github.io/<repo>/`
+2. **Build and deployment** → **Source** 를 **`Deploy from a branch`** 로 선택
+3. **Branch** 를 **`main`** + **`/docs`** 로 지정 후 *Save*
+4. 워크플로가 한 번 돌고 나면 같은 페이지 상단에 사이트 URL 표시 → 보통 `https://<owner>.github.io/<repo>/`
 
-> 로컬 미리보기: `python scripts/build_site.py --releases releases --out site && python -m http.server -d site 8000`
+> 로컬 미리보기: `python scripts/build_site.py --releases releases --out docs && python -m http.server -d docs 8000`
 
 ---
 

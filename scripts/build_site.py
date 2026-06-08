@@ -1,14 +1,15 @@
 """GitHub Pages 정적 사이트 빌드.
 
-releases/ 폴더를 스캔해 site/ 에 다음을 생성한다:
+releases/ 폴더를 스캔해 docs/ 에 다음을 생성한다:
 
-- site/index.html        : 전체 릴리즈 카드 목록 (최신순, slide-01.png 썸네일)
-- site/releases/<id>/index.html : 릴리즈별 슬라이드 갤러리 + 다운로드 링크
-- site/releases/<id>/slide-*.png : 미리보기 PNG 복사
-- site/assets/style.css  : 공통 스타일 (라이트/다크 자동)
+- docs/index.html        : 전체 릴리즈 카드 목록 (최신순, slide-01.png 썸네일)
+- docs/sample/index.html : 샘플 랜딩 페이지
+- docs/releases/<id>/index.html : 릴리즈별 슬라이드 갤러리 + 다운로드 링크
+- docs/releases/<id>/slide-*.png : 미리보기 PNG 복사
+- docs/assets/style.css  : 공통 스타일 (라이트/다크 자동)
 
 PPTX / PDF 같은 큰 바이너리는 사이트에 복사하지 않고 GitHub raw URL 로 링크해서
-Pages 아티팩트를 가볍게 유지한다. 환경변수:
+Pages 산출물을 가볍게 유지한다. 환경변수:
 
     GITHUB_REPOSITORY  : owner/repo (Actions 에서 자동 주입; 로컬은 default)
     GITHUB_REF_NAME    : 기본 브랜치명 (Actions 에서 자동 주입; 로컬은 main)
@@ -388,7 +389,7 @@ def build(releases_dir: Path, out_dir: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build GitHub Pages site from releases/")
     parser.add_argument("--releases", default="releases", help="releases directory")
-    parser.add_argument("--out", default="site", help="output directory")
+    parser.add_argument("--out", default="docs", help="output directory")
     args = parser.parse_args()
     build(Path(args.releases), Path(args.out))
     return 0
