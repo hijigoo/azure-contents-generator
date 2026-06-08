@@ -97,8 +97,32 @@ header.site { display: flex; align-items: baseline; justify-content: space-betwe
   gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
 header.site h1 { margin: 0; font-size: 1.6rem; }
 header.site .sub { color: var(--muted); font-size: 0.95rem; }
+header.site nav { display: flex; gap: 16px; align-items: center; }
 header.site nav a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
 header.site nav a:hover { text-decoration: underline; }
+
+/* sample landing */
+.hero { padding: 56px 0 40px; text-align: center; }
+.hero .eyebrow { display: inline-block; padding: 4px 12px; border-radius: 999px;
+  background: var(--code-bg); color: var(--muted); font-size: 0.8rem; margin-bottom: 16px;
+  letter-spacing: 0.04em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin: 0 0 16px;
+  letter-spacing: -0.02em; }
+.hero h1 .grad { background: linear-gradient(135deg, var(--accent), #a855f7);
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 640px; margin: 0 auto 28px; }
+.hero .ctas { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.features { display: grid; gap: 20px; padding: 40px 0;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.feature { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px; }
+.feature .icon { font-size: 1.8rem; margin-bottom: 8px; }
+.feature h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.feature p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+.cta-band { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+  padding: 36px 28px; text-align: center; margin: 24px 0; }
+.cta-band h2 { margin: 0 0 8px; font-size: 1.5rem; }
+.cta-band p { margin: 0 0 20px; color: var(--muted); }
 .cards { display: grid; gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
@@ -210,7 +234,10 @@ def render_index(releases: list[dict], repo: str) -> str:
     <h1>📊 Azure Contents Generator</h1>
     <div class="sub">최신 Azure / Microsoft 업데이트가 반영된 PPT 릴리즈 카탈로그</div>
   </div>
-  <nav><a href="https://github.com/{escape(repo)}" target="_blank" rel="noopener">GitHub ↗</a></nav>
+  <nav>
+    <a href="sample/">소개</a>
+    <a href="https://github.com/{escape(repo)}" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
 </header>
 <section class="cards">
 {cards_html}
@@ -267,6 +294,67 @@ def render_release(r: dict, repo: str, raw_base: str) -> str:
     return page_shell(f"{r['stem']} — {r['ts_human']}", body, css_href="../../assets/style.css")
 
 
+def render_sample(repo: str) -> str:
+    body = f"""<header class="site">
+  <div>
+    <h1><a href="../" style="color:inherit;text-decoration:none">📊 Azure Contents Generator</a></h1>
+    <div class="sub">샘플 랜딩 페이지</div>
+  </div>
+  <nav>
+    <a href="../">릴리즈</a>
+    <a href="https://github.com/{escape(repo)}" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">Sample Page</span>
+  <h1>Azure 최신 소식을 <span class="grad">PPT로 자동</span> 정리합니다</h1>
+  <p class="lead">
+    매주 Microsoft 공식 RSS를 수집하고, GitHub Models 또는 Copilot Coding Agent가
+    한국어 슬라이드를 생성합니다. PR 한 번이면 배포까지 완료됩니다.
+  </p>
+  <div class="ctas">
+    <a class="btn" href="../">📚 릴리즈 보기</a>
+    <a class="btn secondary" href="https://github.com/{escape(repo)}" target="_blank" rel="noopener">⭐ GitHub</a>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <div class="icon">🤖</div>
+    <h3>LLM 기반 자동 요약</h3>
+    <p>GitHub Models 무료 티어로 한국어 슬라이드 본문을 매주 자동 생성합니다.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">🎨</div>
+    <h3>원본 디자인 유지</h3>
+    <p>python-pptx로 슬라이드 마스터와 테마를 그대로 보존하며 콘텐츠만 갱신합니다.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">📦</div>
+    <h3>릴리즈 카탈로그</h3>
+    <p>모든 산출물(PPTX · PDF · PNG)이 releases/ 폴더에 시간순으로 누적됩니다.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">🌗</div>
+    <h3>다크 모드 자동</h3>
+    <p>OS 테마를 따라 라이트/다크가 자동 전환됩니다. 외부 의존성 없는 순수 Python 빌드.</p>
+  </div>
+</section>
+
+<section class="cta-band">
+  <h2>이 프로젝트가 마음에 드시나요?</h2>
+  <p>레포를 fork하거나 issue로 의견을 남겨주세요.</p>
+  <a class="btn" href="https://github.com/{escape(repo)}" target="_blank" rel="noopener">GitHub에서 보기 ↗</a>
+</section>
+
+<footer class="site">
+  자동 생성 · <a href="https://github.com/{escape(repo)}">{escape(repo)}</a>
+</footer>
+"""
+    return page_shell("샘플 페이지 — Azure Contents Generator", body, css_href="../assets/style.css")
+
+
 def build(releases_dir: Path, out_dir: Path) -> None:
     repo = os.environ.get("GITHUB_REPOSITORY", "hijigoo/azure-contents-generator")
     raw_base = repo_raw_base()
@@ -282,6 +370,10 @@ def build(releases_dir: Path, out_dir: Path) -> None:
     releases = [parse_release(p) for p in list_releases(releases_dir)]
 
     (out_dir / "index.html").write_text(render_index(releases, repo), encoding="utf-8")
+
+    sample_dir = out_dir / "sample"
+    sample_dir.mkdir(parents=True, exist_ok=True)
+    (sample_dir / "index.html").write_text(render_sample(repo), encoding="utf-8")
 
     for r in releases:
         rel_out = out_dir / "releases" / r["id"]
