@@ -1,0 +1,149 @@
+{
+  "generated_at": "2026-06-08T00:23:32.347891+00:00",
+  "feeds": [
+    "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+    "https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=AI-AzureAIServicesBlog"
+  ],
+  "items": [
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Ingestion Volume Change dashboard in Metrics Usage Insights",
+      "link": "https://azure.microsoft.com/updates?id=565286",
+      "published": "Fri, 05 Jun 2026 20:45:48 Z",
+      "summary": "Metrics Usage Insights now includes an Ingestion Volume Change dashboard to help you compare ingestion volume over time. Quickly detect spikes or drops in time series counts and event ingestion rates, enabling faster investigation of cost changes and more"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In development] Private Preview: Guest RDMA on Azure Boost",
+      "link": "https://azure.microsoft.com/updates?id=564981",
+      "published": "Fri, 05 Jun 2026 20:30:12 Z",
+      "summary": "Guest RDMA is now in preview on Azure, starting in the UK South region, bringing high-throughput, ultra-low latency networking directly into guest VMs within the same region. By using Azure Boost to enable RDMA in the guest OS, applications can bypass the"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Voice sync for avatar support in Voice Live API in Microsoft Foundry",
+      "link": "https://azure.microsoft.com/updates?id=564176",
+      "published": "Thu, 04 Jun 2026 22:15:50 Z",
+      "summary": "In public preview, Microsoft Foundry now supports avatar voice sync with custom voices in the Voice Live API, allowing developers to pair branded or persona-specific text-to-speech voices with real-time avatar experiences. This update helps teams building"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Azure Files assessments are now available worldwide using Azure Migrate",
+      "link": "https://azure.microsoft.com/updates?id=564563",
+      "published": "Thu, 04 Jun 2026 21:45:11 Z",
+      "summary": "We’re pleased to\nannounce that Azure Migrate now generally supports discovery and assessment\nof SMB and NFS file shares hosted on Windows and Linux servers. This gives\ncustomers a complete, data-driven view of their file share environment and a\nclear path"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: AI pipelines in Azure HorizonDB",
+      "link": "https://azure.microsoft.com/updates?id=565182",
+      "published": "Thu, 04 Jun 2026 19:45:40 Z",
+      "summary": "AI pipelines for Azure HorizonDB is now\navailable in public preview. AI pipelines let you describe an AI data ingestion\nworkflow, chunking, embedding, extraction, generation, and ranking,\ndeclaratively in SQL, and run it as a fault-tolerant pipeline insid"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Ingest OTLP signals into Azure Monitor with the OpenTelemetry Collector",
+      "link": "https://azure.microsoft.com/updates?id=565090",
+      "published": "Thu, 04 Jun 2026 19:45:40 Z",
+      "summary": "Azure Monitor's support for native ingestion of OpenTelemetry Protocol (OTLP) signals is now generally available. This enables you to send telemetry data directly from OpenTelemetry-instrumented applications and platforms to Azure Monitor. You can configu"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Tool search in Microsoft Foundry toolboxes",
+      "link": "https://azure.microsoft.com/updates?id=563506",
+      "published": "Thu, 04 Jun 2026 19:30:58 Z",
+      "summary": "Microsoft Foundry adds tool search to Foundry toolboxes in public preview, giving developers and admins a fast way to find the right tool inside large, multi-team catalogs. As your toolbox grows, sending every tool definition on every turn gets expensive."
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: APIM Support for Foundry Models in Azure AI Search",
+      "link": "https://azure.microsoft.com/updates?id=563451",
+      "published": "Thu, 04 Jun 2026 19:30:58 Z",
+      "summary": "Microsoft Foundry brings Azure API Management support to all Foundry model integrations in Azure AI Search, now in public preview. Enterprise platform engineers and AI solution teams running large-scale RAG pipelines can place Foundry and Azure OpenAI mod"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure SQL as a knowledge source in Foundry IQ",
+      "link": "https://azure.microsoft.com/updates?id=563446",
+      "published": "Thu, 04 Jun 2026 19:30:58 Z",
+      "summary": "Microsoft Foundry adds Azure SQL Database as a first-class Knowledge Source in Azure AI Search, available in public preview. Enterprise developers and solution architects building Copilot, RAG, and agentic experiences can now expose authoritative tables a"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Microsoft Discovery",
+      "link": "https://azure.microsoft.com/updates?id=562733",
+      "published": "Thu, 04 Jun 2026 19:30:58 Z",
+      "summary": "Microsoft Discovery is now generally available, providing research and development organizations an enterprise\nplatform for building and governing agentic AI workflows across scientific and\nengineering disciplines. Also available in preview is the Microso"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Private Connectivity for Azure AI Search and Foundry Knowledge Bases",
+      "link": "https://azure.microsoft.com/updates?id=563516",
+      "published": "Thu, 04 Jun 2026 19:15:11 Z",
+      "summary": "Azure AI Search and Foundry Knowledge Bases now support private, end-to-end network connectivity between search resources and Foundry services. Customers can route ingestion, enrichment, retrieval, and agent traffic over Shared Private Link or Network Sec"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Fabric IQ Ontology Knowledge Source in Microsoft Foundry IQ",
+      "link": "https://azure.microsoft.com/updates?id=563416",
+      "published": "Thu, 04 Jun 2026 19:15:11 Z",
+      "summary": "Microsoft Foundry IQ now treats a Microsoft Fabric Ontology as a federated knowledge source in public preview, giving agents a way to query the semantic layer customers already curate in Fabric. Foundry IQ translates natural language questions into ontolo"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Microsoft Foundry IQ",
+      "link": "https://azure.microsoft.com/updates?id=563222",
+      "published": "Thu, 04 Jun 2026 19:15:11 Z",
+      "summary": "Microsoft Foundry IQ reaches general availability, giving developers a managed knowledge layer that grounds agents in enterprise data without rebuilding retrieval pipelines for each project. Teams connect SharePoint, OneLake, Azure Blob, and other sources"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Content Understanding chunking and image verbalization in Azure AI Search",
+      "link": "https://azure.microsoft.com/updates?id=563661",
+      "published": "Thu, 04 Jun 2026 19:00:34 Z",
+      "summary": "Azure AI Search now supports Content Understanding chunking and image verbalization in public preview, expanding the built-in skill that parses rich documents during indexing. Indexers can split documents into semantically meaningful chunks and generate t"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Azure Monitor Service Level Indicators (SLI)",
+      "link": "https://azure.microsoft.com/updates?id=565159",
+      "published": "Thu, 04 Jun 2026 16:30:52 Z",
+      "summary": "Azure Monitor now includes Service Level Indicators (SLIs) and Service Level Objectives (SLOs), giving teams a clearer way to measure how customers actually experience their applications. Instead of relying only on infrastructure signals like CPU or isola"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: MAI-Voice-2 in Microsoft Foundry",
+      "link": "https://azure.microsoft.com/updates?id=563217",
+      "published": "Wed, 03 Jun 2026 23:00:57 Z",
+      "summary": "Microsoft Foundry now offers MAI-Voice-2 in public preview, a first-party voice model from the Microsoft AI team. MAI-Voice-2 generates natural speech across more than 10 languages and supports voice cloning from a short reference sample, plus voice promp"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] General Availability: Backup your ledger files for audit with Azure confidential ledger’s new tool",
+      "link": "https://azure.microsoft.com/updates?id=560810",
+      "published": "Wed, 03 Jun 2026 22:15:24 Z",
+      "summary": "Ever wondered how to allow auditing personas (i.e. security analyst in your organization or security assessment contractor) the ability to view your ledger files and establish trust in the cryptographic\n proofs themselves? With the new localized, web ledg"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Text Analytics for Health NextGen Playground in Azure AI Language",
+      "link": "https://azure.microsoft.com/updates?id=563671",
+      "published": "Wed, 03 Jun 2026 21:15:57 Z",
+      "summary": "Azure AI Language brings the next-generation Text Analytics for Health (TA4H) playground to general availability in the Microsoft Foundry portal. Clinical informatics teams and ISVs can paste discharge summaries, doctor's notes, or research abstracts and"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: User feedback logging in Microsoft Foundry",
+      "link": "https://azure.microsoft.com/updates?id=563431",
+      "published": "Wed, 03 Jun 2026 21:15:57 Z",
+      "summary": "This feature introduces end user feedback logging semantics that enables developers to capture structured feedback signals from real users interacting with AI agents—such as thumbs up/down, ratings, or custom annotations—and automatically associates that"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Self-serve custom photo avatar creation in Microsoft Foundry",
+      "link": "https://azure.microsoft.com/updates?id=563491",
+      "published": "Wed, 03 Jun 2026 20:45:02 Z",
+      "summary": "Microsoft Foundry brings self-serve custom photo avatar creation to GA in the Foundry NextGen fine-tuning portal. Enterprise customers building voice agents with avatars or producing content with avatar and speech often need a branded avatar instead of a"
+    }
+  ]
+}
