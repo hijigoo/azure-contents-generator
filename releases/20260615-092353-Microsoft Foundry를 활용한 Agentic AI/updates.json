@@ -1,0 +1,149 @@
+{
+  "generated_at": "2026-06-15T00:23:43.727465+00:00",
+  "feeds": [
+    "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+    "https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=AI-AzureAIServicesBlog"
+  ],
+  "items": [
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Av2-series, F-series, Fs-series, Fsv2-series, G-series, Gs-series, and Lsv2-series Virtual Machines for Azure Batch pools",
+      "link": "https://azure.microsoft.com/updates?id=564774",
+      "published": "Thu, 11 Jun 2026 19:00:41 Z",
+      "summary": "Azure Compute will retire the following Virtual Machine series on November 15, 2028, impacting Azure Batch pools that rely on them:Av2-seriesF-series, Fs-series, Fsv2-seriesG-series, Gs-seriesLsv2-seriesAfter this date:New Batch pools using these VM serie"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: D-series, Ds-series, Dv2-series, Dsv2-series, and Ls-series Virtual Machines for Azure Batch pools",
+      "link": "https://azure.microsoft.com/updates?id=564772",
+      "published": "Thu, 11 Jun 2026 19:00:41 Z",
+      "summary": "Azure Compute will retire the following Virtual Machine series on May 1, 2028, impacting Azure Batch pools that rely on them:D-series, Ds-seriesDv2-series, Dsv2-seriesLs-seriesAfter this date:New Batch pools using these VM series cannot be createdExisting"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: GPv1 and Legacy Blob storage account creation",
+      "link": "https://azure.microsoft.com/updates?id=564441",
+      "published": "Thu, 11 Jun 2026 19:00:41 Z",
+      "summary": "As part of our ongoing efforts to streamline the Azure\nStorage portfolio and deliver enhanced performance, scalability, and cost\nefficiency, we are announcing the retirement of all General purpose v1 (GPv1)\nstorage accounts. This includes legacy blob stor"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: SQL MCP Server",
+      "link": "https://azure.microsoft.com/updates?id=564734",
+      "published": "Thu, 11 Jun 2026 18:45:02 Z",
+      "summary": "SQL MCP Server is now generally available, giving customers\na secure, high-performance way to build agentic solutions with controlled\naccess to production data. Built for SQL and compatible with PostgreSQL and\nAzure Cosmos DB, SQL MCP Server is a dynamic,"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Azure Load Balancer Inbound NAT rule version 1 for Azure VMSS (aka Inbound NAT Pools)",
+      "link": "https://azure.microsoft.com/updates?id=565482",
+      "published": "Thu, 11 Jun 2026 16:15:07 Z",
+      "summary": "Update to our previous communication: We previously\nannounced the retirement of all Inbound NAT rules version 1 resources, which\nincluded both single-VM NAT rules and NAT pools for Virtual Machine Scale\nSets. We have narrowed the scope of this retirement"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Microsoft Entra server principals on Azure SQL Database",
+      "link": "https://azure.microsoft.com/updates?id=565154",
+      "published": "Wed, 10 Jun 2026 20:45:26 Z",
+      "summary": "Microsoft Entra server principals (logins) for Azure SQL Database is now generally available. You can now use CREATE LOGIN ... FROM EXTERNAL PROVIDER in the virtual master database, bringing parity with SQL logins for your Microsoft Entra identities.With"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Azure Synapse Link for Azure Cosmos DB NoSQL",
+      "link": "https://azure.microsoft.com/updates?id=558560",
+      "published": "Wed, 10 Jun 2026 17:00:06 Z",
+      "summary": "As of March 31, 2026, new Azure Cosmos DB NoSQL accounts can no longer enable Azure Synapse Link. Existing customers will remain fully supported until March 31, 2029, when Azure Synapse Link will reach end of life.We encourage all customers to begin migra"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Azure VPN Client for Linux (Preview) will be retired on August 31, 2026",
+      "link": "https://azure.microsoft.com/updates?id=565393",
+      "published": "Wed, 10 Jun 2026 16:15:16 Z",
+      "summary": "The Azure VPN Client for Linux (Preview) has remained in public preview and does not have a path to general availability (GA). As part of our ongoing efforts to align Azure networking services with current security and reliability standards, this preview"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Agent mode for GitHub Copilot in SQL Server Management Studio (SSMS)",
+      "link": "https://azure.microsoft.com/updates?id=562637",
+      "published": "Tue, 09 Jun 2026 23:45:10 Z",
+      "summary": "You can now use Agent mode for GitHub Copilot in SSMS to work with your database: investigating performance problems, tuning queries, reviewing maintenance and configuration, identifying security concerns, troubleshooting errors, and assisting with operat"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: PostgreSQL Hub for Azure Developers",
+      "link": "https://azure.microsoft.com/updates?id=562084",
+      "published": "Tue, 09 Jun 2026 18:45:07 Z",
+      "summary": "PostgreSQL Hub for Azure Developers brings together key AI and application development resources for PostgreSQL on Azure. It includes curated sample apps and solution accelerators, tutorials, and structured learning pathways to help you build everything f"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Update: Minimum billable object size for cooler storage tiers",
+      "link": "https://azure.microsoft.com/updates?id=559756",
+      "published": "Tue, 14 Apr 2026 21:15:15 Z",
+      "summary": "We are pausing the introduction of a minimum billable object size for the cool, cold, and archive access tiers. As a result, billing behavior will not change on July 1, 2026, for either new or existing storage accounts.  We will provide an update on our r"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Azure NC RTX PRO 6000 Blackwell Server Edition v6 Series Virtual Machines",
+      "link": "https://azure.microsoft.com/updates?id=565271",
+      "published": "Mon, 08 Jun 2026 18:15:14 Z",
+      "summary": "Azure NCv6-series virtual machines (VMs) are now generally available in the Azure Southeast Asia and West US 2 regions. NCv6 VMs are powered by NVIDIA RTX PRO 6000 Blackwell Server Edition graphics processing units (GPUs) with each GPU featuring 96 GB of"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Premium SSD v2 disks now support non-zonal Azure Virtual Machines",
+      "link": "https://azure.microsoft.com/updates?id=565359",
+      "published": "Mon, 08 Jun 2026 18:00:23 Z",
+      "summary": "Azure Premium SSD v2 disks now support non-zonal, single-instance Azure virtual machines in select Azure regions with Availability Zones (AZs). Customers can now deploy Premium SSD v2 with non-zonal virtual machines without selecting an Availability Zone."
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Microsoft Foundry agent security capabilities in Microsoft Defender for Cloud are transitioning to a Microsoft Agent 365 license",
+      "link": "https://azure.microsoft.com/updates?id=565171",
+      "published": "Mon, 08 Jun 2026 17:15:43 Z",
+      "summary": "Starting July 1, 2026, Microsoft Foundry agent security capabilities previously available through Microsoft Defender for Cloud will transition to a Microsoft Agent 365 license. Agent protection in Defender will be powered by Agent 365 observability logs a"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure Site Recovery support for Linux Azure VMs with NVMe disk controllers.",
+      "link": "https://azure.microsoft.com/updates?id=565103",
+      "published": "Mon, 08 Jun 2026 17:15:43 Z",
+      "summary": "Azure Site Recovery\nnow supports replication and disaster recovery for Linux Azure Virtual Machines\nrunning on NVMe-enabled Generation 2 VM families, such as the Da/Ea/Fa\nv6-series and Ebsv5/Ebdsv5 in the Azure-to-Azure scenario. This support is\nlimited t"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Maintenance control for Azure Database for PostgreSQL - reschedule, apply on demand, view and download",
+      "link": "https://azure.microsoft.com/updates?id=563756",
+      "published": "Mon, 08 Jun 2026 17:15:43 Z",
+      "summary": "Enhanced maintenance control capabilities are now generally available for Azure Database for PostgreSQL Flexible Server. These new capabilities give you greater visibility and flexibility in managing platform maintenance events, helping reduce disruption"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure Managed Redis now supports Entra ID based RBAC for data management",
+      "link": "https://azure.microsoft.com/updates?id=564873",
+      "published": "Mon, 08 Jun 2026 16:15:40 Z",
+      "summary": "With role-based access control (RBAC) for Azure Managed Redis data access, you can precisely control who can read, write, or administer your Redis data using Microsoft Entra ID—without relying on shared keys. Built on top of Redis Access Control Lists (AC"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Ingestion Volume Change dashboard in Metrics Usage Insights",
+      "link": "https://azure.microsoft.com/updates?id=565286",
+      "published": "Fri, 05 Jun 2026 20:45:48 Z",
+      "summary": "Metrics Usage Insights now includes an Ingestion Volume Change dashboard to help you compare ingestion volume over time. Quickly detect spikes or drops in time series counts and event ingestion rates, enabling faster investigation of cost changes and more"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In development] Private Preview: Guest RDMA on Azure Boost",
+      "link": "https://azure.microsoft.com/updates?id=564981",
+      "published": "Fri, 05 Jun 2026 20:30:12 Z",
+      "summary": "Guest RDMA is now in preview on Azure, starting in the UK South region, bringing high-throughput, ultra-low latency networking directly into guest VMs within the same region. By using Azure Boost to enable RDMA in the guest OS, applications can bypass the"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Voice sync for avatar support in Voice Live API in Microsoft Foundry",
+      "link": "https://azure.microsoft.com/updates?id=564176",
+      "published": "Thu, 04 Jun 2026 22:15:50 Z",
+      "summary": "In public preview, Microsoft Foundry now supports avatar voice sync with custom voices in the Voice Live API, allowing developers to pair branded or persona-specific text-to-speech voices with real-time avatar experiences. This update helps teams building"
+    }
+  ]
+}
