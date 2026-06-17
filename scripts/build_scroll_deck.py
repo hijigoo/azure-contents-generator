@@ -395,8 +395,17 @@ def extract_deck(pptx_path: Path) -> list[dict]:
         # 임베디드/링크 영상 (YouTube 등) → video 블록
         blocks.extend(_slide_videos(slide))
 
+        # 발표자 노트(슬라이드 노트) → 발표자 모드용 스크립트
+        notes = ""
+        try:
+            if slide.has_notes_slide:
+                notes = _clean(slide.notes_slide.notes_text_frame.text).strip()
+        except Exception:
+            notes = ""
+
         deck.append({"num": i, "auto_title": auto_title, "w_pt": w_pt,
-                     "ar": sw / sh_, "shapes": shapes_out, "blocks": blocks})
+                     "ar": sw / sh_, "shapes": shapes_out, "blocks": blocks,
+                     "notes": notes})
     return deck
 
 
@@ -457,7 +466,7 @@ nav a:hover{background:var(--active);}
 nav a.active{background:var(--active);border-left-color:var(--accent);font-weight:600;}
 nav a .n{color:var(--muted);min-width:22px;text-align:right;font-variant-numeric:tabular-nums;}
 main{padding:32px clamp(16px,4vw,64px) 40vh;}
-.slide-wrap{max-width:1000px;margin:0 auto 26px;scroll-margin-top:20px;}
+.slide-wrap{max-width:1180px;margin:0 auto 26px;scroll-margin-top:20px;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;
 box-shadow:var(--stage-shadow);padding:clamp(24px,3.5vw,48px);min-height:60vh;
 display:flex;flex-direction:column;}
@@ -531,7 +540,7 @@ blockquote cite{display:block;margin-top:8px;font-style:normal;font-size:.88em;c
 .card-body table th{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;}
 .card--hero{align-items:center;justify-content:center;text-align:center;min-height:72vh;}
 .card--hero .card-head{border-bottom:none;margin:0;padding:0;}
-.card--hero .card-head h2{font-size:clamp(30px,5vw,52px);margin-top:12px;line-height:1.15;}
+.card--hero .card-head h2{font-size:clamp(28px,4vw,44px);margin-top:12px;line-height:1.15;}
 .card--hero .card-body{flex:none;margin-top:18px;}
 .card--hero .lead{font-size:1.2em;color:var(--muted);font-weight:400;}
 .topbar{display:none;}
@@ -565,11 +574,11 @@ radial-gradient(120% 90% at 100% 0%,rgba(124,92,255,.14),transparent 55%),
 radial-gradient(90% 80% at 100% 100%,rgba(227,0,140,.08),transparent 60%);}
 .frag--plain{background:var(--card);color:var(--fg);border:1px solid var(--border);}
 .frag h1.ftitle{margin:0;font-weight:800;line-height:1.12;
-font-size:clamp(30px,4.2vw,52px);letter-spacing:-.01em;
+font-size:clamp(27px,3.5vw,44px);letter-spacing:-.01em;
 text-wrap:balance;overflow-wrap:break-word;word-break:keep-all;max-width:18ch;
 margin-inline:auto;}
 .frag:not(.frag--center) h1.ftitle{margin-inline:0;max-width:24ch;}
-.frag .fsub{margin:14px 0 0;font-weight:700;font-size:clamp(17px,2vw,24px);
+.frag .fsub{margin:14px 0 0;font-weight:700;font-size:clamp(16px,1.7vw,22px);
 color:var(--msft-purple);line-height:1.3;}
 .frag .feyebrow{font-weight:700;font-size:13px;letter-spacing:.08em;
 text-transform:uppercase;color:var(--msft-purple);}
@@ -628,13 +637,23 @@ color:var(--ink-dim);margin-bottom:18px;}
 .frag .brandbar .sq i:nth-child(3){background:#00a4ef;}
 .frag .brandbar .sq i:nth-child(4){background:#ffb900;}
 /* 실제 PPT 캡처 이미지 프레임 */
-.frag figure.fshot{margin:0;width:100%;}
+.frag figure.fshot{margin:0;width:100%;display:flex;flex-direction:column;justify-content:center;}
 .frag figure.fshot img{display:block;width:100%;height:auto;border-radius:12px;
 border:1px solid var(--hair);box-shadow:0 10px 34px rgba(0,0,0,.28);
 background:#fff;}
 .frag figure.fshot figcaption{margin-top:10px;color:var(--ink-dim);font-size:13px;text-align:center;}
 .frag .fshot--zoom img{cursor:zoom-in;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;}
 .frag .fshot--zoom img:hover{transform:scale(1.02);box-shadow:0 18px 50px rgba(0,0,0,.4);}
+/* 이미지 그리드 안의 스크린샷은 셀을 가득 채워 충분히 크게 */
+.frag .fgrid.imgL{grid-template-columns:1.7fr 1fr;align-items:stretch;}
+.frag .fgrid.imgR{grid-template-columns:1fr 1.7fr;align-items:stretch;}
+.frag .fgrid.imgL>figure.fshot,.frag .fgrid.imgR>figure.fshot{align-self:center;}
+.frag .fgrid.imgL>figure.fshot img,.frag .fgrid.imgR>figure.fshot img{
+width:100%;max-height:none;}
+/* 이미지 비중이 작은 그리드는 더 넓게 보이도록 좌우 여백 축소 */
+.frag:has(.fgrid.imgL) ,.frag:has(.fgrid.imgR){padding-left:clamp(20px,2.4vw,40px);padding-right:clamp(20px,2.4vw,40px);}
+/* 단독(전폭) 스크린샷은 과하게 커지지 않도록 가운데 정렬 + 상한 */
+.frag>figure.fshot,.frag .reveal>figure.fshot{max-width:1040px;margin-inline:auto;}
 /* 이미지·다이어그램 라이트박스(클릭 시 확대) */
 .lightbox{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.9);display:none;
 align-items:center;justify-content:center;padding:4vh 4vw;cursor:zoom-out;}
@@ -700,6 +719,79 @@ font-size:clamp(18px,2.4vw,24px);box-shadow:0 8px 22px rgba(0,0,0,.35);transitio
 .frag .forbit .onode .ot{font-weight:700;font-size:clamp(12px,1.35vw,15px);line-height:1.2;}
 .frag .forbit .onode .od{font-size:clamp(10px,1.1vw,12px);color:var(--ink-dim);line-height:1.3;}
 @keyframes spin{to{transform:rotate(360deg);}}
+/* === 하단 컨트롤 바 === */
+.deckbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:45;
+display:flex;align-items:center;gap:4px;padding:6px 8px;border-radius:999px;
+background:color-mix(in srgb,var(--card) 86%,transparent);backdrop-filter:blur(12px);
+-webkit-backdrop-filter:blur(12px);border:1px solid var(--border);
+box-shadow:0 10px 34px rgba(0,0,0,.3);font-size:13px;color:var(--fg);
+opacity:.32;transition:opacity .25s,transform .25s;}
+.deckbar:hover,.deckbar:focus-within{opacity:1;}
+.deckbar button{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+min-width:34px;height:34px;padding:0 12px;border-radius:999px;border:1px solid transparent;
+background:none;color:inherit;cursor:pointer;font-size:15px;line-height:1;}
+.deckbar button:hover{background:var(--active);}
+.deckbar .dbcount{min-width:62px;text-align:center;font-variant-numeric:tabular-nums;
+font-weight:600;cursor:default;}
+.deckbar .dbcount:hover{background:none;}
+.deckbar .sep{width:1px;height:20px;background:var(--border);margin:0 3px;}
+.deckbar .lbl{font-size:13px;font-weight:600;}
+@media (max-width:560px){.deckbar .lbl{display:none;}.deckbar button{padding:0 8px;}}
+@media print{.deckbar{display:none;}}
+/* === 발표(전체화면 단일 슬라이드) 오버레이 === */
+.present{position:fixed;inset:0;z-index:60;background:#05060a;display:none;
+align-items:center;justify-content:center;}
+body.presenting{overflow:hidden;}
+body.presenting .present{display:flex;}
+.present .stagebox{position:relative;width:min(96vw,calc(94vh*16/9));
+height:min(94vh,calc(96vw*9/16));overflow:hidden;border-radius:14px;
+background:var(--bg);box-shadow:0 30px 90px rgba(0,0,0,.6);}
+.fit-holder{position:absolute;top:0;left:0;transform-origin:top left;}
+.fit-holder .slide-wrap{margin:0;max-width:none;opacity:1;transform:none;}
+.fit-holder .frag{min-height:0;}
+.present .pbtn,.present .pexit{position:absolute;z-index:3;border-radius:50%;
+border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;
+cursor:pointer;display:grid;place-items:center;opacity:.45;transition:opacity .2s,background .2s;}
+.present .pbtn:hover,.present .pexit:hover{opacity:1;background:rgba(255,255,255,.18);}
+.present .pbtn{top:50%;transform:translateY(-50%);width:48px;height:48px;font-size:24px;}
+.present .pprev{left:20px;} .present .pnext{right:20px;}
+.present .pexit{top:18px;right:20px;width:40px;height:40px;font-size:18px;}
+.present .pnum{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+color:#fff;opacity:.55;font-size:14px;font-variant-numeric:tabular-nums;z-index:3;}
+/* === 발표자 모드(별도 창) === */
+.presenter-room{display:none;}
+body.presenter{overflow:hidden;}
+body.presenter .layout,body.presenter .deckbar,body.presenter .topbar,
+body.presenter .side-open,body.presenter .present{display:none!important;}
+body.presenter .presenter-room{display:grid;position:fixed;inset:0;background:#0b0d14;
+color:#e8eaf2;gap:14px;padding:16px;
+grid-template-columns:1.55fr 1fr;grid-template-rows:1.1fr 1.4fr auto;
+grid-template-areas:"cur next" "cur script" "bar bar";}
+.presenter-room .plabel{font-size:12px;font-weight:700;letter-spacing:.08em;
+text-transform:uppercase;color:#8b93b4;margin-bottom:8px;}
+.presenter-room .pcur{grid-area:cur;display:flex;flex-direction:column;min-height:0;}
+.presenter-room .pnext{grid-area:next;display:flex;flex-direction:column;min-height:0;}
+.presenter-room .pscript{grid-area:script;display:flex;flex-direction:column;min-height:0;
+background:#11141e;border:1px solid #232838;border-radius:12px;padding:16px 18px;}
+.presenter-room .pscript-body{overflow:auto;white-space:pre-wrap;line-height:1.62;
+font-size:clamp(16px,1.5vw,22px);color:#dfe3f0;}
+.presenter-room .pscript-body.empty{color:#6b7390;font-style:italic;}
+.presenter-room .pcur .stagebox,.presenter-room .pnext .stagebox{position:relative;
+flex:1;min-height:0;overflow:hidden;border-radius:12px;background:#05060a;
+border:1px solid #232838;}
+.presenter-room .pbar{grid-area:bar;display:flex;align-items:center;gap:14px;
+background:#11141e;border:1px solid #232838;border-radius:12px;padding:10px 16px;}
+.presenter-room .pbar .ptime{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;
+letter-spacing:.02em;}
+.presenter-room .pbar .pcounter{font-size:15px;color:#aeb6d4;font-variant-numeric:tabular-nums;}
+.presenter-room .pbar .grow{flex:1;}
+.presenter-room .pbar button{height:40px;min-width:44px;padding:0 16px;border-radius:10px;
+border:1px solid #2c3247;background:#1a1f2e;color:#e8eaf2;cursor:pointer;font-size:15px;
+font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+.presenter-room .pbar button:hover{background:#252b3d;}
+.presenter-room .pbar button.accent{background:linear-gradient(135deg,#3b82f6,#8b5cf6);border:none;}
+@media (max-width:780px){body.presenter .presenter-room{grid-template-columns:1fr;
+grid-template-rows:auto auto 1fr auto;grid-template-areas:"cur" "next" "script" "bar";}}
 @media (prefers-reduced-motion:reduce){
 .slide-wrap{opacity:1;transform:none;transition:none;}
 .slide-wrap.in .reveal{animation:none;}
@@ -707,6 +799,199 @@ font-size:clamp(18px,2.4vw,24px);box-shadow:0 8px 22px rgba(0,0,0,.35);transitio
 .frag .fshot--zoom img:hover{transform:none;}
 .frag .forbit .ring{animation:none;}
 }
+"""
+
+
+# 발표/발표자/전체화면 인터랙션 (f-string 아님 — 중괄호 그대로 사용 가능)
+PRESENT_JS = r"""
+(function(){
+  var NOTES = window.__NOTES || {};
+  var DECK  = window.__DECK  || 'deck';
+  var slides = [].slice.call(document.querySelectorAll('.slide-wrap'));
+  var total = slides.length;
+  if(!total) return;
+  var state = { index: 0 };
+  var isPresenter = /present=presenter/.test(location.hash);
+
+  var chan = null;
+  try { chan = new BroadcastChannel('deck:'+DECK); } catch(e) { chan = null; }
+  function send(msg){ if(chan){ try{ chan.postMessage(msg); }catch(e){} } }
+
+  function currentScrollIndex(){
+    var mid=window.innerHeight*0.5, best=0, bestD=Infinity;
+    for(var i=0;i<slides.length;i++){
+      var r=slides[i].getBoundingClientRect();
+      if(r.top<=mid && r.bottom>=mid) return i;
+      var c=(r.top+r.bottom)/2, d=Math.abs(c-mid);
+      if(d<bestD){ bestD=d; best=i; }
+    }
+    return best;
+  }
+
+  var DESIGN_W = 1280;
+  function fitInto(box, slideEl){
+    if(!box) return;
+    box.innerHTML='';
+    if(!slideEl) return;
+    var holder=document.createElement('div');
+    holder.className='fit-holder';
+    holder.style.width=DESIGN_W+'px';
+    var node=slideEl.cloneNode(true);
+    node.classList.add('in');
+    holder.appendChild(node);
+    box.appendChild(holder);
+    requestAnimationFrame(function(){
+      var bw=box.clientWidth, bh=box.clientHeight;
+      var nh=holder.scrollHeight||720, nw=DESIGN_W;
+      var s=Math.min(bw/nw, bh/nh);
+      holder.style.transform='scale('+s+')';
+      holder.style.left=Math.max(0,(bw-nw*s)/2)+'px';
+      holder.style.top=Math.max(0,(bh-nh*s)/2)+'px';
+    });
+  }
+
+  var present=document.querySelector('.present');
+  var pStage=present? present.querySelector('.stagebox'):null;
+  var pNum=present? present.querySelector('.pnum'):null;
+  function renderPresent(){
+    fitInto(pStage, slides[state.index]);
+    if(pNum) pNum.textContent=(state.index+1)+' / '+total;
+  }
+  function enterPresent(){
+    document.body.classList.add('presenting');
+    try{ if(!document.fullscreenElement && document.documentElement.requestFullscreen)
+      document.documentElement.requestFullscreen(); }catch(e){}
+    renderPresent();
+  }
+  function exitPresent(){
+    document.body.classList.remove('presenting');
+    if(pStage) pStage.innerHTML='';
+    try{ if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); }catch(e){}
+    if(slides[state.index]) slides[state.index].scrollIntoView({block:'start'});
+  }
+
+  var room=document.querySelector('.presenter-room');
+  var curBox=room? room.querySelector('.pcur-box'):null;
+  var nextBox=room? room.querySelector('.pnext-box'):null;
+  var scriptBody=room? room.querySelector('.pscript-body'):null;
+  var counter=room? room.querySelector('.pcounter'):null;
+  var timeEl=room? room.querySelector('.ptime'):null;
+  function renderPresenter(){
+    fitInto(curBox, slides[state.index]);
+    fitInto(nextBox, slides[state.index+1]||null);
+    var n=NOTES[String(state.index+1)]||'';
+    if(scriptBody){
+      scriptBody.textContent=n||'이 슬라이드에는 발표자 노트가 없습니다.';
+      scriptBody.classList.toggle('empty', !n);
+    }
+    if(counter) counter.textContent=(state.index+1)+' / '+total;
+  }
+
+  var bar=document.querySelector('.deckbar');
+  var barCount=bar? bar.querySelector('.dbcount'):null;
+  function updateBar(){ if(barCount) barCount.textContent=(state.index+1)+' / '+total; }
+
+  var navAt=0;
+  function go(i, opts){
+    opts=opts||{};
+    i=Math.max(0,Math.min(total-1,i));
+    state.index=i;
+    updateBar();
+    if(document.body.classList.contains('presenter')) renderPresenter();
+    else if(document.body.classList.contains('presenting')) renderPresent();
+    else if(opts.scroll!==false && slides[i]){
+      navAt=Date.now();
+      slides[i].scrollIntoView({behavior:opts.smooth===false?'auto':'smooth',block:'start'});
+    }
+    if(!opts.silent) send({t:'goto', i:state.index});
+  }
+  function next(){ go(state.index+1); }
+  function prev(){ go(state.index-1); }
+
+  function toggleFS(){
+    var d=document;
+    if(!d.fullscreenElement){ if(d.documentElement.requestFullscreen) d.documentElement.requestFullscreen(); }
+    else if(d.exitFullscreen){ d.exitFullscreen(); }
+  }
+
+  function openPresenter(){
+    enterPresent();
+    var url=location.pathname+location.search+'#present=presenter';
+    var w=window.open(url,'deckPresenter_'+DECK,'width=1280,height=820');
+    if(!w){ alert('팝업이 차단되었습니다. 발표자 창을 열려면 팝업을 허용해 주세요.'); }
+  }
+
+  if(chan){
+    chan.onmessage=function(ev){
+      var m=ev.data||{};
+      if(m.t==='goto'){ go(m.i,{silent:true,scroll:true}); }
+      else if(m.t==='hello'){ send({t:'goto', i:state.index}); }
+    };
+  }
+
+  document.addEventListener('keydown',function(e){
+    if(e.altKey||e.ctrlKey||e.metaKey) return;
+    var tag=(e.target&&e.target.tagName)||'';
+    if(tag==='SELECT'||tag==='INPUT'||tag==='TEXTAREA') return;
+    var mode = document.body.classList.contains('presenter') ? 'presenter'
+             : document.body.classList.contains('presenting') ? 'present' : 'scroll';
+    if(e.key==='ArrowRight'||e.key==='PageDown'){ next(); if(mode!=='scroll') e.preventDefault(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ prev(); if(mode!=='scroll') e.preventDefault(); }
+    else if(e.key===' '){ if(mode!=='scroll'){ next(); e.preventDefault(); } }
+    else if(e.key==='Escape'){ if(mode==='present') exitPresent(); }
+    else if(e.key==='f'||e.key==='F'){ if(mode!=='scroll') toggleFS(); }
+  });
+
+  if(isPresenter){
+    document.body.classList.add('presenter');
+    var t0=Date.now();
+    function tick(){ if(!timeEl) return; var s=Math.floor((Date.now()-t0)/1000);
+      var mm=String(Math.floor(s/60)).padStart(2,'0'), ss=String(s%60).padStart(2,'0');
+      timeEl.textContent=mm+':'+ss; }
+    setInterval(tick,1000); tick();
+    if(room){
+      var rp=room.querySelector('.pp-prev'), rn=room.querySelector('.pp-next'),
+          rf=room.querySelector('.pp-fs'), rr=room.querySelector('.pp-reset');
+      if(rp) rp.onclick=prev; if(rn) rn.onclick=next; if(rf) rf.onclick=toggleFS;
+      if(rr) rr.onclick=function(){ t0=Date.now(); tick(); };
+    }
+    send({t:'hello'});
+    renderPresenter();
+    window.addEventListener('load', renderPresenter);
+    setTimeout(renderPresenter, 1500);
+    window.addEventListener('resize', renderPresenter);
+    return;
+  }
+
+  if(bar){
+    var b;
+    if((b=bar.querySelector('.db-prev'))) b.onclick=prev;
+    if((b=bar.querySelector('.db-next'))) b.onclick=next;
+    if((b=bar.querySelector('.db-fs'))) b.onclick=toggleFS;
+    if((b=bar.querySelector('.db-present'))) b.onclick=enterPresent;
+    if((b=bar.querySelector('.db-presenter'))) b.onclick=openPresenter;
+  }
+  if(present){
+    present.querySelector('.pprev').onclick=prev;
+    present.querySelector('.pnext').onclick=next;
+    present.querySelector('.pexit').onclick=exitPresent;
+  }
+  var ticking=false;
+  window.addEventListener('scroll',function(){
+    if(document.body.classList.contains('presenting')) return;
+    if(Date.now()-navAt < 700) return;
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){ state.index=currentScrollIndex(); updateBar(); ticking=false; });
+  },{passive:true});
+  window.addEventListener('resize',function(){
+    if(document.body.classList.contains('presenting')) renderPresent();
+  });
+  document.addEventListener('fullscreenchange',function(){
+    if(!document.fullscreenElement && document.body.classList.contains('presenting')) exitPresent();
+  });
+  state.index=currentScrollIndex();
+  updateBar();
+})();
 """
 
 
@@ -895,6 +1180,9 @@ def render_version_html(rel: dict, deck: list[dict], titles: dict, versions: lis
     content = content or {}
     fragments = fragments or {}
     deck_name = rel["stem"]
+    notes_json = json.dumps({str(s["num"]): s.get("notes", "") for s in deck},
+                            ensure_ascii=False)
+    deck_json = json.dumps(deck_name, ensure_ascii=False)
     nav_items, sections = [], []
     for s in deck:
         title = resolve_title(s, titles)
@@ -933,6 +1221,36 @@ def render_version_html(rel: dict, deck: list[dict], titles: dict, versions: lis
 <div class="ver" style="padding-top:16px"><a href="../index.html" style="color:var(--accent)">&larr; 전체 덱 목록</a></div>
 </aside>
 <main>{''.join(sections)}</main>
+</div>
+<div class="deckbar" role="group" aria-label="발표 제어">
+<button class="db-prev" title="이전 슬라이드 (←)" aria-label="이전 슬라이드">&#8249;</button>
+<span class="dbcount">1 / {len(deck)}</span>
+<button class="db-next" title="다음 슬라이드 (→)" aria-label="다음 슬라이드">&#8250;</button>
+<span class="sep"></span>
+<button class="db-present" title="발표 시작 (전체화면 슬라이드쇼)"><span>&#9654;</span><span class="lbl">발표</span></button>
+<button class="db-presenter" title="발표자 모드 (2화면: 슬라이드 + 발표자 노트)"><span>&#127908;</span><span class="lbl">발표자</span></button>
+<button class="db-fs" title="전체화면 전환" aria-label="전체화면">&#9974;</button>
+</div>
+<div class="present" aria-hidden="true">
+<button class="pbtn pprev" aria-label="이전">&#8249;</button>
+<div class="stagebox"></div>
+<button class="pbtn pnext" aria-label="다음">&#8250;</button>
+<button class="pexit" aria-label="발표 종료 (Esc)">&#10005;</button>
+<div class="pnum"></div>
+</div>
+<div class="presenter-room">
+<div class="pcur"><div class="plabel">현재 슬라이드</div><div class="stagebox pcur-box"></div></div>
+<div class="pnext"><div class="plabel">다음 슬라이드</div><div class="stagebox pnext-box"></div></div>
+<div class="pscript"><div class="plabel">발표자 노트</div><div class="pscript-body"></div></div>
+<div class="pbar">
+<div class="ptime">00:00</div>
+<button class="pp-reset" title="타이머 초기화">&#8635;</button>
+<div class="pcounter">1 / {len(deck)}</div>
+<div class="grow"></div>
+<button class="pp-prev">&#8249; 이전</button>
+<button class="pp-next accent">다음 &#8250;</button>
+<button class="pp-fs" title="전체화면">&#9974;</button>
+</div>
 </div>
 <script>
 function toggleSide(){{document.body.classList.toggle('side-collapsed');}}
@@ -1012,6 +1330,8 @@ links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').
  }}
 }})();
 </script>
+<script>window.__NOTES={notes_json};window.__DECK={deck_json};</script>
+<script>{PRESENT_JS}</script>
 </body></html>"""
 
 
