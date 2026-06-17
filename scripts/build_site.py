@@ -236,6 +236,7 @@ def render_index(releases: list[dict], repo: str) -> str:
     <div class="sub">최신 Azure / Microsoft 업데이트가 반영된 PPT 릴리즈 카탈로그</div>
   </div>
   <nav>
+    <a href="decks/">발표용 덱</a>
     <a href="sample/">소개</a>
     <a href="https://github.com/{escape(repo)}" target="_blank" rel="noopener">GitHub ↗</a>
   </nav>
@@ -384,6 +385,13 @@ def build(releases_dir: Path, out_dir: Path) -> None:
         (rel_out / "index.html").write_text(render_release(r, repo, raw_base), encoding="utf-8")
 
     print(f"built {len(releases)} release page(s) into {out_dir}")
+
+    # 발표용 스크롤 덱(PPTX → HTML)을 docs/decks/ 로 함께 생성
+    try:
+        import build_scroll_deck
+        build_scroll_deck.build(releases_dir, out_dir / "decks")
+    except Exception as exc:  # 덱 생성 실패가 사이트 빌드를 막지 않도록
+        print(f"[warn] scroll-deck build skipped: {exc}")
 
 
 def main() -> int:
