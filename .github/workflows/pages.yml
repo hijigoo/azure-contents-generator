@@ -25,6 +25,7 @@ jobs:
         with:
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
+          lfs: true
 
       - uses: actions/setup-python@v5
         with:
