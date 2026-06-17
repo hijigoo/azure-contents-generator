@@ -1,0 +1,149 @@
+{
+  "generated_at": "2026-06-03T17:02:12.361012+00:00",
+  "feeds": [
+    "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+    "https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=AI-AzureAIServicesBlog"
+  ],
+  "items": [
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Simple log alerts in Azure Monitor",
+      "link": "https://azure.microsoft.com/updates?id=561978",
+      "published": "Wed, 03 Jun 2026 02:00:57 Z",
+      "summary": "We are excited to announce the General Availability of Simple log alerts in Azure Monitor, available starting today. This feature is designed to provide a simplified and more intuitive experience for monitoring and alerting, enhancing your ability to dete"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Code-first observability for Foundry Agents in VS Code",
+      "link": "https://azure.microsoft.com/updates?id=563197",
+      "published": "Tue, 02 Jun 2026 23:15:29 Z",
+      "summary": "Microsoft Foundry brings code-first observability to agent developers in public preview, delivered as an observe skill inside the Foundry Plugin for VS Code Copilot Chat. Developers run the full evaluation-driven optimization loop from the editor through"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Agent kit for Azure Cosmos DB",
+      "link": "https://azure.microsoft.com/updates?id=563022",
+      "published": "Tue, 02 Jun 2026 22:30:49 Z",
+      "summary": "Your AI coding agents just got smarter about building high-performance database applications. The Azure Cosmos DB Agent Kit is now generally available, bringing proven best practices directly into your development workflow. Whether you're designing data m"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure SQL updates for early-June",
+      "link": "https://azure.microsoft.com/updates?id=563142",
+      "published": "Tue, 02 Jun 2026 22:15:55 Z",
+      "summary": "In early June 2026, the following update and enhancement was made to Azure SQL: Now you can use AES 256 symmetric keys to configure transparent data encryption (TDE) with customer-managed keys in Azure SQL Database. Learn more."
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Secure, Modern Access to Azure Files on macOS with MS Entra ID",
+      "link": "https://azure.microsoft.com/updates?id=565073",
+      "published": "Tue, 02 Jun 2026 22:00:05 Z",
+      "summary": "Azure Files now supports access\nfrom macOS using Entra ID authentication (Public Preview), enabling secure,\nidentity-based access to file shares for cross-platform teams. This expands\nsupport for modern workflows, allowing users on macOS to seamlessly acc"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: File share centric management model (Microsoft.FileShares) for Azure Files",
+      "link": "https://azure.microsoft.com/updates?id=565062",
+      "published": "Tue, 02 Jun 2026 21:30:23 Z",
+      "summary": "The new file share service management experience for Azure Files is now generally available for NFS 4.1 shares on SSD storage. Powered by the Microsoft.FileShares resource provider, file shares are now top-level Azure resources that you can create, secure"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In development] Preview: Azure Cobalt 200 Arm-based Dpsv7, Dplsv7, Epsv7, Mpsv4, and Lpsv5-series Virtual Machines",
+      "link": "https://azure.microsoft.com/updates?id=564451",
+      "published": "Tue, 02 Jun 2026 21:00:30 Z",
+      "summary": "The general purpose Dpsv7 and Dplsv7, memory-optimized Epsv7, high-memory Mpsv4, and dense storage Lpsv5 VMs are now available in preview. These virtual machines deliver significant enhancements over the previous generation Cobalt 100 VMs, offering improv"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Unified Text Translation API in Azure AI Translator",
+      "link": "https://azure.microsoft.com/updates?id=563631",
+      "published": "Tue, 02 Jun 2026 21:00:30 Z",
+      "summary": "Azure AI\nTranslator's unified Text Translation API reaches general availability, giving\ndevelopers a single endpoint that fronts neural machine translation, large\nlanguage model translation, small language model translation, Adaptive custom\ntranslation, a"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure API Management introduces a Unified Model API for multi-model AI applications.",
+      "link": "https://azure.microsoft.com/updates?id=562853",
+      "published": "Tue, 02 Jun 2026 21:00:30 Z",
+      "summary": "As organizations adopt multiple LLM providers, developers often need to handle different API formats, SDKs, and integration patterns for each model vendor. This increases application complexity and makes provider switching, failover, and governance more d"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Azure API Management Premium v2 and Standard v2 now support wildcard custom hostnames.",
+      "link": "https://azure.microsoft.com/updates?id=562894",
+      "published": "Tue, 02 Jun 2026 20:45:52 Z",
+      "summary": "As API\nestates grow, managing individual custom domains and certificates for every\nsubdomain can quickly become operationally complex and difficult to\nscale. Without wildcard support, every new subdomain — whether\npayments.api.contoso.com, inventory.api.c"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Global PTU Reservations Are Now Region-Agnostic",
+      "link": "https://azure.microsoft.com/updates?id=562657",
+      "published": "Tue, 02 Jun 2026 20:45:52 Z",
+      "summary": "Global Provisioned Throughput (PTU) reservations are now region-agnostic, enabling a single reservation to cover Global PTU deployments across multiple regions. Why it matters:Optimize savings: One reservation can apply across regions, improving utilizati"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure Backup for Cosmos DB",
+      "link": "https://azure.microsoft.com/updates?id=562769",
+      "published": "Tue, 02 Jun 2026 20:15:03 Z",
+      "summary": "You can now enable vaulted backups for Azure Cosmos DB\naccounts, protecting mission-critical data with secure, isolated, and resilient\nbackups. Azure Backup for Cosmos DB, now in preview, supports cyber-resiliency\nand compliance needs, even in scenarios i"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure Policy Coverage for Model Router in Foundry Models",
+      "link": "https://azure.microsoft.com/updates?id=563636",
+      "published": "Tue, 02 Jun 2026 20:00:59 Z",
+      "summary": "Azure Policy now provides centralized governance for deployments using the model router. Organizations can define and enforce routing standards across their environment, helping ensure that model selection aligns with security, compliance, and operational"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Voice Live integration with Microsoft Foundry Agent Service",
+      "link": "https://azure.microsoft.com/updates?id=563601",
+      "published": "Tue, 02 Jun 2026 20:00:59 Z",
+      "summary": "Microsoft Foundry Agent Service is now generally available\nfor Voice Live integration, allowing developers to connect real-time\nspeech-to-text and text-to-speech to a Foundry Agent without writing their own\naudio pipeline. Existing agent capabilities — in"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Azure Sphere OS version 26.06 is now available",
+      "link": "https://azure.microsoft.com/updates?id=565033",
+      "published": "Tue, 02 Jun 2026 19:30:20 Z",
+      "summary": "Azure Sphere OS version 26.06 is now available in the Retail feed. This release includes updates to Azure Sphere OS only; it does not include an updated SDK. If your devices are connected to the internet, they will receive the updated OS from the cloud.Th"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Automatic OS Image Upgrades for VMSS Flex",
+      "link": "https://azure.microsoft.com/updates?id=564976",
+      "published": "Tue, 02 Jun 2026 19:30:20 Z",
+      "summary": "Automatic OS Image Upgrades for Virtual Machine Scale Sets (VMSS) using Flexible Orchestration are now in public preview, enabling consistent, fleet-wide OS updates with reduced manual effort. This capability extends automated image upgrades to VMSS Flex,"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: OpenTelemetry Metrics, Visualizations, and Enhanced Monitoring in Azure Monitor for Azure VMs and Arc Servers",
+      "link": "https://azure.microsoft.com/updates?id=564802",
+      "published": "Tue, 02 Jun 2026 19:30:20 Z",
+      "summary": "OpenTelemetry metrics and visualizations in Azure Monitor are generally\navailable, delivering an enhanced, unified monitoring experience for Azure\nVirtual Machines and Arc Servers. This release consolidates key monitoring\ncapabilities into a single experi"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public preview: Azure Linux 4.0 for Azure Virtual Machines and VM Scale Sets",
+      "link": "https://azure.microsoft.com/updates?id=564543",
+      "published": "Tue, 02 Jun 2026 19:30:20 Z",
+      "summary": "Azure Linux 4.0,\nMicrosoft's first-party Linux distribution purpose-built for Azure, is now\navailable in public preview for Azure Virtual Machines and VM Scale Sets. It brings a modernized stack — including Linux kernel 6.18 LTS, dnf5 package\nmanager, gli"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Azure Container Linux (ACL) now generally available on Azure Kubernetes Service (AKS)",
+      "link": "https://azure.microsoft.com/updates?id=564537",
+      "published": "Tue, 02 Jun 2026 19:30:20 Z",
+      "summary": "Azure Container Linux is a container-optimized, immutable operating system for\nAKS node pools — derived from Flatcar Container Linux and built on Azure Linux\nRPM packages. It delivers a locked-down, minimal host purpose-built for running\ncontainerized wor"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Azure Event Grid - MQTT v5 Subscription Identifier",
+      "link": "https://azure.microsoft.com/updates?id=564532",
+      "published": "Tue, 02 Jun 2026 19:30:20 Z",
+      "summary": "Azure Event Grid Standard Namespace now supports MQTT v5 subscription identifier capabilities in GA. Now each MQTT subscription can include an identifier that is\ndelivered with incoming messages, enabling applications to route events\nimmediately based on"
+    }
+  ]
+}

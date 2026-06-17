@@ -1,0 +1,50 @@
+<section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">06 / 29</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">에이전트 개발 라이프사이클</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:74ch">각 단계마다 <b>"잘 동작하나요?"</b> 를 점검하고, 그렇지 않으면 이전 단계로 돌아가 <b>Build → Optimize → Operate</b> 를 반복합니다.</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  B(["🟣 Build"]) --> O(["🔵 Optimize"]) --> P(["🟣 Operate"]) --> D([지속 운영])
+  O -. 미흡하면 보완 .-> B
+  P -. 이슈 발생 시 .-> B
+  style B fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style O fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style P fill:#e3008c22,stroke:#e3008c,color:#e8eaf2
+  style D fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">각 단계에서 "잘 동작하나요?" 를 점검하고, 미흡하면 이전 단계로 되돌아갑니다.</div>
+  </div>
+  <div class="fgrid c3" style="margin-top:22px">
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 10px;color:var(--msft-purple);font-size:18px">Build</h3>
+      <ul class="fbul">
+        <li>비즈니스 Use Case 식별</li>
+        <li>모델 · 도구 · 에이전트 리서치</li>
+        <li>프롬프트 테스트 &amp; 에이전트 빌드</li>
+        <li>도구·지식 추가, 모델 미세 조정</li>
+        <li>구성 추적 · 디버깅</li>
+        <li>Multi-Agent 오케스트레이션</li>
+      </ul>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 10px;color:var(--msft-blue);font-size:18px">Optimize</h3>
+      <ul class="fbul">
+        <li>코드 커스터마이징</li>
+        <li>확장 가능한 관리형 런타임에 호스팅</li>
+        <li>에이전트 동작 평가</li>
+        <li>에이전트 배포</li>
+      </ul>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 10px;color:var(--msft-pink);font-size:18px">Operate</h3>
+      <ul class="fbul">
+        <li>비용 · 규제 준수 · 안정성 모니터링</li>
+        <li>위험 완화 및 보호</li>
+        <li>애플리케이션 통합</li>
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,42 @@
+<section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">11 / 29</span>
+    <h1 class="ftitle" style="font-size:clamp(26px,3.4vw,42px)">모델 라우터 동작 구조</h1>
+  </div>
+  <div class="fgrid c2" style="margin-top:18px">
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-pink)">Challenge</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim)">작업에 적합한 LLM을 선택하는 것은 어렵습니다. 사용자들은 특정 사용 사례에 대해 단일 LLM에 고집하는 경우가 많습니다.</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">Opportunity</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim)">스마트 라우팅은 <b style="color:inherit">품질을 유지</b>하면서 <b style="color:inherit">비용을 최적화</b>합니다. 최적의 모델을 동적으로 선택해 사용자 경험을 저해하지 않으면서 비용을 절감합니다.</p>
+    </div>
+  </div>
+  <div class="fgrid c3" style="margin-top:18px">
+    <div class="fpanel">
+      <div class="chip" style="background:linear-gradient(120deg,#3b82f6,#8b5cf6);color:#fff;border:none">1 단계</div>
+      <p style="margin:12px 0 0;font-weight:700">사용자가 API로 엔드포인트 호출</p>
+      <ul class="fbul">
+        <li>간단한 질문 — "5월 파리 날씨는 어때?"</li>
+        <li>복잡한 쿼리 — "비건 가족을 위한 5일 일정 계획"</li>
+      </ul>
+    </div>
+    <div class="fpanel">
+      <div class="chip" style="background:linear-gradient(120deg,#6d5cf6,#e3008c);color:#fff;border:none">2 단계</div>
+      <p style="margin:12px 0 0;font-weight:700">라우터가 최적 모델로 동적 라우팅</p>
+      <ul class="fbul">
+        <li>입력 매개변수(프롬프트·도구 사용)를 평가</li>
+        <li>GPT-4.1-nano · GPT-4.1-mini · … 중 선택</li>
+      </ul>
+    </div>
+    <div class="fpanel">
+      <div class="chip" style="background:linear-gradient(120deg,#8b5cf6,#3b82f6);color:#fff;border:none">3 단계</div>
+      <p style="margin:12px 0 0;font-weight:700">최적화된 응답 반환</p>
+      <ul class="fbul">
+        <li>선택된 모델의 응답을 그대로 반환</li>
+        <li>최적화된 Response 제공</li>
+      </ul>
+    </div>
+  </div>
+</section>
