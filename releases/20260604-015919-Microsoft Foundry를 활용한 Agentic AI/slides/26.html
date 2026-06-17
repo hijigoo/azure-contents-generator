@@ -1,0 +1,35 @@
+<section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">26 / 29</span>
+    <h1 class="ftitle" style="font-size:clamp(26px,3.4vw,44px)">Agent 평가 예시 살펴보기</h1>
+    <div class="chip" style="margin-top:12px;background:linear-gradient(120deg,#3b82f6,#e3008c);color:#fff;border:none;display:inline-block">과제 : 일기예보 제공</div>
+    <p class="flead" style="margin:12px auto 0;max-width:72ch">시스템 명령어 "당신은 기상 전문가군요." · 사용자 "샌프란시스코 날씨는 어때?"</p>
+  </div>
+  <div class="fgrid c3" style="margin-top:20px">
+    <div class="fpanel">
+      <div class="chip" style="background:linear-gradient(120deg,#22d3ee,#3b82f6);color:#fff;border:none">1</div>
+      <h3 style="margin:10px 0 0">User Intent 분석</h3>
+      <p style="margin:6px 0 0;color:var(--ink-dim)">사용자는 지역 날씨와 예보 시간을 알고 싶어 합니다.</p>
+      <ul class="fbul"><li>의도 해석 평가</li></ul>
+    </div>
+    <div class="fpanel">
+      <div class="chip" style="background:linear-gradient(120deg,#3b82f6,#6d5cf6);color:#fff;border:none">2</div>
+      <h3 style="margin:10px 0 0">도구 호출</h3>
+      <p style="margin:6px 0 0;font-family:ui-monospace,monospace;color:var(--ink-dim)">get_loc() · get_weather(loc, time)</p>
+      <ul class="fbul">
+        <li>도구 호출·선택·입력·출력 정확도 *</li>
+        <li>툴 콜 성공율 * · Operational metrics</li>
+      </ul>
+    </div>
+    <div class="fpanel">
+      <div class="chip" style="background:linear-gradient(120deg,#6d5cf6,#e3008c);color:#fff;border:none">3</div>
+      <h3 style="margin:10px 0 0">응답</h3>
+      <p style="margin:6px 0 0;color:var(--ink-dim)">"흐리며 화씨 60도, 샌프란시스코에 비가 올 가능성도 있습니다."</p>
+      <ul class="fbul">
+        <li>Task 완료율 * · 작업 내비게이션 효율성 *</li>
+        <li>과제 준수(목표/정책/규칙) · Groundedness · Relevance</li>
+      </ul>
+    </div>
+  </div>
+  <p class="fstat-line" style="font-style:normal;text-align:center;font-size:13px">* Ignite 신규 기능</p>
+</section>

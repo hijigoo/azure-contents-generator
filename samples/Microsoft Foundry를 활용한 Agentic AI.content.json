@@ -1,0 +1,649 @@
+{
+ "_comment": "에이전트가 슬라이드 원문을 고객 전달용 HTML로 재구성한 콘텐츠. titles.json 이 카드 제목을 담당하고, 여기서는 본문(lead+blocks)을 정의한다.",
+ "slides": {
+  "1": {
+   "layout": "title",
+   "lead": "엔터프라이즈급 AI 에이전트를 한 플랫폼에서 구축·배포·운영하는 방법",
+   "blocks": [
+    {
+     "type": "para",
+     "text": "Kichul Kim · Solution Engineer"
+    }
+   ]
+  },
+  "2": {
+   "layout": "section",
+   "lead": "PART 1 — 모델, 도구, 오케스트레이션, 운영을 하나로 묶는 AI 앱·에이전트 플랫폼"
+  },
+  "3": {
+   "lead": "Microsoft Foundry는 아이디어에서 운영까지 이어지는 'AI 앱·에이전트 팩토리'입니다. 모델 선택부터 배포, 모니터링까지 한 흐름으로 연결됩니다.",
+   "blocks": [
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "모델",
+       "desc": "프런티어·오픈 모델을 한곳에서 선택"
+      },
+      {
+       "title": "도구·지식",
+       "desc": "데이터와 도구를 에이전트에 연결"
+      },
+      {
+       "title": "오케스트레이션",
+       "desc": "멀티 에이전트 워크플로우 구성"
+      },
+      {
+       "title": "운영·거버넌스",
+       "desc": "보안, 평가, 가시성까지 통합 관리"
+      }
+     ]
+    }
+   ]
+  },
+  "4": {
+   "lead": "팀의 역량과 요구에 맞춰 에이전트를 만드는 방식을 선택할 수 있습니다. 코드 제어력과 개발 속도 사이에서 원하는 지점을 고르세요.",
+   "blocks": [
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "Pro-code",
+       "desc": "모든 세부를 코드로 제어 — GPUs & Containers, 프레임워크 자유 사용"
+      },
+      {
+       "title": "Managed code",
+       "desc": "관리형 서비스 위에서 코드로 구축 — Foundry Agent Service의 즉시 실행 런타임"
+      },
+      {
+       "title": "Low-code / No-code",
+       "desc": "Copilot Studio의 드래그 앤 드롭으로 빠르게 구축"
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "style": "info",
+     "title": "트레이드오프",
+     "text": "왼쪽일수록 제어·맞춤화가, 오른쪽일수록 사용 편의성과 개발 속도가 커집니다."
+    }
+   ]
+  },
+  "5": {
+   "lead": "어떤 방식으로 만들든, 견고한 AI 개발은 여섯 가지 기본 구성 요소 위에서 이뤄집니다.",
+   "blocks": [
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "Models",
+       "desc": "용도에 맞는 모델 선택"
+      },
+      {
+       "title": "Deployment",
+       "desc": "확장 가능한 배포"
+      },
+      {
+       "title": "Knowledge & Tools",
+       "desc": "지식과 도구 연결"
+      },
+      {
+       "title": "Fine-tuning",
+       "desc": "맞춤화·미세 조정"
+      },
+      {
+       "title": "Orchestration & Dev Tools",
+       "desc": "오케스트레이션과 개발 도구"
+      },
+      {
+       "title": "Observability & Controls",
+       "desc": "관측성과 에이전트 제어"
+      }
+     ]
+    }
+   ]
+  },
+  "6": {
+   "lead": "에이전트는 한 번 만들고 끝나지 않습니다. Build → Optimize → Operate 의 반복 사이클로 발전합니다.",
+   "blocks": [
+    {
+     "type": "columns",
+     "items": [
+      {
+       "title": "1. Build",
+       "blocks": [
+        {
+         "type": "bullets",
+         "items": [
+          "모델·도구·에이전트 리서치",
+          "도구와 지식 추가",
+          "에이전트 빌드와 배포",
+          "애플리케이션 통합"
+         ]
+        }
+       ]
+      },
+      {
+       "title": "2. Optimize",
+       "blocks": [
+        {
+         "type": "bullets",
+         "items": [
+          "프롬프트 테스트와 평가",
+          "모델 미세 조정",
+          "코드 커스터마이징",
+          "멀티 에이전트 오케스트레이션"
+         ]
+        }
+       ]
+      },
+      {
+       "title": "3. Operate",
+       "blocks": [
+        {
+         "type": "bullets",
+         "items": [
+          "확장형 관리형 런타임 호스팅",
+          "비용·규제 준수·안정성 모니터링",
+          "구성 추적과 디버깅",
+          "위험 완화 및 보호"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "7": {
+   "layout": "section",
+   "lead": "PART 2 — Foundry Models, 모델 라우터, 오케스트레이션, 운영 제어"
+  },
+  "8": {
+   "layout": "section",
+   "lead": "수천 개의 모델을 하나의 카탈로그에서 — Foundry Models"
+  },
+  "9": {
+   "lead": "프런티어 모델부터 오픈 모델까지, 11,000개가 넘는 모델을 하나의 플랫폼에서 일관된 방식으로 사용합니다.",
+   "blocks": [
+    {
+     "type": "stats",
+     "items": [
+      {
+       "value": "11,000+",
+       "label": "Foundry Models 내 프런티어·오픈 모델"
+      }
+     ]
+    },
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "통합된 접근",
+       "desc": "모든 모델에 동일한 방식으로 접근"
+      },
+      {
+       "title": "Scalable deployment",
+       "desc": "확장 가능한 배포"
+      },
+      {
+       "title": "Enterprise-Ready",
+       "desc": "엔터프라이즈 보안·규정 준수"
+      }
+     ]
+    },
+    {
+     "type": "para",
+     "text": "대표 모델 패밀리:"
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "Azure OpenAI · Meta Llama · Mistral · DeepSeek · xAI Grok",
+      "Cohere · Phi SLM · Claude · NVIDIA · Black Forest Labs · Hugging Face",
+      "산업·지역 특화 모델: Core42 Jais · SDAIA ALLaM · NTT Tsuzumi 등"
+     ]
+    },
+    {
+     "type": "callout",
+     "style": "tip",
+     "title": "Microsoft 직접 판매 모델",
+     "text": "SLA·규정 준수, 예약 용량, 비용 최적화 PTU, 기본 제공 Safety guardrails 혜택을 제공합니다."
+    }
+   ]
+  },
+  "10": {
+   "lead": "모델 라우터는 작업 복잡성과 요구 품질을 기준으로 매 요청마다 최적의 모델을 지능적으로 선택합니다.",
+   "blocks": [
+    {
+     "type": "stats",
+     "items": [
+      {
+       "value": "최대 60%",
+       "label": "GPT-4.1 단독 대비 비용 절감 (유사 정확도)"
+      }
+     ]
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "선별된 Microsoft Foundry 모델 집합으로 라우팅",
+      "사용자가 라우팅 프로필을 선택하고 모델 하위 집합을 직접 정의",
+      "Azure 기반의 엔터프라이즈급 안정성과 내장 보안·관측성",
+      "Foundry Agent Service 에서도 사용 가능"
+     ]
+    }
+   ]
+  },
+  "11": {
+   "lead": "스마트 라우팅은 사용자 경험을 해치지 않으면서 품질을 유지하고 비용을 최적화합니다.",
+   "blocks": [
+    {
+     "type": "columns",
+     "items": [
+      {
+       "title": "Challenge",
+       "blocks": [
+        {
+         "type": "para",
+         "text": "작업에 맞는 LLM 선택은 어렵고, 사용자는 모든 사례에 단일 모델을 고집하기 쉽습니다."
+        }
+       ]
+      },
+      {
+       "title": "Opportunity",
+       "blocks": [
+        {
+         "type": "para",
+         "text": "최적 모델을 동적으로 선택하면 품질을 지키면서 비용을 줄일 수 있습니다."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "steps",
+     "items": [
+      {
+       "title": "엔드포인트 호출",
+       "desc": "사용자가 API로 라우터 엔드포인트를 호출합니다."
+      },
+      {
+       "title": "동적 지능형 라우팅",
+       "desc": "라우터가 프롬프트·도구 사용 등 입력을 평가해 최적 모델로 라우팅합니다."
+      },
+      {
+       "title": "최적화된 응답 반환",
+       "desc": "선택된 모델의 응답을 사용자에게 돌려줍니다."
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "style": "info",
+     "title": "예시",
+     "text": "\"5월 파리 날씨는?\" 같은 간단한 질문은 경량 모델(예: GPT-4.1-nano)로, \"비건 가족을 위한 5일 파리–베네치아 일정\" 같은 복잡한 요청은 더 강력한 모델로 라우팅합니다."
+    }
+   ]
+  },
+  "12": {
+   "layout": "section",
+   "lead": "PART 3 — 계획하고 추론하며 실행하는 멀티 에이전트 오케스트레이션"
+  },
+  "13": {
+   "lead": "데이터와 도구를 넘나들며 계획·추론·실행하는 지능형 멀티 에이전트 워크플로우를 구성합니다.",
+   "blocks": [
+    {
+     "type": "steps",
+     "items": [
+      {
+       "title": "모델 선택",
+       "desc": "용도에 맞는 모델 지정"
+      },
+      {
+       "title": "프롬프트 작성",
+       "desc": "에이전트의 역할과 지시 정의"
+      },
+      {
+       "title": "도구·지식·메모리 연결",
+       "desc": "데이터·도구·메모리를 결합"
+      },
+      {
+       "title": "가드레일 연결",
+       "desc": "안전·정책 가드레일 적용"
+      },
+      {
+       "title": "테스트",
+       "desc": "동작을 평가하고 반복 개선"
+      }
+     ]
+    }
+   ]
+  },
+  "14": {
+   "lead": "하나의 에이전트는 다음 구성 요소가 결합되어 동작합니다.",
+   "blocks": [
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "Model",
+       "desc": "추론을 담당하는 모델"
+      },
+      {
+       "title": "Instructions",
+       "desc": "역할·목표를 정의하는 지시"
+      },
+      {
+       "title": "Tools",
+       "desc": "행동을 수행하는 도구"
+      },
+      {
+       "title": "Knowledge",
+       "desc": "근거가 되는 지식 소스"
+      },
+      {
+       "title": "Memory",
+       "desc": "맥락을 유지하는 메모리"
+      },
+      {
+       "title": "Guardrails",
+       "desc": "안전·정책 제어"
+      }
+     ]
+    }
+   ]
+  },
+  "15": {
+   "layout": "section",
+   "lead": "프레임워크 자유도가 필요한 팀을 위한 — 커스텀 코드 에이전트"
+  },
+  "16": {
+   "lead": "원하는 프레임워크로 만든 에이전트를 컨테이너로 패키징해 Foundry Agent Service에 배포합니다.",
+   "blocks": [
+    {
+     "type": "flow",
+     "items": [
+      "Agent frameworks",
+      "Build / Package",
+      "Containers",
+      "Deploy",
+      "Foundry Agent Service"
+     ]
+    },
+    {
+     "type": "para",
+     "text": "배포된 Hosted Agent는 클라이언트의 호출을 받아 관리형 런타임 위에서 실행됩니다."
+    }
+   ]
+  },
+  "17": {
+   "lead": "Foundry로 만든 에이전트를 M365 Copilot과 Teams 채팅에 즉시 게시할 수 있습니다.",
+   "blocks": [
+    {
+     "type": "flow",
+     "items": [
+      "Foundry Agent Service",
+      "원클릭 퍼블리싱",
+      "M365 / A365"
+     ]
+    },
+    {
+     "type": "callout",
+     "style": "tip",
+     "text": "별도 통합 작업 없이, 사용자가 매일 쓰는 업무 도구에서 바로 에이전트를 사용할 수 있습니다."
+    }
+   ]
+  },
+  "18": {
+   "layout": "section",
+   "lead": "DEMO — 현장 진단 에이전트가 여러 지식 소스를 활용하는 시나리오"
+  },
+  "19": {
+   "lead": "현장 진단 질의 하나에 에이전트는 서로 다른 위치의 지식을 결합해 답합니다 — 사용자의 오타까지 보정하면서.",
+   "blocks": [
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "장비 매뉴얼",
+       "desc": "마크다운 매뉴얼이 Fabric OneLake에 통합"
+      },
+      {
+       "title": "전기 표준 정보",
+       "desc": "웹에서 최신 표준을 확인"
+      },
+      {
+       "title": "회사 방침·문서",
+       "desc": "SharePoint에서 관리되는 사내 문서"
+      },
+      {
+       "title": "오타 보정",
+       "desc": "사용자 입력의 오타를 이해하고 의도 해석"
+      }
+     ]
+    }
+   ]
+  },
+  "20": {
+   "layout": "section",
+   "lead": "에이전트가 도구를 어떻게 호출하고 연결하는지",
+   "blocks": [
+    {
+     "type": "video",
+     "src": "https://www.youtube.com/embed/bHL1jbWjJUc?start=190",
+     "caption": "데모 영상 — 에이전트가 도구를 호출하고 연결하는 과정"
+    }
+   ]
+  },
+  "21": {
+   "lead": "에이전트는 사용자 의도를 해석하고 적절한 도구를 호출해 결과를 종합하는 흐름으로 실행됩니다.",
+   "blocks": [
+    {
+     "type": "steps",
+     "items": [
+      {
+       "title": "의도 분석",
+       "desc": "사용자 요청에서 목표를 파악"
+      },
+      {
+       "title": "도구 호출",
+       "desc": "필요한 도구를 선택해 실행"
+      },
+      {
+       "title": "응답 생성",
+       "desc": "도구 결과를 종합해 답변 제공"
+      }
+     ]
+    }
+   ]
+  },
+  "22": {
+   "lead": "Microsoft Foundry의 MCP 지원 도구로 여러 도구를 순차적으로 연결해 복합 작업을 수행합니다.",
+   "blocks": [
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "Configured Tools",
+       "desc": "미리 구성된 도구"
+      },
+      {
+       "title": "Catalog Tools",
+       "desc": "카탈로그에서 선택하는 도구"
+      },
+      {
+       "title": "Custom Tools",
+       "desc": "직접 만든 맞춤 도구"
+      }
+     ]
+    }
+   ]
+  },
+  "23": {
+   "lead": "Fine-tuning은 특정 사용 사례에 맞춰 모델을 최적화해 품질과 효율을 함께 끌어올립니다.",
+   "blocks": [
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "성능·정확도 향상",
+       "desc": "특정 사용 사례에 맞춘 최적화"
+      },
+      {
+       "title": "비용·지연 최소화",
+       "desc": "AI 효율 극대화, 응답 지연 단축"
+      },
+      {
+       "title": "신뢰성 강화",
+       "desc": "편향을 줄이고 환각(hallucination) 방지"
+      }
+     ]
+    }
+   ]
+  },
+  "24": {
+   "lead": "Foundry Control Plane은 조직 전반의 AI 라이프사이클을 가시성과 제어 아래 관리합니다.",
+   "blocks": [
+    {
+     "type": "cards",
+     "items": [
+      {
+       "title": "운영 가시성",
+       "desc": "전사 AI 운영을 한눈에 파악"
+      },
+      {
+       "title": "보안 강화",
+       "desc": "정책 기반의 보안 제어"
+      },
+      {
+       "title": "전사 규모 운영 관리",
+       "desc": "조직 단위 거버넌스"
+      }
+     ]
+    }
+   ]
+  },
+  "25": {
+   "lead": "Foundry는 품질·안전·에이전트 동작·검색까지 폭넓은 평가 지표(Evaluators)를 기본 제공합니다.",
+   "blocks": [
+    {
+     "type": "columns",
+     "items": [
+      {
+       "title": "Quality",
+       "blocks": [
+        {
+         "type": "bullets",
+         "items": [
+          "Groundedness · Relevance",
+          "Coherence · Fluency · Similarity",
+          "NLP Metrics (예: F1)"
+         ]
+        }
+       ]
+      },
+      {
+       "title": "Risk & Safety",
+       "blocks": [
+        {
+         "type": "bullets",
+         "items": [
+          "Hate · Sexual · Violence · Self-Harm",
+          "Jailbreak / Indirect Attack",
+          "Protected Material · Code Vulnerability"
+         ]
+        }
+       ]
+      },
+      {
+       "title": "Agents",
+       "blocks": [
+        {
+         "type": "bullets",
+         "items": [
+          "Intent Resolution",
+          "Tool Call / Selection Accuracy",
+          "Task Adherence · Completion"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "style": "info",
+     "text": "기본 제공 평가자 외에 Custom Evaluators 로 조직 고유의 기준도 추가할 수 있습니다."
+    }
+   ]
+  },
+  "26": {
+   "lead": "에이전트 평가는 실제 실행 흐름의 각 단계를 지표로 점검합니다 — 예: 일기예보 요청.",
+   "blocks": [
+    {
+     "type": "steps",
+     "items": [
+      {
+       "title": "User Intent 분석",
+       "desc": "\"샌프란시스코 날씨는 어때?\" → 지역·시간 의도 파악 (의도 해석 평가)"
+      },
+      {
+       "title": "도구 호출",
+       "desc": "get_loc() → get_weather(loc, time) (도구 선택·입력·출력 정확도)"
+      },
+      {
+       "title": "응답",
+       "desc": "\"흐리고 화씨 60도, 비 가능성\" (과제 준수·완료율 등 운영 지표)"
+      }
+     ]
+    }
+   ]
+  },
+  "27": {
+   "lead": "모델 적응의 성숙도에 따라 단계적으로 가치를 높여갑니다 — 베이스 모델에서 지속 개선 루프까지.",
+   "blocks": [
+    {
+     "type": "steps",
+     "items": [
+      {
+       "title": "Base model",
+       "desc": "Foundry Models 의 기본 모델로 시작"
+      },
+      {
+       "title": "Prompt engineering",
+       "desc": "선언적(Declarative) 에이전트 구성"
+      },
+      {
+       "title": "RAG · Tool calling",
+       "desc": "지식 검색과 멀티 에이전트, Foundry IQ 활용"
+      },
+      {
+       "title": "Fine-tuning · RAFT",
+       "desc": "Foundry 내 미세 조정·증류(distillation)"
+      },
+      {
+       "title": "Continuous improvement",
+       "desc": "피드백·신호 루프로 지속 개선, Control Plane 으로 운영"
+      }
+     ]
+    },
+    {
+     "type": "callout",
+     "style": "tip",
+     "text": "오른쪽 단계로 갈수록 모델 적응 성숙도와 비즈니스 가치가 함께 커집니다."
+    }
+   ]
+  },
+  "28": {
+   "layout": "title",
+   "lead": "감사합니다",
+   "blocks": [
+    {
+     "type": "para",
+     "text": "Microsoft Foundry로 더 빠르고 안전하게 에이전트를 만들어 보세요."
+    }
+   ]
+  }
+ }
+}

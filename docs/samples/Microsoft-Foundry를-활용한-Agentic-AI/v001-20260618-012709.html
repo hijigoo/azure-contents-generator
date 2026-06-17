@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Microsoft Foundry를 활용한 Agentic AI (v001 · 2026-06-18 01:27:09)</title>
+<style>:root{color-scheme:light dark;--bg:#fff;--fg:#0f172a;--muted:#64748b;
+--border:#e2e8f0;--card:#fff;--accent:#2563eb;--side:#f8fafc;--active:#e0e7ff;
+--slide-bg:#ffffff;--stage-shadow:0 1px 3px rgba(0,0,0,.12),0 8px 24px rgba(0,0,0,.08);}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1120;--fg:#e2e8f0;--muted:#94a3b8;
+--border:#1e293b;--card:#0f172a;--accent:#60a5fa;--side:#0f172a;--active:#1e293b;
+--slide-bg:#ffffff;--stage-shadow:0 1px 3px rgba(0,0,0,.5),0 8px 24px rgba(0,0,0,.4);}}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,
+"Helvetica Neue",Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.4;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+aside{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+background:var(--side);border-right:1px solid var(--border);padding:20px 0;}
+aside .deck-title{padding:0 20px 12px;font-weight:700;font-size:15px;}
+aside .ver{padding:0 20px 16px;font-size:12px;color:var(--muted);}
+aside .ver select{width:100%;margin-top:6px;padding:6px;border-radius:8px;
+border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:12px;}
+nav ol{list-style:none;margin:0;padding:0;}
+nav a{display:flex;gap:10px;padding:8px 20px;text-decoration:none;color:var(--fg);
+font-size:13px;border-left:3px solid transparent;}
+nav a:hover{background:var(--active);}
+nav a.active{background:var(--active);border-left-color:var(--accent);font-weight:600;}
+nav a .n{color:var(--muted);min-width:22px;text-align:right;font-variant-numeric:tabular-nums;}
+main{padding:32px clamp(16px,4vw,64px) 40vh;}
+.slide-wrap{max-width:1000px;margin:0 auto 26px;scroll-margin-top:20px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+box-shadow:var(--stage-shadow);padding:clamp(24px,3.5vw,48px);min-height:60vh;
+display:flex;flex-direction:column;}
+.card-head{margin:0 0 22px;padding-bottom:16px;border-bottom:2px solid var(--accent);}
+.card-head .kicker{color:var(--accent);font-weight:700;font-size:12px;
+letter-spacing:.06em;text-transform:uppercase;font-variant-numeric:tabular-nums;}
+.card-head h2{margin:6px 0 0;font-size:clamp(22px,2.8vw,34px);line-height:1.22;
+font-weight:750;}
+.card-body{flex:1;font-size:clamp(15px,1.45vw,19px);}
+.card-body>*:first-child{margin-top:0;}
+ul.bullets{list-style:none;margin:14px 0;padding:0;}
+ul.bullets li{position:relative;margin:9px 0;padding-left:1.4em;line-height:1.5;}
+ul.bullets li::before{content:"\2022";position:absolute;left:.25em;color:var(--accent);
+font-weight:700;}
+ul.bullets li.lv1{margin-left:1.5em;font-size:.96em;}
+ul.bullets li.lv2{margin-left:3em;font-size:.93em;}
+ul.bullets li.lv3,ul.bullets li.lv4{margin-left:4.5em;font-size:.9em;opacity:.95;}
+ul.bullets li.lv1::before{content:"\2013";}
+ul.bullets li.lv2::before,ul.bullets li.lv3::before,ul.bullets li.lv4::before{content:"\25E6";}
+ul.bullets li.b{font-weight:700;}
+.card-body .tbl{overflow-x:auto;margin:18px 0;}
+.card-body table{border-collapse:collapse;width:100%;font-size:.92em;}
+.card-body th,.card-body td{border:1px solid var(--border);padding:8px 12px;
+vertical-align:top;text-align:left;}
+.card-body table tr:first-child td{background:var(--side);font-weight:600;}
+.card-body figure.img{margin:18px 0;text-align:center;}
+.card-body figure.img img{max-width:100%;max-height:52vh;border-radius:8px;
+border:1px solid var(--border);}
+/* 영상 */
+figure.video{margin:18px 0;}
+figure.video .frame{position:relative;width:100%;max-width:880px;margin-inline:auto;
+aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+figure.video .frame iframe,figure.video .frame video{position:absolute;inset:0;width:100%;height:100%;border:0;}
+figure.video figcaption{margin-top:8px;text-align:center;font-size:.88em;color:var(--muted);}
+.empty{color:var(--muted);font-style:italic;}
+/* 발표용(에이전트 재구성) 블록 */
+.card-body .lead{font-size:1.12em;line-height:1.62;margin:0 0 18px;font-weight:500;}
+.card-body p{line-height:1.62;margin:12px 0;}
+ul.bul{list-style:none;margin:14px 0;padding:0;}
+ul.bul>li{position:relative;margin:9px 0;padding-left:1.4em;line-height:1.55;}
+ul.bul>li::before{content:"\2022";position:absolute;left:.25em;color:var(--accent);font-weight:700;}
+ul.bul ul{list-style:none;margin:6px 0 2px;padding:0;}
+ul.bul ul li{position:relative;margin:5px 0;padding-left:1.3em;font-size:.94em;color:var(--muted);}
+ul.bul ul li::before{content:"\2013";position:absolute;left:.2em;color:var(--muted);}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:16px 0;}
+.gc{border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--side);}
+.gc h4{margin:0 0 6px;font-size:1.02em;color:var(--accent);}
+.gc p{margin:0;font-size:.93em;color:var(--muted);line-height:1.5;}
+ol.steps{list-style:none;margin:16px 0;padding:0;}
+ol.steps>li{display:flex;gap:14px;margin:14px 0;align-items:flex-start;}
+ol.steps .sn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);
+color:#fff;display:grid;place-items:center;font-weight:700;font-size:.9em;}
+ol.steps h4{margin:2px 0 4px;font-size:1.02em;}
+ol.steps p{margin:0;color:var(--muted);font-size:.94em;line-height:1.5;}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:18px 0;}
+.flow .fi{border:1px solid var(--border);background:var(--side);border-radius:10px;
+padding:10px 14px;font-weight:600;font-size:.94em;}
+.flow .fa{color:var(--accent);font-weight:700;font-size:1.1em;}
+.stats{display:flex;flex-wrap:wrap;gap:16px;margin:18px 0;}
+.stat{background:var(--side);border:1px solid var(--border);border-radius:12px;padding:16px 22px;min-width:120px;}
+.stat .sv{font-size:1.9em;font-weight:750;color:var(--accent);line-height:1;}
+.stat .sl{margin-top:6px;font-size:.9em;color:var(--muted);}
+.callout{border-left:4px solid var(--accent);background:var(--side);padding:12px 16px;
+border-radius:0 10px 10px 0;margin:16px 0;line-height:1.55;}
+.callout.tip{border-left-color:#16a34a;} .callout.warn{border-left-color:#d97706;}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin:16px 0;}
+.col h4{margin:0 0 8px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:6px;}
+blockquote{margin:16px 0;padding:14px 20px;border-left:4px solid var(--accent);
+font-style:italic;background:var(--side);border-radius:0 10px 10px 0;line-height:1.55;}
+blockquote cite{display:block;margin-top:8px;font-style:normal;font-size:.88em;color:var(--muted);}
+.card-body table th{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;}
+.card--hero{align-items:center;justify-content:center;text-align:center;min-height:72vh;}
+.card--hero .card-head{border-bottom:none;margin:0;padding:0;}
+.card--hero .card-head h2{font-size:clamp(30px,5vw,52px);margin-top:12px;line-height:1.15;}
+.card--hero .card-body{flex:none;margin-top:18px;}
+.card--hero .lead{font-size:1.2em;color:var(--muted);font-weight:400;}
+.topbar{display:none;}
+@media (max-width:860px){
+.layout{grid-template-columns:1fr;}
+main{padding:16px 12px 40vh;}
+aside{position:fixed;left:0;top:0;width:80%;max-width:320px;z-index:20;
+transform:translateX(-100%);transition:transform .2s;box-shadow:0 0 40px rgba(0,0,0,.3);}
+aside.open{transform:translateX(0);}
+.topbar{display:flex;position:sticky;top:0;z-index:10;background:var(--side);
+border-bottom:1px solid var(--border);padding:10px 16px;gap:12px;align-items:center;}
+.topbar button{font-size:20px;background:none;border:none;color:var(--fg);cursor:pointer;}
+.topbar .t{font-weight:700;font-size:14px;}
+}
+</style></head><body>
+<div class="topbar"><button onclick="document.querySelector('aside').classList.toggle('open')">&#9776;</button><span class="t">Microsoft Foundry를 활용한 Agentic AI</span></div>
+<div class="layout">
+<aside>
+<div class="deck-title">Microsoft Foundry를 활용한 Agentic AI</div>
+<div class="ver">v001 · 2026-06-18 01:27:09<br><a href="index.html" style="color:var(--accent)">전체 버전 1개 &rarr;</a></div>
+<nav><ol><li><a href="#slide-1" data-target="slide-1"><span class="n">1</span><span>Microsoft Foundry를 활용한 Agentic AI</span></a></li><li><a href="#slide-2" data-target="slide-2"><span class="n">2</span><span>Microsoft Foundry란 무엇인가</span></a></li><li><a href="#slide-3" data-target="slide-3"><span class="n">3</span><span>AI 앱·에이전트 팩토리</span></a></li><li><a href="#slide-4" data-target="slide-4"><span class="n">4</span><span>원하는 방식으로 에이전트 구축</span></a></li><li><a href="#slide-5" data-target="slide-5"><span class="n">5</span><span>AI 개발의 기본 구성 요소</span></a></li><li><a href="#slide-6" data-target="slide-6"><span class="n">6</span><span>에이전트 개발 라이프사이클</span></a></li><li><a href="#slide-7" data-target="slide-7"><span class="n">7</span><span>Foundry가 제공하는 서비스</span></a></li><li><a href="#slide-8" data-target="slide-8"><span class="n">8</span><span>Foundry Models</span></a></li><li><a href="#slide-9" data-target="slide-9"><span class="n">9</span><span>모든 모델을 하나의 플랫폼에서</span></a></li><li><a href="#slide-10" data-target="slide-10"><span class="n">10</span><span>모델 라우터</span></a></li><li><a href="#slide-11" data-target="slide-11"><span class="n">11</span><span>스마트 라우팅의 가치</span></a></li><li><a href="#slide-12" data-target="slide-12"><span class="n">12</span><span>Agent Orchestration</span></a></li><li><a href="#slide-13" data-target="slide-13"><span class="n">13</span><span>멀티 에이전트 워크플로우</span></a></li><li><a href="#slide-14" data-target="slide-14"><span class="n">14</span><span>에이전트 구성 요소</span></a></li><li><a href="#slide-15" data-target="slide-15"><span class="n">15</span><span>커스텀 코드 에이전트</span></a></li><li><a href="#slide-16" data-target="slide-16"><span class="n">16</span><span>Agent Service 배포 흐름</span></a></li><li><a href="#slide-17" data-target="slide-17"><span class="n">17</span><span>원클릭 퍼블리싱 (M365)</span></a></li><li><a href="#slide-18" data-target="slide-18"><span class="n">18</span><span>데모 시나리오</span></a></li><li><a href="#slide-19" data-target="slide-19"><span class="n">19</span><span>현장 진단 질의 예시</span></a></li><li><a href="#slide-20" data-target="slide-20"><span class="n">20</span><span>도구 연결 동작</span></a></li><li><a href="#slide-21" data-target="slide-21"><span class="n">21</span><span>에이전트 실행 흐름</span></a></li><li><a href="#slide-22" data-target="slide-22"><span class="n">22</span><span>도구의 순차적 연결</span></a></li><li><a href="#slide-23" data-target="slide-23"><span class="n">23</span><span>Fine-tuning 모델 최적화</span></a></li><li><a href="#slide-24" data-target="slide-24"><span class="n">24</span><span>Foundry Control Plane</span></a></li><li><a href="#slide-25" data-target="slide-25"><span class="n">25</span><span>Evaluators 평가 지표</span></a></li><li><a href="#slide-26" data-target="slide-26"><span class="n">26</span><span>에이전트 평가 예시</span></a></li><li><a href="#slide-27" data-target="slide-27"><span class="n">27</span><span>모델 커스터마이징 옵션</span></a></li><li><a href="#slide-28" data-target="slide-28"><span class="n">28</span><span>감사합니다</span></a></li></ol></nav>
+<div class="ver" style="padding-top:16px"><a href="../index.html" style="color:var(--accent)">&larr; 전체 PPT 목록</a></div>
+</aside>
+<main><div class="slide-wrap" id="slide-1"><article class="card card--hero"><div class="card-head"><span class="kicker">1 / 28</span><h2>Microsoft Foundry를 활용한 Agentic AI</h2></div><div class="card-body"><p class="lead">엔터프라이즈급 AI 에이전트를 한 플랫폼에서 구축·배포·운영하는 방법</p><p>Kichul Kim · Solution Engineer</p></div></article></div><div class="slide-wrap" id="slide-2"><article class="card card--hero"><div class="card-head"><span class="kicker">2 / 28</span><h2>Microsoft Foundry란 무엇인가</h2></div><div class="card-body"><p class="lead">PART 1 — 모델, 도구, 오케스트레이션, 운영을 하나로 묶는 AI 앱·에이전트 플랫폼</p></div></article></div><div class="slide-wrap" id="slide-3"><article class="card"><div class="card-head"><span class="kicker">3 / 28</span><h2>AI 앱·에이전트 팩토리</h2></div><div class="card-body"><p class="lead">Microsoft Foundry는 아이디어에서 운영까지 이어지는 &#x27;AI 앱·에이전트 팩토리&#x27;입니다. 모델 선택부터 배포, 모니터링까지 한 흐름으로 연결됩니다.</p><div class="grid"><div class="gc"><h4>모델</h4><p>프런티어·오픈 모델을 한곳에서 선택</p></div><div class="gc"><h4>도구·지식</h4><p>데이터와 도구를 에이전트에 연결</p></div><div class="gc"><h4>오케스트레이션</h4><p>멀티 에이전트 워크플로우 구성</p></div><div class="gc"><h4>운영·거버넌스</h4><p>보안, 평가, 가시성까지 통합 관리</p></div></div></div></article></div><div class="slide-wrap" id="slide-4"><article class="card"><div class="card-head"><span class="kicker">4 / 28</span><h2>원하는 방식으로 에이전트 구축</h2></div><div class="card-body"><p class="lead">팀의 역량과 요구에 맞춰 에이전트를 만드는 방식을 선택할 수 있습니다. 코드 제어력과 개발 속도 사이에서 원하는 지점을 고르세요.</p><div class="grid"><div class="gc"><h4>Pro-code</h4><p>모든 세부를 코드로 제어 — GPUs &amp; Containers, 프레임워크 자유 사용</p></div><div class="gc"><h4>Managed code</h4><p>관리형 서비스 위에서 코드로 구축 — Foundry Agent Service의 즉시 실행 런타임</p></div><div class="gc"><h4>Low-code / No-code</h4><p>Copilot Studio의 드래그 앤 드롭으로 빠르게 구축</p></div></div><div class="callout info"><strong>트레이드오프</strong> 왼쪽일수록 제어·맞춤화가, 오른쪽일수록 사용 편의성과 개발 속도가 커집니다.</div></div></article></div><div class="slide-wrap" id="slide-5"><article class="card"><div class="card-head"><span class="kicker">5 / 28</span><h2>AI 개발의 기본 구성 요소</h2></div><div class="card-body"><p class="lead">어떤 방식으로 만들든, 견고한 AI 개발은 여섯 가지 기본 구성 요소 위에서 이뤄집니다.</p><div class="grid"><div class="gc"><h4>Models</h4><p>용도에 맞는 모델 선택</p></div><div class="gc"><h4>Deployment</h4><p>확장 가능한 배포</p></div><div class="gc"><h4>Knowledge &amp; Tools</h4><p>지식과 도구 연결</p></div><div class="gc"><h4>Fine-tuning</h4><p>맞춤화·미세 조정</p></div><div class="gc"><h4>Orchestration &amp; Dev Tools</h4><p>오케스트레이션과 개발 도구</p></div><div class="gc"><h4>Observability &amp; Controls</h4><p>관측성과 에이전트 제어</p></div></div></div></article></div><div class="slide-wrap" id="slide-6"><article class="card"><div class="card-head"><span class="kicker">6 / 28</span><h2>에이전트 개발 라이프사이클</h2></div><div class="card-body"><p class="lead">에이전트는 한 번 만들고 끝나지 않습니다. Build → Optimize → Operate 의 반복 사이클로 발전합니다.</p><div class="cols"><div class="col"><h4>1. Build</h4><ul class="bul"><li>모델·도구·에이전트 리서치</li><li>도구와 지식 추가</li><li>에이전트 빌드와 배포</li><li>애플리케이션 통합</li></ul></div><div class="col"><h4>2. Optimize</h4><ul class="bul"><li>프롬프트 테스트와 평가</li><li>모델 미세 조정</li><li>코드 커스터마이징</li><li>멀티 에이전트 오케스트레이션</li></ul></div><div class="col"><h4>3. Operate</h4><ul class="bul"><li>확장형 관리형 런타임 호스팅</li><li>비용·규제 준수·안정성 모니터링</li><li>구성 추적과 디버깅</li><li>위험 완화 및 보호</li></ul></div></div></div></article></div><div class="slide-wrap" id="slide-7"><article class="card card--hero"><div class="card-head"><span class="kicker">7 / 28</span><h2>Foundry가 제공하는 서비스</h2></div><div class="card-body"><p class="lead">PART 2 — Foundry Models, 모델 라우터, 오케스트레이션, 운영 제어</p></div></article></div><div class="slide-wrap" id="slide-8"><article class="card card--hero"><div class="card-head"><span class="kicker">8 / 28</span><h2>Foundry Models</h2></div><div class="card-body"><p class="lead">수천 개의 모델을 하나의 카탈로그에서 — Foundry Models</p></div></article></div><div class="slide-wrap" id="slide-9"><article class="card"><div class="card-head"><span class="kicker">9 / 28</span><h2>모든 모델을 하나의 플랫폼에서</h2></div><div class="card-body"><p class="lead">프런티어 모델부터 오픈 모델까지, 11,000개가 넘는 모델을 하나의 플랫폼에서 일관된 방식으로 사용합니다.</p><div class="stats"><div class="stat"><div class="sv">11,000+</div><div class="sl">Foundry Models 내 프런티어·오픈 모델</div></div></div><div class="grid"><div class="gc"><h4>통합된 접근</h4><p>모든 모델에 동일한 방식으로 접근</p></div><div class="gc"><h4>Scalable deployment</h4><p>확장 가능한 배포</p></div><div class="gc"><h4>Enterprise-Ready</h4><p>엔터프라이즈 보안·규정 준수</p></div></div><p>대표 모델 패밀리:</p><ul class="bul"><li>Azure OpenAI · Meta Llama · Mistral · DeepSeek · xAI Grok</li><li>Cohere · Phi SLM · Claude · NVIDIA · Black Forest Labs · Hugging Face</li><li>산업·지역 특화 모델: Core42 Jais · SDAIA ALLaM · NTT Tsuzumi 등</li></ul><div class="callout tip"><strong>Microsoft 직접 판매 모델</strong> SLA·규정 준수, 예약 용량, 비용 최적화 PTU, 기본 제공 Safety guardrails 혜택을 제공합니다.</div></div></article></div><div class="slide-wrap" id="slide-10"><article class="card"><div class="card-head"><span class="kicker">10 / 28</span><h2>모델 라우터</h2></div><div class="card-body"><p class="lead">모델 라우터는 작업 복잡성과 요구 품질을 기준으로 매 요청마다 최적의 모델을 지능적으로 선택합니다.</p><div class="stats"><div class="stat"><div class="sv">최대 60%</div><div class="sl">GPT-4.1 단독 대비 비용 절감 (유사 정확도)</div></div></div><ul class="bul"><li>선별된 Microsoft Foundry 모델 집합으로 라우팅</li><li>사용자가 라우팅 프로필을 선택하고 모델 하위 집합을 직접 정의</li><li>Azure 기반의 엔터프라이즈급 안정성과 내장 보안·관측성</li><li>Foundry Agent Service 에서도 사용 가능</li></ul></div></article></div><div class="slide-wrap" id="slide-11"><article class="card"><div class="card-head"><span class="kicker">11 / 28</span><h2>스마트 라우팅의 가치</h2></div><div class="card-body"><p class="lead">스마트 라우팅은 사용자 경험을 해치지 않으면서 품질을 유지하고 비용을 최적화합니다.</p><div class="cols"><div class="col"><h4>Challenge</h4><p>작업에 맞는 LLM 선택은 어렵고, 사용자는 모든 사례에 단일 모델을 고집하기 쉽습니다.</p></div><div class="col"><h4>Opportunity</h4><p>최적 모델을 동적으로 선택하면 품질을 지키면서 비용을 줄일 수 있습니다.</p></div></div><ol class="steps"><li><span class="sn">1</span><div><h4>엔드포인트 호출</h4><p>사용자가 API로 라우터 엔드포인트를 호출합니다.</p></div></li><li><span class="sn">2</span><div><h4>동적 지능형 라우팅</h4><p>라우터가 프롬프트·도구 사용 등 입력을 평가해 최적 모델로 라우팅합니다.</p></div></li><li><span class="sn">3</span><div><h4>최적화된 응답 반환</h4><p>선택된 모델의 응답을 사용자에게 돌려줍니다.</p></div></li></ol><div class="callout info"><strong>예시</strong> &quot;5월 파리 날씨는?&quot; 같은 간단한 질문은 경량 모델(예: GPT-4.1-nano)로, &quot;비건 가족을 위한 5일 파리–베네치아 일정&quot; 같은 복잡한 요청은 더 강력한 모델로 라우팅합니다.</div></div></article></div><div class="slide-wrap" id="slide-12"><article class="card card--hero"><div class="card-head"><span class="kicker">12 / 28</span><h2>Agent Orchestration</h2></div><div class="card-body"><p class="lead">PART 3 — 계획하고 추론하며 실행하는 멀티 에이전트 오케스트레이션</p></div></article></div><div class="slide-wrap" id="slide-13"><article class="card"><div class="card-head"><span class="kicker">13 / 28</span><h2>멀티 에이전트 워크플로우</h2></div><div class="card-body"><p class="lead">데이터와 도구를 넘나들며 계획·추론·실행하는 지능형 멀티 에이전트 워크플로우를 구성합니다.</p><ol class="steps"><li><span class="sn">1</span><div><h4>모델 선택</h4><p>용도에 맞는 모델 지정</p></div></li><li><span class="sn">2</span><div><h4>프롬프트 작성</h4><p>에이전트의 역할과 지시 정의</p></div></li><li><span class="sn">3</span><div><h4>도구·지식·메모리 연결</h4><p>데이터·도구·메모리를 결합</p></div></li><li><span class="sn">4</span><div><h4>가드레일 연결</h4><p>안전·정책 가드레일 적용</p></div></li><li><span class="sn">5</span><div><h4>테스트</h4><p>동작을 평가하고 반복 개선</p></div></li></ol></div></article></div><div class="slide-wrap" id="slide-14"><article class="card"><div class="card-head"><span class="kicker">14 / 28</span><h2>에이전트 구성 요소</h2></div><div class="card-body"><p class="lead">하나의 에이전트는 다음 구성 요소가 결합되어 동작합니다.</p><div class="grid"><div class="gc"><h4>Model</h4><p>추론을 담당하는 모델</p></div><div class="gc"><h4>Instructions</h4><p>역할·목표를 정의하는 지시</p></div><div class="gc"><h4>Tools</h4><p>행동을 수행하는 도구</p></div><div class="gc"><h4>Knowledge</h4><p>근거가 되는 지식 소스</p></div><div class="gc"><h4>Memory</h4><p>맥락을 유지하는 메모리</p></div><div class="gc"><h4>Guardrails</h4><p>안전·정책 제어</p></div></div></div></article></div><div class="slide-wrap" id="slide-15"><article class="card card--hero"><div class="card-head"><span class="kicker">15 / 28</span><h2>커스텀 코드 에이전트</h2></div><div class="card-body"><p class="lead">프레임워크 자유도가 필요한 팀을 위한 — 커스텀 코드 에이전트</p></div></article></div><div class="slide-wrap" id="slide-16"><article class="card"><div class="card-head"><span class="kicker">16 / 28</span><h2>Agent Service 배포 흐름</h2></div><div class="card-body"><p class="lead">원하는 프레임워크로 만든 에이전트를 컨테이너로 패키징해 Foundry Agent Service에 배포합니다.</p><div class="flow"><span class="fi">Agent frameworks</span> <span class="fa">&rarr;</span> <span class="fi">Build / Package</span> <span class="fa">&rarr;</span> <span class="fi">Containers</span> <span class="fa">&rarr;</span> <span class="fi">Deploy</span> <span class="fa">&rarr;</span> <span class="fi">Foundry Agent Service</span></div><p>배포된 Hosted Agent는 클라이언트의 호출을 받아 관리형 런타임 위에서 실행됩니다.</p></div></article></div><div class="slide-wrap" id="slide-17"><article class="card"><div class="card-head"><span class="kicker">17 / 28</span><h2>원클릭 퍼블리싱 (M365)</h2></div><div class="card-body"><p class="lead">Foundry로 만든 에이전트를 M365 Copilot과 Teams 채팅에 즉시 게시할 수 있습니다.</p><div class="flow"><span class="fi">Foundry Agent Service</span> <span class="fa">&rarr;</span> <span class="fi">원클릭 퍼블리싱</span> <span class="fa">&rarr;</span> <span class="fi">M365 / A365</span></div><div class="callout tip">별도 통합 작업 없이, 사용자가 매일 쓰는 업무 도구에서 바로 에이전트를 사용할 수 있습니다.</div></div></article></div><div class="slide-wrap" id="slide-18"><article class="card card--hero"><div class="card-head"><span class="kicker">18 / 28</span><h2>데모 시나리오</h2></div><div class="card-body"><p class="lead">DEMO — 현장 진단 에이전트가 여러 지식 소스를 활용하는 시나리오</p></div></article></div><div class="slide-wrap" id="slide-19"><article class="card"><div class="card-head"><span class="kicker">19 / 28</span><h2>현장 진단 질의 예시</h2></div><div class="card-body"><p class="lead">현장 진단 질의 하나에 에이전트는 서로 다른 위치의 지식을 결합해 답합니다 — 사용자의 오타까지 보정하면서.</p><div class="grid"><div class="gc"><h4>장비 매뉴얼</h4><p>마크다운 매뉴얼이 Fabric OneLake에 통합</p></div><div class="gc"><h4>전기 표준 정보</h4><p>웹에서 최신 표준을 확인</p></div><div class="gc"><h4>회사 방침·문서</h4><p>SharePoint에서 관리되는 사내 문서</p></div><div class="gc"><h4>오타 보정</h4><p>사용자 입력의 오타를 이해하고 의도 해석</p></div></div></div></article></div><div class="slide-wrap" id="slide-20"><article class="card card--hero"><div class="card-head"><span class="kicker">20 / 28</span><h2>도구 연결 동작</h2></div><div class="card-body"><p class="lead">에이전트가 도구를 어떻게 호출하고 연결하는지</p><figure class="video"><div class="frame"><iframe src="https://www.youtube.com/embed/bHL1jbWjJUc?start=190" title="video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><figcaption>데모 영상 — 에이전트가 도구를 호출하고 연결하는 과정</figcaption></figure></div></article></div><div class="slide-wrap" id="slide-21"><article class="card"><div class="card-head"><span class="kicker">21 / 28</span><h2>에이전트 실행 흐름</h2></div><div class="card-body"><p class="lead">에이전트는 사용자 의도를 해석하고 적절한 도구를 호출해 결과를 종합하는 흐름으로 실행됩니다.</p><ol class="steps"><li><span class="sn">1</span><div><h4>의도 분석</h4><p>사용자 요청에서 목표를 파악</p></div></li><li><span class="sn">2</span><div><h4>도구 호출</h4><p>필요한 도구를 선택해 실행</p></div></li><li><span class="sn">3</span><div><h4>응답 생성</h4><p>도구 결과를 종합해 답변 제공</p></div></li></ol></div></article></div><div class="slide-wrap" id="slide-22"><article class="card"><div class="card-head"><span class="kicker">22 / 28</span><h2>도구의 순차적 연결</h2></div><div class="card-body"><p class="lead">Microsoft Foundry의 MCP 지원 도구로 여러 도구를 순차적으로 연결해 복합 작업을 수행합니다.</p><div class="grid"><div class="gc"><h4>Configured Tools</h4><p>미리 구성된 도구</p></div><div class="gc"><h4>Catalog Tools</h4><p>카탈로그에서 선택하는 도구</p></div><div class="gc"><h4>Custom Tools</h4><p>직접 만든 맞춤 도구</p></div></div></div></article></div><div class="slide-wrap" id="slide-23"><article class="card"><div class="card-head"><span class="kicker">23 / 28</span><h2>Fine-tuning 모델 최적화</h2></div><div class="card-body"><p class="lead">Fine-tuning은 특정 사용 사례에 맞춰 모델을 최적화해 품질과 효율을 함께 끌어올립니다.</p><div class="grid"><div class="gc"><h4>성능·정확도 향상</h4><p>특정 사용 사례에 맞춘 최적화</p></div><div class="gc"><h4>비용·지연 최소화</h4><p>AI 효율 극대화, 응답 지연 단축</p></div><div class="gc"><h4>신뢰성 강화</h4><p>편향을 줄이고 환각(hallucination) 방지</p></div></div></div></article></div><div class="slide-wrap" id="slide-24"><article class="card"><div class="card-head"><span class="kicker">24 / 28</span><h2>Foundry Control Plane</h2></div><div class="card-body"><p class="lead">Foundry Control Plane은 조직 전반의 AI 라이프사이클을 가시성과 제어 아래 관리합니다.</p><div class="grid"><div class="gc"><h4>운영 가시성</h4><p>전사 AI 운영을 한눈에 파악</p></div><div class="gc"><h4>보안 강화</h4><p>정책 기반의 보안 제어</p></div><div class="gc"><h4>전사 규모 운영 관리</h4><p>조직 단위 거버넌스</p></div></div></div></article></div><div class="slide-wrap" id="slide-25"><article class="card"><div class="card-head"><span class="kicker">25 / 28</span><h2>Evaluators 평가 지표</h2></div><div class="card-body"><p class="lead">Foundry는 품질·안전·에이전트 동작·검색까지 폭넓은 평가 지표(Evaluators)를 기본 제공합니다.</p><div class="cols"><div class="col"><h4>Quality</h4><ul class="bul"><li>Groundedness · Relevance</li><li>Coherence · Fluency · Similarity</li><li>NLP Metrics (예: F1)</li></ul></div><div class="col"><h4>Risk &amp; Safety</h4><ul class="bul"><li>Hate · Sexual · Violence · Self-Harm</li><li>Jailbreak / Indirect Attack</li><li>Protected Material · Code Vulnerability</li></ul></div><div class="col"><h4>Agents</h4><ul class="bul"><li>Intent Resolution</li><li>Tool Call / Selection Accuracy</li><li>Task Adherence · Completion</li></ul></div></div><div class="callout info">기본 제공 평가자 외에 Custom Evaluators 로 조직 고유의 기준도 추가할 수 있습니다.</div></div></article></div><div class="slide-wrap" id="slide-26"><article class="card"><div class="card-head"><span class="kicker">26 / 28</span><h2>에이전트 평가 예시</h2></div><div class="card-body"><p class="lead">에이전트 평가는 실제 실행 흐름의 각 단계를 지표로 점검합니다 — 예: 일기예보 요청.</p><ol class="steps"><li><span class="sn">1</span><div><h4>User Intent 분석</h4><p>&quot;샌프란시스코 날씨는 어때?&quot; → 지역·시간 의도 파악 (의도 해석 평가)</p></div></li><li><span class="sn">2</span><div><h4>도구 호출</h4><p>get_loc() → get_weather(loc, time) (도구 선택·입력·출력 정확도)</p></div></li><li><span class="sn">3</span><div><h4>응답</h4><p>&quot;흐리고 화씨 60도, 비 가능성&quot; (과제 준수·완료율 등 운영 지표)</p></div></li></ol></div></article></div><div class="slide-wrap" id="slide-27"><article class="card"><div class="card-head"><span class="kicker">27 / 28</span><h2>모델 커스터마이징 옵션</h2></div><div class="card-body"><p class="lead">모델 적응의 성숙도에 따라 단계적으로 가치를 높여갑니다 — 베이스 모델에서 지속 개선 루프까지.</p><ol class="steps"><li><span class="sn">1</span><div><h4>Base model</h4><p>Foundry Models 의 기본 모델로 시작</p></div></li><li><span class="sn">2</span><div><h4>Prompt engineering</h4><p>선언적(Declarative) 에이전트 구성</p></div></li><li><span class="sn">3</span><div><h4>RAG · Tool calling</h4><p>지식 검색과 멀티 에이전트, Foundry IQ 활용</p></div></li><li><span class="sn">4</span><div><h4>Fine-tuning · RAFT</h4><p>Foundry 내 미세 조정·증류(distillation)</p></div></li><li><span class="sn">5</span><div><h4>Continuous improvement</h4><p>피드백·신호 루프로 지속 개선, Control Plane 으로 운영</p></div></li></ol><div class="callout tip">오른쪽 단계로 갈수록 모델 적응 성숙도와 비즈니스 가치가 함께 커집니다.</div></div></article></div><div class="slide-wrap" id="slide-28"><article class="card card--hero"><div class="card-head"><span class="kicker">28 / 28</span><h2>감사합니다</h2></div><div class="card-body"><p class="lead">감사합니다</p><p>Microsoft Foundry로 더 빠르고 안전하게 에이전트를 만들어 보세요.</p></div></article></div></main>
+</div>
+<script>
+const links=[...document.querySelectorAll('nav a')];
+const map=new Map(links.map(a=>[a.dataset.target,a]));
+const obs=new IntersectionObserver((es)=>{
+ es.forEach(e=>{if(e.isIntersecting){
+  links.forEach(a=>a.classList.remove('active'));
+  const a=map.get(e.target.id); if(a){a.classList.add('active');
+   a.scrollIntoView({block:'nearest'});}
+ }});
+},{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('.slide-wrap').forEach(s=>obs.observe(s));
+links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').classList.remove('open')));
+</script>
+</body></html>
