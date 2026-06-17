@@ -635,11 +635,14 @@ background:#fff;}
 .frag figure.fshot figcaption{margin-top:10px;color:var(--ink-dim);font-size:13px;text-align:center;}
 .frag .fshot--zoom img{cursor:zoom-in;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;}
 .frag .fshot--zoom img:hover{transform:scale(1.02);box-shadow:0 18px 50px rgba(0,0,0,.4);}
-/* 이미지 라이트박스(클릭 시 확대) */
+/* 이미지·다이어그램 라이트박스(클릭 시 확대) */
 .lightbox{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.9);display:none;
 align-items:center;justify-content:center;padding:4vh 4vw;cursor:zoom-out;}
 .lightbox.on{display:flex;}
 .lightbox img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.6);}
+.lightbox .lbcontent{display:flex;align-items:center;justify-content:center;max-width:96vw;max-height:92vh;}
+.lightbox .lbcontent svg{width:auto;height:auto;max-width:94vw;max-height:88vh;
+background:#11131c;border-radius:12px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.6);}
 .lightbox .lbx{position:fixed;top:18px;right:22px;font-size:30px;color:#fff;opacity:.8;line-height:1;}
 /* Mermaid 렌더 실패 폴백 */
 .frag .mermaid.mmfail{display:block;}
@@ -667,9 +670,16 @@ transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);will-change:o
 .slide-wrap.in .reveal:nth-child(6){animation-delay:.40s;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
 /* 다이어그램 라이브러리(Mermaid) */
-.frag .fdiagram{margin:18px auto 0;max-width:1000px;width:100%;}
+.frag .fdiagram{margin:18px auto 0;max-width:1100px;width:100%;position:relative;}
 .frag .fdiagram .mermaid{display:flex;justify-content:center;line-height:1.3;}
 .frag .fdiagram .mermaid svg{max-width:100%;height:auto;}
+.frag .fdiagram.zoomable .mermaid{cursor:zoom-in;}
+.frag .fdiagram .fdiagram-zoom{position:absolute;top:6px;right:6px;z-index:2;display:inline-flex;align-items:center;gap:5px;
+padding:5px 11px;font-size:12px;font-weight:600;border-radius:999px;cursor:zoom-in;
+background:color-mix(in srgb,var(--msft-purple) 22%,#11131c);
+border:1px solid color-mix(in srgb,var(--msft-purple) 50%,transparent);color:#e8eaf2;opacity:.8;
+transition:opacity .2s,transform .2s,box-shadow .2s;}
+.frag .fdiagram .fdiagram-zoom:hover{opacity:1;transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.35);}
 .frag .fdiagram .fdiagram-cap{margin-top:10px;text-align:center;color:var(--ink-dim);font-size:13px;}
 /* 방사형(orbit) 다이어그램 */
 .frag .forbit{position:relative;width:min(560px,82vw);aspect-ratio:1;margin:22px auto 0;}
@@ -946,15 +956,17 @@ else{{
 }}
 links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').classList.remove('open')));
 (function(){{
- const zimgs=[...document.querySelectorAll('.fshot--zoom img')];
- if(!zimgs.length) return;
  const lb=document.createElement('div');lb.className='lightbox';
- lb.innerHTML='<span class="lbx">&times;</span><img alt="">';
+ lb.innerHTML='<span class="lbx">&times;</span><div class="lbcontent"></div>';
  document.body.appendChild(lb);
- const lbi=lb.querySelector('img');
- zimgs.forEach(im=>im.addEventListener('click',()=>{{lbi.src=im.currentSrc||im.src;lb.classList.add('on');}}));
- lb.addEventListener('click',()=>lb.classList.remove('on'));
- document.addEventListener('keydown',e=>{{if(e.key==='Escape')lb.classList.remove('on');}});
+ const lbc=lb.querySelector('.lbcontent');
+ const close=()=>{{lb.classList.remove('on');lbc.innerHTML='';}};
+ window.__lb={{open(node){{lbc.innerHTML='';lbc.appendChild(node);lb.classList.add('on');}},close}};
+ [...document.querySelectorAll('.fshot--zoom img')].forEach(im=>im.addEventListener('click',()=>{{
+  const c=new Image();c.src=im.currentSrc||im.src;c.alt=im.alt||'';window.__lb.open(c);
+ }}));
+ lb.addEventListener('click',close);
+ document.addEventListener('keydown',e=>{{if(e.key==='Escape')close();}});
 }})();
 </script>
 <script type="module">
@@ -978,7 +990,23 @@ links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').
    try{{await mermaid.parse(src);good.push(el);}}
    catch(e){{el.classList.add('mmfail');el.innerHTML='<div class="mmfail-note">다이어그램을 표시할 수 없습니다.</div>';}}
   }}
-  if(good.length) await mermaid.run({{nodes:good}});
+  if(good.length){{
+   await mermaid.run({{nodes:good}});
+   good.forEach(el=>{{
+    const svg=el.querySelector('svg');if(!svg)return;
+    svg.style.maxWidth='100%';svg.style.width='100%';svg.removeAttribute('height');
+    const box=el.closest('.fdiagram')||el.parentElement;
+    if(!box||box.querySelector('.fdiagram-zoom'))return;
+    box.classList.add('zoomable');
+    const open=()=>{{const c=svg.cloneNode(true);
+     c.style.width='auto';c.style.height='auto';c.style.maxWidth='94vw';c.style.maxHeight='88vh';
+     window.__lb&&window.__lb.open(c);}};
+    const btn=document.createElement('button');btn.type='button';btn.className='fdiagram-zoom';
+    btn.textContent='🔍 확대';btn.addEventListener('click',ev=>{{ev.stopPropagation();open();}});
+    box.appendChild(btn);
+    el.addEventListener('click',open);
+   }});
+  }}
  }}catch(e){{
   nodes.forEach(m=>{{m.style.whiteSpace='pre-wrap';m.style.color='var(--ink-dim)';}});
  }}

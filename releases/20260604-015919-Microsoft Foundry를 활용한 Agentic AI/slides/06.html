@@ -7,20 +7,15 @@
   <div class="fdiagram reveal">
     <pre class="mermaid">
 flowchart LR
-  B(["🟣 Build"]) --> QB{잘 동작하나요?}
-  QB -- 아니오 --> B
-  QB -- 예 --> O(["🔵 Optimize"])
-  O --> QO{잘 동작하나요?}
-  QO -- 아니오 --> O
-  QO -- 예 --> P(["🟣 Operate"])
-  P --> QP{안정적인가요?}
-  QP -- 아니오 --> B
-  QP -- 예 --> D([지속 운영])
+  B(["🟣 Build"]) --> O(["🔵 Optimize"]) --> P(["🟣 Operate"]) --> D([지속 운영])
+  O -. 미흡하면 보완 .-> B
+  P -. 이슈 발생 시 .-> B
   style B fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
   style O fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
   style P fill:#e3008c22,stroke:#e3008c,color:#e8eaf2
   style D fill:#14352a,stroke:#34d399,color:#e8eaf2
     </pre>
+    <div class="fdiagram-cap">각 단계에서 "잘 동작하나요?" 를 점검하고, 미흡하면 이전 단계로 되돌아갑니다.</div>
   </div>
   <div class="fgrid c3" style="margin-top:22px">
     <div class="fpanel reveal">
