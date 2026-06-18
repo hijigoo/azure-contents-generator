@@ -1,0 +1,33 @@
+<section class="frag frag--light">
+  <div style="text-align:center">
+    <span class="fkicker">13 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">End-to-End MLOps 운영 스택</h1>
+    <p class="flead" style="margin:8px auto 0">Cloud Training ↔ Edge Inference 의 운영 컴포넌트</p>
+  </div>
+  <div class="fgrid c4" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">1 · Data Layer</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">ADLS Gen2 · OneLake · Blob · NetApp Files · Purview Catalog</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-purple)">2 · Compute / Training</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">Azure ML Compute (NDv5, ND H100) · Databricks · CycleCloud Slurm · Managed Lustre</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-pink)">3 · MLOps Layer</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">Azure ML Pipelines · MLflow Registry · GitHub Actions · Prompt Flow · Responsible AI</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:#34d399">4 · Edge / Operations</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">Azure Arc · IoT Edge · AKS Edge Essentials · Azure Stack HCI · Defender for IoT</p>
+    </div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px">
+    <div class="feyebrow" style="color:var(--msft-blue)">권장 운영 패턴</div>
+    <ul class="fbul" style="margin-top:10px">
+      <li>Training은 Azure ML Pipeline + AML Compute(ND H100) 또는 CycleCloud HPC로 자동 스케줄 (<b>Spot/Low-priority로 비용 절감</b>)</li>
+      <li>Model Registry → Approval Gate → Container Image Build → Edge Module 배포까지 GitHub Actions/Azure DevOps로 일원화</li>
+      <li>Edge Inference 모니터링은 Azure Monitor + Log Analytics + Prometheus, Drift는 AML Data Drift Detector로 자동 트리거</li>
+    </ul>
+  </div>
+</section>

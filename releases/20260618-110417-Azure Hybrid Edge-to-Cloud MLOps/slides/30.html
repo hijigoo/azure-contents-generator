@@ -1,0 +1,43 @@
+<section class="frag frag--light">
+  <div style="text-align:center">
+    <span class="fkicker">30 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">MLOps CI/CD — GitHub Actions Closed-loop</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">코드·데이터 변경 → 자동 학습·검증 → Azure ML / Edge 배포 → 운영 모니터링 → 드리프트 감지 시 재학습 트리거</p>
+  </div>
+  <div class="fgrid c4 reveal" style="margin-top:20px;align-items:stretch">
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--ink-dim)">SOURCE</div>
+      <h4 style="margin:6px 0 6px">GitHub Repository</h4>
+      <p style="margin:0;font-size:13px">ML 코드 · 파이프라인 정의 · 환경/데이터 config (Git 버전 관리)</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 40%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-blue)">CI</div>
+      <h4 style="margin:6px 0 6px">GitHub Actions · 학습</h4>
+      <p style="margin:0;font-size:13px">lint·test → 환경/데이터셋/컴퓨트 등록 → 학습 파이프라인 실행 · 모델 등록</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-purple) 40%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-purple)">CD</div>
+      <h4 style="margin:6px 0 6px">GitHub Actions · 배포</h4>
+      <p style="margin:0;font-size:13px">모델 검증·승인 게이트 → Online Endpoint / IoT Edge 모듈 배포</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,#34d399 40%,transparent)">
+      <div class="feyebrow" style="color:#34d399">RUN</div>
+      <h4 style="margin:6px 0 6px">Azure ML · Edge Runtime</h4>
+      <p style="margin:0;font-size:13px">실시간/배치 추론 · Azure Monitor 텔레메트리 · 데이터 드리프트 감지</p>
+    </div>
+  </div>
+  <div class="fdiagram reveal" style="margin-top:18px">
+    <pre class="mermaid">
+flowchart LR
+  G["GitHub Repo<br/>코드·config"] --> CI["Actions CI<br/>학습·등록"]
+  CI --> CD["Actions CD<br/>검증·배포"]
+  CD --> RT["Azure ML / Edge<br/>추론 서빙"]
+  RT --> MON["Azure Monitor<br/>드리프트 감지"]
+  MON == "재학습 트리거" ==> CI
+  style CI fill:#4aa3e022,stroke:#4aa3e0,color:#eaf2fb
+  style CD fill:#0078d422,stroke:#0078d4,color:#eaf2fb
+  style MON fill:#14352a,stroke:#34d399,color:#eaf2fb
+    </pre>
+    <div class="fdiagram-cap">Closed-loop CI/CD · 클릭하면 확대됩니다</div>
+  </div>
+</section>

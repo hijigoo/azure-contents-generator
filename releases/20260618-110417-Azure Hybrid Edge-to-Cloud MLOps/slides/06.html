@@ -1,0 +1,43 @@
+<section class="frag frag--light">
+  <div style="text-align:center">
+    <span class="fkicker">06 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">네트워크 설계 — Azure ExpressRoute</h1>
+    <p class="flead" style="margin:8px auto 0">대규모 Edge 데이터 연동을 위한 전용회선 기반 Hybrid Connectivity</p>
+  </div>
+  <div class="fgrid c3" style="margin-top:20px;align-items:stretch">
+    <div class="fcol fpanel reveal">
+      <div class="h" style="color:var(--msft-blue)">전용 대역폭</div>
+      <div class="d">50 Mbps ~ 100 Gbps (ER Direct), 회선 SLA <b>99.95%</b></div>
+    </div>
+    <div class="fcol fpanel reveal">
+      <div class="h" style="color:var(--msft-blue)">낮고 예측가능한 지연</div>
+      <div class="d">공중망 미경유, <b>Microsoft Global Backbone</b> 사용</div>
+    </div>
+    <div class="fcol fpanel reveal">
+      <div class="h" style="color:var(--msft-blue)">보안 &amp; 컴플라이언스</div>
+      <div class="d">인터넷 미노출, MACsec(ER Direct), 규제 산업 적합</div>
+    </div>
+  </div>
+  <div class="fdiagram reveal" style="margin-top:18px">
+    <pre class="mermaid">
+flowchart LR
+  CN["🏭 Customer Network<br/>Factory / DC<br/>Servers · NAS/SAN · IoT"] --> CE["CE<br/>Router"]
+  CE --> PR["Provider / Meet-me<br/>KT · LGU+ · SKB · Equinix<br/>Megaport · Colt (또는 ER Direct)"]
+  PR -- "BGP Peering · Active-Active (L3)" --> MSEE["Microsoft Edge<br/>(MSEE)"]
+  MSEE --> VN["Azure Region<br/>VNet · Private Peering"]
+  MSEE -. "MS Peering" .-> M365["M365 / SaaS"]
+  style CN fill:#0078d422,stroke:#0078d4,color:#eaf2fb
+  style MSEE fill:#4aa3e022,stroke:#4aa3e0,color:#eaf2fb
+  style VN fill:#14352a,stroke:#34d399,color:#eaf2fb
+    </pre>
+    <div class="fdiagram-cap">ExpressRoute 토폴로지 개념도 · Global Backbone</div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px">
+    <div class="feyebrow" style="color:var(--msft-blue)">ExpressRoute 회선 옵션</div>
+    <ul class="fbul" style="margin-top:10px">
+      <li><b>Provider 모델</b> — 통신사·교환국 경유, 50 Mbps ~ 10 Gbps · 국내외 통신사 다수</li>
+      <li><b>ER Direct</b> — Microsoft Edge에 직접 연동, 10/100 Gbps 포트, 대규모·금융·제조에 적합</li>
+      <li><b>ER Metro</b> — 동일 메트로 내 2개 Peering 위치를 통한 <b>99.99%</b> 가용성 옵션</li>
+    </ul>
+  </div>
+</section>

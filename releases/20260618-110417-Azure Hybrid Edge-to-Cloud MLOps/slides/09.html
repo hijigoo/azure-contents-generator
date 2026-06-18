@@ -1,0 +1,37 @@
+<section class="frag frag--light">
+  <div style="text-align:center">
+    <span class="fkicker">09 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">데이터 수집 전략 — 실시간 vs 배치</h1>
+    <p class="flead" style="margin:8px auto 0">워크로드 특성에 따른 Azure 서비스 매트릭스</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="chip" style="background:color-mix(in srgb,#f59e0b 18%,transparent);border-color:color-mix(in srgb,#f59e0b 50%,transparent);font-weight:700">⚡ Real-time / Streaming</div>
+      <p style="margin:14px 0 4px;font-weight:700">Use Case</p>
+      <p style="margin:0;color:var(--ink-dim)">실시간 이상 탐지 / Predictive QC · 설비 alarm·안전 트리거 · Streaming inference 로깅</p>
+      <p style="margin:14px 0 6px;font-weight:700">주요 Azure 서비스</p>
+      <ul class="fbul">
+        <li><b>Azure IoT Hub</b> — 수백만 디바이스 양방향, MQTT/AMQP, X.509</li>
+        <li><b>Azure IoT Edge</b> — Edge gateway, 로컬 추론·필터링·압축</li>
+        <li><b>Azure Event Hubs</b> — 초당 수백만 이벤트, Kafka 호환</li>
+        <li><b>Stream Analytics / Fabric RTI</b> — SQL 기반 실시간 집계·라우팅</li>
+        <li><b>Event Grid</b> — 이벤트 라우팅·서버리스 트리거</li>
+      </ul>
+      <p class="fstat-line" style="text-align:left;padding-top:12px">특장점: <b>Sub-second 지연</b> · 디바이스 ID/보안 · Kafka 친화</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="chip" style="background:color-mix(in srgb,var(--msft-blue) 18%,transparent);border-color:color-mix(in srgb,var(--msft-blue) 50%,transparent);font-weight:700">📦 Batch / Bulk Migration</div>
+      <p style="margin:14px 0 4px;font-weight:700">Use Case</p>
+      <p style="margin:0;color:var(--ink-dim)">과거 이력 데이터 대량 적재(TB~PB) · 일/주 단위 ETL/ELT · 학습용 골든 데이터셋 정기 갱신</p>
+      <p style="margin:14px 0 6px;font-weight:700">주요 Azure 서비스</p>
+      <ul class="fbul">
+        <li><b>Azure Data Box</b> — 오프라인 PB급 전송 (Disk/40·80TB/Heavy)</li>
+        <li><b>Azure Data Factory</b> — 100+ 커넥터, Mapping Data Flow, IR On-prem</li>
+        <li><b>AzCopy / Storage Mover</b> — 고속 파일 복사, 증분/마이그레이션</li>
+        <li><b>Storage Migration Service</b> — Windows 파일서버 → Azure Files</li>
+        <li><b>Azure Migrate (Database)</b> — DB 호환성 평가 + 마이그레이션</li>
+      </ul>
+      <p class="fstat-line" style="text-align:left;padding-top:12px">특장점: <b>대용량 처리</b> · 스케줄링 · 검증·재시도 · 오프라인 옵션</p>
+    </div>
+  </div>
+</section>

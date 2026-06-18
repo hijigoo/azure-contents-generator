@@ -1,0 +1,39 @@
+<section class="frag frag--light">
+  <div style="text-align:center">
+    <span class="fkicker">07 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">ExpressRoute Peering 비교</h1>
+    <p class="flead" style="margin:8px auto 0">Private Peering · Microsoft Peering 구분과 활용 시나리오</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="chip" style="background:color-mix(in srgb,var(--msft-blue) 18%,transparent);border-color:color-mix(in srgb,var(--msft-blue) 50%,transparent);font-weight:700">🔒 Private Peering</div>
+      <p style="margin:14px 0 4px;font-weight:700">연결 대상</p>
+      <p style="margin:0;color:var(--ink-dim)">Azure VNet 내부 IaaS·PaaS 리소스 (Private IP) — IaaS VM, AKS, Storage Private Endpoint, SQL MI 등</p>
+      <p style="margin:14px 0 4px;font-weight:700">주요 특성</p>
+      <ul class="fbul">
+        <li>RFC1918 사설 IP 그대로 사용, NAT 불필요</li>
+        <li>On-prem ↔ VNet 완전 사설 통신 (DC 확장 L3, S2S VPN 대체)</li>
+        <li>Network Latency 5~30 ms (회선 거리 의존)</li>
+      </ul>
+      <p style="margin:12px 0 4px;font-weight:700;color:var(--msft-blue)">최적 시나리오</p>
+      <p style="margin:0;color:var(--ink-dim)">센서 데이터 적재, AML Training cluster 접근, VDI, ERP, 핵심 업무 트래픽</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="chip" style="background:color-mix(in srgb,#22d3ee 18%,transparent);border-color:color-mix(in srgb,#22d3ee 50%,transparent);font-weight:700">🌐 Microsoft Peering</div>
+      <p style="margin:14px 0 4px;font-weight:700">연결 대상</p>
+      <p style="margin:0;color:var(--ink-dim)">Microsoft Public Services (Public IP 기반) — Azure PaaS Public Endpoint</p>
+      <p style="margin:14px 0 4px;font-weight:700">주요 특성</p>
+      <ul class="fbul">
+        <li>Public IP / DNS 해석 필요, NAT 가능</li>
+        <li>Route Filter로 서비스/리전 선택 적용</li>
+        <li>인터넷 우회로 M365 품질·보안 향상 (글로벌 prefixes 시 ER Premium)</li>
+      </ul>
+      <p style="margin:12px 0 4px;font-weight:700;color:#22d3ee">최적 시나리오</p>
+      <p style="margin:0;color:var(--ink-dim)">Blob Public EP, Public API, M365/SaaS</p>
+    </div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px;border-color:color-mix(in srgb,#34d399 40%,transparent)">
+    <div class="feyebrow" style="color:#34d399">✓ 권장 구성</div>
+    <p style="margin:8px 0 0">ER 회선 1개에 <b>Private Peering + (선택) Microsoft Peering</b>을 동시에 활성화 → IaaS/PaaS 통신과 M365/SaaS 트래픽을 단일 회선으로 처리. Microsoft Peering 구성으로 Private Endpoint Inbound의 <b>Hidden Cost 절감</b> 가능.</p>
+  </div>
+</section>

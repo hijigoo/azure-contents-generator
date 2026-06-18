@@ -1,0 +1,42 @@
+<section class="frag frag--light">
+  <div style="text-align:center">
+    <span class="fkicker">26 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">3M — Azure IoT Edge + Azure SQL Edge 모델 배포</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">목적: 설비 고장을 <b>수 시간 전 예측</b> · 예지보전 — 설비 센서 + 제품 정보 상관분석 → Edge 저장·추론 → 클라우드 동기화 학습</p>
+  </div>
+  <div class="fgrid c3 reveal" style="margin-top:18px;align-items:stretch">
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 42%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-blue)">① 라인 데이터</div>
+      <b style="display:block;margin-top:2px">설비 센서 + 제품 정보</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">2-스트림 상관분석</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">② Edge 저장</div>
+      <b style="display:block;margin-top:2px">Azure SQL Edge / IoT Edge</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">라인 옆에서 저장·처리</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,#34d399 42%,transparent)">
+      <div class="feyebrow" style="color:#34d399">③ Edge 분석·예측</div>
+      <b style="display:block;margin-top:2px">이상징후 사전 감지</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">고장을 수 시간 전 예측</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">④ 클라우드 동기화</div>
+      <b style="display:block;margin-top:2px">내결함성 전송</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">전송 시간 <b>주 → 분</b> 단축</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-purple) 42%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-purple)">⑤ 클라우드 학습</div>
+      <b style="display:block;margin-top:2px">모델 학습·검증·등록</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">ML Services · 예측 모델 고도화</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">⑥ Edge 재배포</div>
+      <b style="display:block;margin-top:2px">검증 모델 → Azure SQL Edge</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">→ ② Edge 저장으로 환류</p>
+    </div>
+  </div>
+  <p style="text-align:center;color:var(--ink-dim);margin:12px 0 0;font-size:13.5px">↻ <b style="color:#34d399">Closed-loop</b> — Edge 분석·예측 ↔ 클라우드 재학습 ↔ Edge 재배포가 자동 순환</p>
+  <p class="fstat-line" style="margin-top:16px"><b>Edge-first</b> 설계로 네트워크 제한 현장에서도 로컬 저장·추론 → 설비 센서·제품 정보 상관분석으로 이상 징후 조기 포착 → 클라우드(Azure ML · Databricks) 재학습 → Edge 재배포로 <b>예지보전·다운타임 절감</b></p>
+  <p class="fstat-line" style="margin-top:6px">Reference: <b>microsoft.com/en/customers/story/844496-3m-manufacturing-azure-sql-edge</b></p>
+</section>
