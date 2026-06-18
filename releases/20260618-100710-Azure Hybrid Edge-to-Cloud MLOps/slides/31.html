@@ -1,0 +1,32 @@
+<section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">31 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">GitHub Actions MLOps 워크플로 (실전 예시)</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">Azure/mlops-v2-gha-demo — NYC Taxi 회귀 예제 · <code>workflow_dispatch</code>로 트리거되는 엔드투엔드 학습 파이프라인</p>
+  </div>
+  <div class="fgrid imgR reveal" style="margin-top:18px;align-items:center">
+    <div class="fdiagram" style="margin:0">
+      <pre class="mermaid">
+flowchart TB
+  T["workflow_dispatch<br/>수동/이벤트 트리거"] --> ENV["set-env<br/>환경변수·시크릿 로드"]
+  ENV --> CFG["get-config<br/>config-infra YAML 파싱"]
+  CFG --> RE["register-environment"]
+  CFG --> RD["register-dataset"]
+  CFG --> RC["create-compute"]
+  RE --> RUN["run-training-pipeline<br/>Azure ML Job 제출"]
+  RD --> RUN
+  RC --> RUN
+  RUN --> REG["모델 등록"]
+  style T fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style RUN fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style REG fill:#14352a,stroke:#34d399,color:#e8eaf2
+      </pre>
+      <div class="fdiagram-cap">병렬 등록 → 학습 Job 제출 · 클릭하면 확대됩니다</div>
+    </div>
+    <figure class="fshot fshot--zoom" style="margin:0">
+      <img src="img/s31-1.webp" loading="lazy" alt="GitHub Actions 실행 결과">
+      <figcaption>GitHub Actions 실행 결과 — 각 Job의 성공/실패가 한눈에</figcaption>
+    </figure>
+  </div>
+  <p class="fstat-line">Reference: <b>github.com/Azure/mlops-v2-gha-demo</b> · MLOps v2 가속기 GitHub Actions 데모</p>
+</section>

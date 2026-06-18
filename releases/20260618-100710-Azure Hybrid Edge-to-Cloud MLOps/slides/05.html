@@ -1,0 +1,35 @@
+<section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">05 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">Hybrid Reference Architecture</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:78ch">On-prem(Edge) ↔ Azure <b>Closed-loop MLOps</b> 구성도 — 현장은 실시간 추론·로컬 저장, 중요한 데이터만 선별 전송, 클라우드는 통합 학습 후 모델을 다시 Edge로 배포</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  subgraph EDGE["🏭 On-premise / Edge (Factory)"]
+    direction TB
+    SEN["Sensors · PLC<br/>SCADA · Vision"] --> IE["Azure IoT Edge<br/>+ Azure Stack HCI"]
+    IE --> INF["Real-time Inference<br/>Edge Model Registry"]
+    IE --> LS[("Local Storage<br/>NAS · SAN · Object")]
+    ARC["Azure Arc-enabled<br/>Servers / K8s"]
+  end
+  subgraph AZ["☁️ Azure Public Cloud"]
+    direction TB
+    ING["IoT Hub · Event Hubs<br/>Stream Analytics · Fabric RTI"] --> LAKE[("ADLS Gen2 · OneLake<br/>Blob · Files · NetApp")]
+    LAKE --> COMP["Fabric · Databricks<br/>CycleCloud HPC"]
+    COMP --> AML["Azure ML · Training<br/>Model Registry · MLflow"]
+  end
+  IE -- "ExpressRoute Private Peering" --> ING
+  LS -. "Data Box (Bulk)" .-> LAKE
+  AML == "Closed-loop: Deploy to Edge (Arc + IoT Edge)" ==> INF
+  SEC["🔐 Purview · Defender for Cloud · Entra ID · Key Vault"]
+  style EDGE fill:#8b5cf615,stroke:#8b5cf6,color:#e8eaf2
+  style AZ fill:#3b82f615,stroke:#3b82f6,color:#e8eaf2
+  style AML fill:#e3008c22,stroke:#e3008c,color:#e8eaf2
+  style INF fill:#14352a,stroke:#34d399,color:#e8eaf2
+  style SEC fill:#1f2937,stroke:#9ca3af,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">5개 계층: Data Ingestion · Storage/Lake · Analytics/Simulation · ML &amp; Ops · Security/Governance — 클릭하면 확대됩니다</div>
+  </div>
+</section>

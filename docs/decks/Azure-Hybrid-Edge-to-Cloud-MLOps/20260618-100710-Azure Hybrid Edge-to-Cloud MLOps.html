@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Azure Hybrid Edge-to-Cloud MLOps</title>
+<style>:root{color-scheme:light dark;--bg:#fff;--fg:#0f172a;--muted:#64748b;
+--border:#e2e8f0;--card:#fff;--accent:#2563eb;--side:#f8fafc;--active:#e0e7ff;
+--slide-bg:#ffffff;--stage-shadow:0 1px 3px rgba(0,0,0,.12),0 8px 24px rgba(0,0,0,.08);}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1120;--fg:#e2e8f0;--muted:#94a3b8;
+--border:#1e293b;--card:#0f172a;--accent:#60a5fa;--side:#0f172a;--active:#1e293b;
+--slide-bg:#ffffff;--stage-shadow:0 1px 3px rgba(0,0,0,.5),0 8px 24px rgba(0,0,0,.4);}}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,
+"Helvetica Neue",Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+background:var(--bg);color:var(--fg);line-height:1.4;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh;transition:grid-template-columns .25s ease;}
+body.side-collapsed .layout{grid-template-columns:0 1fr;}
+aside{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+background:var(--side);border-right:1px solid var(--border);padding:20px 0;}
+body.side-collapsed aside{overflow:hidden;border-right:none;}
+.collapse-btn{position:absolute;top:14px;right:12px;width:30px;height:30px;display:grid;
+place-items:center;border:1px solid var(--border);border-radius:8px;background:var(--card);
+color:var(--fg);cursor:pointer;font-size:14px;line-height:1;z-index:5;}
+.collapse-btn:hover{background:var(--active);}
+.side-open{position:fixed;top:14px;left:14px;z-index:30;width:38px;height:38px;display:none;
+place-items:center;border:1px solid var(--border);border-radius:10px;background:var(--card);
+color:var(--fg);cursor:pointer;font-size:18px;box-shadow:0 4px 16px rgba(0,0,0,.18);}
+body.side-collapsed .side-open{display:grid;}
+aside .deck-title{padding:0 50px 12px 20px;font-weight:700;font-size:15px;}
+aside .ver{padding:0 20px 16px;font-size:12px;color:var(--muted);}
+aside .ver select{width:100%;margin-top:6px;padding:6px;border-radius:8px;
+border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:12px;}
+nav ol{list-style:none;margin:0;padding:0;}
+nav a{display:flex;gap:10px;padding:8px 20px;text-decoration:none;color:var(--fg);
+font-size:13px;border-left:3px solid transparent;}
+nav a:hover{background:var(--active);}
+nav a.active{background:var(--active);border-left-color:var(--accent);font-weight:600;}
+nav a .n{color:var(--muted);min-width:22px;text-align:right;font-variant-numeric:tabular-nums;}
+main{padding:32px clamp(16px,4vw,64px) 40vh;}
+.slide-wrap{max-width:1180px;margin:0 auto 26px;scroll-margin-top:20px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+box-shadow:var(--stage-shadow);padding:clamp(24px,3.5vw,48px);min-height:60vh;
+display:flex;flex-direction:column;}
+.card-head{margin:0 0 22px;padding-bottom:16px;border-bottom:2px solid var(--accent);}
+.card-head .kicker{color:var(--accent);font-weight:700;font-size:12px;
+letter-spacing:.06em;text-transform:uppercase;font-variant-numeric:tabular-nums;}
+.card-head h2{margin:6px 0 0;font-size:clamp(22px,2.8vw,34px);line-height:1.22;
+font-weight:750;}
+.card-body{flex:1;font-size:clamp(15px,1.45vw,19px);}
+.card-body>*:first-child{margin-top:0;}
+ul.bullets{list-style:none;margin:14px 0;padding:0;}
+ul.bullets li{position:relative;margin:9px 0;padding-left:1.4em;line-height:1.5;}
+ul.bullets li::before{content:"\2022";position:absolute;left:.25em;color:var(--accent);
+font-weight:700;}
+ul.bullets li.lv1{margin-left:1.5em;font-size:.96em;}
+ul.bullets li.lv2{margin-left:3em;font-size:.93em;}
+ul.bullets li.lv3,ul.bullets li.lv4{margin-left:4.5em;font-size:.9em;opacity:.95;}
+ul.bullets li.lv1::before{content:"\2013";}
+ul.bullets li.lv2::before,ul.bullets li.lv3::before,ul.bullets li.lv4::before{content:"\25E6";}
+ul.bullets li.b{font-weight:700;}
+.card-body .tbl{overflow-x:auto;margin:18px 0;}
+.card-body table{border-collapse:collapse;width:100%;font-size:.92em;}
+.card-body th,.card-body td{border:1px solid var(--border);padding:8px 12px;
+vertical-align:top;text-align:left;}
+.card-body table tr:first-child td{background:var(--side);font-weight:600;}
+.card-body figure.img{margin:18px 0;text-align:center;}
+.card-body figure.img img{max-width:100%;max-height:52vh;border-radius:8px;
+border:1px solid var(--border);}
+/* 영상 */
+figure.video{margin:18px 0;}
+figure.video .frame{position:relative;width:100%;max-width:880px;margin-inline:auto;
+aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+figure.video .frame iframe,figure.video .frame video{position:absolute;inset:0;width:100%;height:100%;border:0;}
+figure.video figcaption{margin-top:8px;text-align:center;font-size:.88em;color:var(--muted);}
+.empty{color:var(--muted);font-style:italic;}
+/* 발표용(에이전트 재구성) 블록 */
+.card-body .lead{font-size:1.12em;line-height:1.62;margin:0 0 18px;font-weight:500;}
+.card-body p{line-height:1.62;margin:12px 0;}
+ul.bul{list-style:none;margin:14px 0;padding:0;}
+ul.bul>li{position:relative;margin:9px 0;padding-left:1.4em;line-height:1.55;}
+ul.bul>li::before{content:"\2022";position:absolute;left:.25em;color:var(--accent);font-weight:700;}
+ul.bul ul{list-style:none;margin:6px 0 2px;padding:0;}
+ul.bul ul li{position:relative;margin:5px 0;padding-left:1.3em;font-size:.94em;color:var(--muted);}
+ul.bul ul li::before{content:"\2013";position:absolute;left:.2em;color:var(--muted);}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:16px 0;}
+.gc{border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--side);}
+.gc h4{margin:0 0 6px;font-size:1.02em;color:var(--accent);}
+.gc p{margin:0;font-size:.93em;color:var(--muted);line-height:1.5;}
+ol.steps{list-style:none;margin:16px 0;padding:0;}
+ol.steps>li{display:flex;gap:14px;margin:14px 0;align-items:flex-start;}
+ol.steps .sn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);
+color:#fff;display:grid;place-items:center;font-weight:700;font-size:.9em;}
+ol.steps h4{margin:2px 0 4px;font-size:1.02em;}
+ol.steps p{margin:0;color:var(--muted);font-size:.94em;line-height:1.5;}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:18px 0;}
+.flow .fi{border:1px solid var(--border);background:var(--side);border-radius:10px;
+padding:10px 14px;font-weight:600;font-size:.94em;}
+.flow .fa{color:var(--accent);font-weight:700;font-size:1.1em;}
+.stats{display:flex;flex-wrap:wrap;gap:16px;margin:18px 0;}
+.stat{background:var(--side);border:1px solid var(--border);border-radius:12px;padding:16px 22px;min-width:120px;}
+.stat .sv{font-size:1.9em;font-weight:750;color:var(--accent);line-height:1;}
+.stat .sl{margin-top:6px;font-size:.9em;color:var(--muted);}
+.callout{border-left:4px solid var(--accent);background:var(--side);padding:12px 16px;
+border-radius:0 10px 10px 0;margin:16px 0;line-height:1.55;}
+.callout.tip{border-left-color:#16a34a;} .callout.warn{border-left-color:#d97706;}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin:16px 0;}
+.col h4{margin:0 0 8px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:6px;}
+blockquote{margin:16px 0;padding:14px 20px;border-left:4px solid var(--accent);
+font-style:italic;background:var(--side);border-radius:0 10px 10px 0;line-height:1.55;}
+blockquote cite{display:block;margin-top:8px;font-style:normal;font-size:.88em;color:var(--muted);}
+.card-body table th{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;}
+.card--hero{align-items:center;justify-content:center;text-align:center;min-height:72vh;}
+.card--hero .card-head{border-bottom:none;margin:0;padding:0;}
+.card--hero .card-head h2{font-size:clamp(28px,4vw,44px);margin-top:12px;line-height:1.15;}
+.card--hero .card-body{flex:none;margin-top:18px;}
+.card--hero .lead{font-size:1.2em;color:var(--muted);font-weight:400;}
+.topbar{display:none;}
+@media (max-width:860px){
+.layout{grid-template-columns:1fr;}
+body.side-collapsed .layout{grid-template-columns:1fr;}
+.collapse-btn,.side-open{display:none!important;}
+main{padding:16px 12px 40vh;}
+aside{position:fixed;left:0;top:0;width:80%;max-width:320px;z-index:20;
+transform:translateX(-100%);transition:transform .2s;box-shadow:0 0 40px rgba(0,0,0,.3);}
+aside.open{transform:translateX(0);}
+.topbar{display:flex;position:sticky;top:0;z-index:10;background:var(--side);
+border-bottom:1px solid var(--border);padding:10px 16px;gap:12px;align-items:center;}
+.topbar button{font-size:20px;background:none;border:none;color:var(--fg);cursor:pointer;}
+.topbar .t{font-weight:700;font-size:14px;}
+}
+/* === 모델 작성 슬라이드 조각(.frag) 디자인 시스템 === */
+.slide-wrap .frag{position:relative;border-radius:16px;overflow:hidden;
+box-shadow:var(--stage-shadow);min-height:64vh;padding:clamp(28px,4vw,56px);
+display:flex;flex-direction:column;
+--msft-purple:#8b5cf6;--msft-blue:#3b82f6;--msft-pink:#e3008c;
+--ink-dim:color-mix(in srgb,currentColor 60%,transparent);
+--hair:color-mix(in srgb,currentColor 16%,transparent);
+--panel:color-mix(in srgb,currentColor 6%,transparent);}
+.frag--dark{background:#0b0a14;color:#f4f3fb;background-image:
+radial-gradient(120% 90% at 100% 0%,rgba(124,92,255,.22),transparent 55%),
+radial-gradient(90% 80% at 100% 100%,rgba(227,0,140,.16),transparent 60%),
+linear-gradient(180deg,#0b0a14,#0e0b1c);}
+.frag--light{background:#f6f4fb;color:#161427;background-image:
+radial-gradient(120% 90% at 100% 0%,rgba(124,92,255,.14),transparent 55%),
+radial-gradient(90% 80% at 100% 100%,rgba(227,0,140,.08),transparent 60%);}
+.frag--plain{background:var(--card);color:var(--fg);border:1px solid var(--border);}
+.frag h1.ftitle{margin:0;font-weight:800;line-height:1.12;
+font-size:clamp(27px,3.5vw,44px);letter-spacing:-.01em;
+text-wrap:balance;overflow-wrap:break-word;word-break:keep-all;max-width:18ch;
+margin-inline:auto;}
+.frag:not(.frag--center) h1.ftitle{margin-inline:0;max-width:24ch;}
+.frag .fsub{margin:14px 0 0;font-weight:700;font-size:clamp(16px,1.7vw,22px);
+color:var(--msft-purple);line-height:1.3;}
+.frag .feyebrow{font-weight:700;font-size:13px;letter-spacing:.08em;
+text-transform:uppercase;color:var(--msft-purple);}
+.frag .fkicker{position:absolute;top:18px;right:22px;font-size:12px;
+color:var(--ink-dim);font-variant-numeric:tabular-nums;}
+.frag p{line-height:1.62;}
+.frag .flead{font-size:clamp(16px,1.6vw,20px);color:var(--ink-dim);line-height:1.62;}
+.frag--center{justify-content:center;}
+.frag--center.tc{align-items:center;text-align:center;}
+.frag .fhead{margin:0 0 6px;}
+.frag .fgrid{display:grid;gap:clamp(14px,1.8vw,26px);margin-top:auto;margin-bottom:auto;}
+.frag .fgrid.c2{grid-template-columns:repeat(2,1fr);}
+.frag .fgrid.imgL{grid-template-columns:1.55fr 1fr;}
+.frag .fgrid.imgR{grid-template-columns:1fr 1.55fr;}
+.frag .fgrid.c3{grid-template-columns:repeat(3,1fr);}
+.frag .fgrid.c4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:760px){.frag .fgrid.c2,.frag .fgrid.imgL,.frag .fgrid.imgR,
+.frag .fgrid.c3,.frag .fgrid.c4{grid-template-columns:1fr;}}
+.frag .fcol{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;}
+.frag .fcol .h{font-weight:700;font-size:clamp(15px,1.5vw,18px);}
+.frag .fcol .d{color:var(--ink-dim);font-size:clamp(13px,1.3vw,15.5px);line-height:1.55;}
+.frag .down{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;
+color:#fff;background:linear-gradient(135deg,var(--msft-blue),var(--msft-pink));
+box-shadow:0 4px 14px rgba(0,0,0,.25);font-size:16px;}
+.frag .fpanel{background:var(--panel);border:1px solid var(--hair);border-radius:14px;
+padding:clamp(16px,1.8vw,22px);}
+.frag .fpanel h3{margin:0 0 8px;font-size:clamp(16px,1.6vw,19px);}
+.frag .fpanel p{margin:6px 0 0;color:var(--ink-dim);font-size:clamp(13px,1.3vw,15.5px);}
+.frag .fstat-line{margin-top:auto;padding-top:18px;text-align:center;font-style:italic;
+font-size:clamp(15px,1.6vw,20px);color:var(--ink-dim);line-height:1.5;}
+.frag .fstat-line b{color:var(--msft-pink);font-style:normal;font-weight:800;}
+.frag .fstats{display:flex;flex-wrap:wrap;gap:clamp(16px,2.4vw,44px);justify-content:center;
+margin:auto 0;}
+.frag .fstats .v{font-size:clamp(30px,4vw,52px);font-weight:800;line-height:1;
+background:linear-gradient(135deg,var(--msft-blue),var(--msft-pink));
+-webkit-background-clip:text;background-clip:text;color:transparent;}
+.frag .fstats .l{margin-top:8px;color:var(--ink-dim);font-size:14px;text-align:center;}
+.frag .fflow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
+.frag .fflow .node{background:var(--panel);border:1px solid var(--hair);border-radius:12px;
+padding:12px 16px;font-weight:600;}
+.frag .fflow .arr{color:var(--msft-purple);font-weight:800;font-size:1.2em;}
+.frag ul.fbul{list-style:none;margin:14px 0 0;padding:0;}
+.frag ul.fbul>li{position:relative;padding-left:1.5em;margin:11px 0;line-height:1.55;}
+.frag ul.fbul>li::before{content:"";position:absolute;left:0;top:.55em;width:.55em;height:.55em;
+border-radius:50%;background:linear-gradient(135deg,var(--msft-blue),var(--msft-pink));}
+.frag .chips{display:flex;flex-wrap:wrap;gap:8px;}
+.frag .chip{border:1px solid var(--hair);border-radius:999px;padding:6px 14px;font-size:14px;
+background:var(--panel);}
+.frag figure.video{margin:18px auto 0;width:100%;}
+.frag .brandbar{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;
+color:var(--ink-dim);margin-bottom:18px;}
+.frag .brandbar .sq{display:grid;grid-template-columns:1fr 1fr;width:18px;height:18px;gap:2px;}
+.frag .brandbar .sq i{display:block;}
+.frag .brandbar .sq i:nth-child(1){background:#f25022;}
+.frag .brandbar .sq i:nth-child(2){background:#7fba00;}
+.frag .brandbar .sq i:nth-child(3){background:#00a4ef;}
+.frag .brandbar .sq i:nth-child(4){background:#ffb900;}
+/* 실제 PPT 캡처 이미지 프레임 */
+.frag figure.fshot{margin:0;width:100%;display:flex;flex-direction:column;justify-content:center;}
+.frag figure.fshot img{display:block;width:100%;height:auto;border-radius:12px;
+border:1px solid var(--hair);box-shadow:0 10px 34px rgba(0,0,0,.28);
+background:#fff;}
+.frag figure.fshot figcaption{margin-top:10px;color:var(--ink-dim);font-size:13px;text-align:center;}
+.frag .fshot--zoom img{cursor:zoom-in;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;}
+.frag .fshot--zoom img:hover{transform:scale(1.02);box-shadow:0 18px 50px rgba(0,0,0,.4);}
+/* 이미지 그리드 안의 스크린샷은 셀을 가득 채워 충분히 크게 */
+.frag .fgrid.imgL{grid-template-columns:1.7fr 1fr;align-items:stretch;}
+.frag .fgrid.imgR{grid-template-columns:1fr 1.7fr;align-items:stretch;}
+.frag .fgrid.imgL>figure.fshot,.frag .fgrid.imgR>figure.fshot{align-self:center;}
+.frag .fgrid.imgL>figure.fshot img,.frag .fgrid.imgR>figure.fshot img{
+width:100%;max-height:none;}
+/* 이미지 비중이 작은 그리드는 더 넓게 보이도록 좌우 여백 축소 */
+.frag:has(.fgrid.imgL) ,.frag:has(.fgrid.imgR){padding-left:clamp(20px,2.4vw,40px);padding-right:clamp(20px,2.4vw,40px);}
+/* 단독(전폭) 스크린샷은 과하게 커지지 않도록 가운데 정렬 + 상한 */
+.frag>figure.fshot,.frag .reveal>figure.fshot{max-width:1040px;margin-inline:auto;}
+/* 이미지·다이어그램 라이트박스(클릭 시 확대) */
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.9);display:none;
+align-items:center;justify-content:center;padding:4vh 4vw;cursor:zoom-out;}
+.lightbox.on{display:flex;}
+.lightbox img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.6);}
+.lightbox .lbcontent{display:flex;align-items:center;justify-content:center;max-width:96vw;max-height:92vh;}
+.lightbox .lbcontent svg{width:auto;height:auto;max-width:94vw;max-height:88vh;
+background:#11131c;border-radius:12px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.6);}
+.lightbox .lbx{position:fixed;top:18px;right:22px;font-size:30px;color:#fff;opacity:.8;line-height:1;}
+/* Mermaid 렌더 실패 폴백 */
+.frag .mermaid.mmfail{display:block;}
+.frag .mmfail-note{padding:16px 18px;border:1px dashed var(--hair);border-radius:12px;
+color:var(--ink-dim);font-size:14px;text-align:center;background:color-mix(in srgb,currentColor 5%,transparent);}
+/* 호버 인터랙션 */
+.frag .fpanel{transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;}
+.frag .fpanel:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--msft-purple) 55%,transparent);
+box-shadow:0 14px 36px rgba(0,0,0,.22);}
+.frag .fcol{transition:transform .3s;}
+.frag .fcol:hover{transform:translateY(-3px);}
+.frag .chip{transition:transform .2s,background .2s,border-color .2s;}
+.frag .chip:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--msft-blue) 60%,transparent);}
+.frag .fflow .node{transition:transform .25s,box-shadow .25s;}
+.frag .fflow .node:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.22);}
+/* 스크롤 진입 애니메이션 */
+.slide-wrap{opacity:0;transform:translateY(28px);
+transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);will-change:opacity,transform;}
+.slide-wrap.in{opacity:1;transform:none;}
+.slide-wrap.in .reveal{animation:fadeUp .6s both;}
+.slide-wrap.in .reveal:nth-child(2){animation-delay:.08s;}
+.slide-wrap.in .reveal:nth-child(3){animation-delay:.16s;}
+.slide-wrap.in .reveal:nth-child(4){animation-delay:.24s;}
+.slide-wrap.in .reveal:nth-child(5){animation-delay:.32s;}
+.slide-wrap.in .reveal:nth-child(6){animation-delay:.40s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+/* 다이어그램 라이브러리(Mermaid) */
+.frag .fdiagram{margin:18px auto 0;max-width:1100px;width:100%;position:relative;}
+.frag .fdiagram .mermaid{display:flex;justify-content:center;line-height:1.3;}
+.frag .fdiagram .mermaid svg{max-width:100%;height:auto;}
+.frag .fdiagram.zoomable .mermaid{cursor:zoom-in;}
+.frag .fdiagram .fdiagram-zoom{position:absolute;top:6px;right:6px;z-index:2;display:inline-flex;align-items:center;gap:5px;
+padding:5px 11px;font-size:12px;font-weight:600;border-radius:999px;cursor:zoom-in;
+background:color-mix(in srgb,var(--msft-purple) 22%,#11131c);
+border:1px solid color-mix(in srgb,var(--msft-purple) 50%,transparent);color:#e8eaf2;opacity:.8;
+transition:opacity .2s,transform .2s,box-shadow .2s;}
+.frag .fdiagram .fdiagram-zoom:hover{opacity:1;transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.35);}
+.frag .fdiagram .fdiagram-cap{margin-top:10px;text-align:center;color:var(--ink-dim);font-size:13px;}
+/* 방사형(orbit) 다이어그램 */
+.frag .forbit{position:relative;width:min(560px,82vw);aspect-ratio:1;margin:22px auto 0;}
+.frag .forbit .ring{position:absolute;inset:14%;border:1.5px dashed color-mix(in srgb,currentColor 22%,transparent);
+border-radius:50%;animation:spin 60s linear infinite;}
+.frag .forbit .ring::before{content:"";position:absolute;inset:11%;border:1px dashed color-mix(in srgb,currentColor 12%,transparent);border-radius:50%;}
+.frag .forbit .ocenter{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+width:38%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;gap:6px;
+background:radial-gradient(circle at 35% 30%,rgba(139,92,246,.28),rgba(20,22,34,.85));
+border:1px solid color-mix(in srgb,currentColor 18%,transparent);box-shadow:0 18px 50px rgba(0,0,0,.45);padding:8px;}
+.frag .forbit .ocenter img{width:46%;height:auto;filter:drop-shadow(0 6px 18px rgba(109,92,246,.5));}
+.frag .forbit .ocenter b{font-size:clamp(12px,1.3vw,15px);line-height:1.2;}
+.frag .forbit .onode{position:absolute;transform:translate(-50%,-50%);width:31%;text-align:center;
+display:flex;flex-direction:column;align-items:center;gap:6px;}
+.frag .forbit .onode .ic{width:clamp(40px,5vw,56px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+font-size:clamp(18px,2.4vw,24px);box-shadow:0 8px 22px rgba(0,0,0,.35);transition:transform .25s,box-shadow .25s;}
+.frag .forbit .onode:hover .ic{transform:translateY(-3px) scale(1.06);box-shadow:0 12px 30px rgba(0,0,0,.45);}
+.frag .forbit .onode .ot{font-weight:700;font-size:clamp(12px,1.35vw,15px);line-height:1.2;}
+.frag .forbit .onode .od{font-size:clamp(10px,1.1vw,12px);color:var(--ink-dim);line-height:1.3;}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* === 하단 컨트롤 바 === */
+.deckbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:45;
+display:flex;align-items:center;gap:4px;padding:6px 8px;border-radius:999px;
+background:color-mix(in srgb,var(--card) 86%,transparent);backdrop-filter:blur(12px);
+-webkit-backdrop-filter:blur(12px);border:1px solid var(--border);
+box-shadow:0 10px 34px rgba(0,0,0,.3);font-size:13px;color:var(--fg);
+opacity:.32;transition:opacity .25s,transform .25s;}
+.deckbar:hover,.deckbar:focus-within{opacity:1;}
+.deckbar button{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+min-width:34px;height:34px;padding:0 12px;border-radius:999px;border:1px solid transparent;
+background:none;color:inherit;cursor:pointer;font-size:15px;line-height:1;}
+.deckbar button:hover{background:var(--active);}
+.deckbar .dbcount{min-width:62px;text-align:center;font-variant-numeric:tabular-nums;
+font-weight:600;cursor:default;}
+.deckbar .dbcount:hover{background:none;}
+.deckbar .sep{width:1px;height:20px;background:var(--border);margin:0 3px;}
+.deckbar .lbl{font-size:13px;font-weight:600;}
+@media (max-width:560px){.deckbar .lbl{display:none;}.deckbar button{padding:0 8px;}}
+@media print{.deckbar{display:none;}}
+/* === 발표(전체화면 단일 슬라이드) 오버레이 === */
+.present{position:fixed;inset:0;z-index:60;background:#05060a;display:none;
+align-items:center;justify-content:center;}
+body.presenting{overflow:hidden;}
+body.presenting .present{display:flex;}
+.present .stagebox{position:relative;width:min(96vw,calc(94vh*16/9));
+height:min(94vh,calc(96vw*9/16));overflow:hidden;border-radius:14px;
+background:var(--bg);box-shadow:0 30px 90px rgba(0,0,0,.6);}
+.fit-holder{position:absolute;top:0;left:0;transform-origin:top left;}
+.fit-holder .slide-wrap{margin:0;max-width:none;opacity:1;transform:none;}
+.fit-holder .frag{min-height:0;}
+.present .pbtn,.present .pexit{position:absolute;z-index:3;border-radius:50%;
+border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;
+cursor:pointer;display:grid;place-items:center;opacity:.45;transition:opacity .2s,background .2s;}
+.present .pbtn:hover,.present .pexit:hover{opacity:1;background:rgba(255,255,255,.18);}
+.present .pbtn{top:50%;transform:translateY(-50%);width:48px;height:48px;font-size:24px;}
+.present .pprev{left:20px;} .present .pnext{right:20px;}
+.present .pexit{top:18px;right:20px;width:40px;height:40px;font-size:18px;}
+.present .pnum{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+color:#fff;opacity:.55;font-size:14px;font-variant-numeric:tabular-nums;z-index:3;}
+/* === 발표자 모드(별도 창) === */
+.presenter-room{display:none;}
+body.presenter{overflow:hidden;}
+body.presenter .layout,body.presenter .deckbar,body.presenter .topbar,
+body.presenter .side-open,body.presenter .present{display:none!important;}
+body.presenter .presenter-room{display:grid;position:fixed;inset:0;background:#0b0d14;
+color:#e8eaf2;gap:14px;padding:16px;
+grid-template-columns:1.55fr 1fr;grid-template-rows:1.1fr 1.4fr auto;
+grid-template-areas:"cur next" "cur script" "bar bar";}
+.presenter-room .plabel{font-size:12px;font-weight:700;letter-spacing:.08em;
+text-transform:uppercase;color:#8b93b4;margin-bottom:8px;}
+.presenter-room .pcur{grid-area:cur;display:flex;flex-direction:column;min-height:0;}
+.presenter-room .pnext{grid-area:next;display:flex;flex-direction:column;min-height:0;}
+.presenter-room .pscript{grid-area:script;display:flex;flex-direction:column;min-height:0;
+background:#11141e;border:1px solid #232838;border-radius:12px;padding:16px 18px;}
+.presenter-room .pscript-body{overflow:auto;white-space:pre-wrap;line-height:1.62;
+font-size:clamp(16px,1.5vw,22px);color:#dfe3f0;}
+.presenter-room .pscript-body.empty{color:#6b7390;font-style:italic;}
+.presenter-room .pcur .stagebox,.presenter-room .pnext .stagebox{position:relative;
+flex:1;min-height:0;overflow:hidden;border-radius:12px;background:#05060a;
+border:1px solid #232838;}
+.presenter-room .pbar{grid-area:bar;display:flex;align-items:center;gap:14px;
+background:#11141e;border:1px solid #232838;border-radius:12px;padding:10px 16px;}
+.presenter-room .pbar .ptime{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;
+letter-spacing:.02em;}
+.presenter-room .pbar .pcounter{font-size:15px;color:#aeb6d4;font-variant-numeric:tabular-nums;}
+.presenter-room .pbar .grow{flex:1;}
+.presenter-room .pbar button{height:40px;min-width:44px;padding:0 16px;border-radius:10px;
+border:1px solid #2c3247;background:#1a1f2e;color:#e8eaf2;cursor:pointer;font-size:15px;
+font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+.presenter-room .pbar button:hover{background:#252b3d;}
+.presenter-room .pbar button.accent{background:linear-gradient(135deg,#3b82f6,#8b5cf6);border:none;}
+@media (max-width:780px){body.presenter .presenter-room{grid-template-columns:1fr;
+grid-template-rows:auto auto 1fr auto;grid-template-areas:"cur" "next" "script" "bar";}}
+@media (prefers-reduced-motion:reduce){
+.slide-wrap{opacity:1;transform:none;transition:none;}
+.slide-wrap.in .reveal{animation:none;}
+.frag .fpanel:hover,.frag .fcol:hover,.frag .chip:hover,.frag .fflow .node:hover,
+.frag .fshot--zoom img:hover{transform:none;}
+.frag .forbit .ring{animation:none;}
+}
+</style></head><body>
+<div class="topbar"><button onclick="document.querySelector('aside').classList.toggle('open')">&#9776;</button><span class="t">Azure Hybrid Edge-to-Cloud MLOps</span></div>
+<button class="side-open" onclick="toggleSide()" title="사이드바 열기" aria-label="사이드바 열기">&#9776;</button>
+<div class="layout">
+<aside>
+<button class="collapse-btn" onclick="toggleSide()" title="사이드바 접기" aria-label="사이드바 접기">&#10094;</button>
+<div class="deck-title">Azure Hybrid Edge-to-Cloud MLOps</div>
+<div class="ver">2026-06-18 10:07:10 KST</div>
+<div class="ver"><a href="index.html" style="color:var(--accent)">버전 히스토리 1개 &rarr;</a></div>
+<nav><ol><li><a href="#slide-1" data-target="slide-1"><span class="n">1</span><span>Edge-to-Cloud MLOps</span></a></li><li><a href="#slide-2" data-target="slide-2"><span class="n">2</span><span>Agenda</span></a></li><li><a href="#slide-3" data-target="slide-3"><span class="n">3</span><span>비즈니스 도전과제</span></a></li><li><a href="#slide-4" data-target="slide-4"><span class="n">4</span><span>SECTION 01 · 레퍼런스 아키텍처</span></a></li><li><a href="#slide-5" data-target="slide-5"><span class="n">5</span><span>Hybrid Reference Architecture</span></a></li><li><a href="#slide-6" data-target="slide-6"><span class="n">6</span><span>네트워크 · ExpressRoute</span></a></li><li><a href="#slide-7" data-target="slide-7"><span class="n">7</span><span>ExpressRoute Peering 비교</span></a></li><li><a href="#slide-8" data-target="slide-8"><span class="n">8</span><span>Global Reach &amp; Virtual WAN</span></a></li><li><a href="#slide-9" data-target="slide-9"><span class="n">9</span><span>데이터 수집 · 실시간 vs 배치</span></a></li><li><a href="#slide-10" data-target="slide-10"><span class="n">10</span><span>데이터 마이그레이션 서비스</span></a></li><li><a href="#slide-11" data-target="slide-11"><span class="n">11</span><span>스토리지 매핑</span></a></li><li><a href="#slide-12" data-target="slide-12"><span class="n">12</span><span>데이터 분석 · 시뮬레이션</span></a></li><li><a href="#slide-13" data-target="slide-13"><span class="n">13</span><span>End-to-End MLOps 운영 스택</span></a></li><li><a href="#slide-14" data-target="slide-14"><span class="n">14</span><span>SECTION 02 · Azure ML &amp; MLOps</span></a></li><li><a href="#slide-15" data-target="slide-15"><span class="n">15</span><span>Azure Machine Learning</span></a></li><li><a href="#slide-16" data-target="slide-16"><span class="n">16</span><span>MLOps 레퍼런스 아키텍처</span></a></li><li><a href="#slide-17" data-target="slide-17"><span class="n">17</span><span>MLOps · Azure 서비스 매핑</span></a></li><li><a href="#slide-18" data-target="slide-18"><span class="n">18</span><span>SECTION 03 · 제조 Closed-loop</span></a></li><li><a href="#slide-19" data-target="slide-19"><span class="n">19</span><span>Closed-loop MLOps Pipeline</span></a></li><li><a href="#slide-20" data-target="slide-20"><span class="n">20</span><span>제조 Edge-to-Cloud 아키텍처</span></a></li><li><a href="#slide-21" data-target="slide-21"><span class="n">21</span><span>IoT Edge ML 추론</span></a></li><li><a href="#slide-22" data-target="slide-22"><span class="n">22</span><span>SECTION 04 · 고객 사례</span></a></li><li><a href="#slide-23" data-target="slide-23"><span class="n">23</span><span>P&amp;G · 사례 개요</span></a></li><li><a href="#slide-24" data-target="slide-24"><span class="n">24</span><span>P&amp;G IoT Operations + Arc</span></a></li><li><a href="#slide-25" data-target="slide-25"><span class="n">25</span><span>3M · 사례 개요</span></a></li><li><a href="#slide-26" data-target="slide-26"><span class="n">26</span><span>3M IoT Edge + SQL Edge</span></a></li><li><a href="#slide-27" data-target="slide-27"><span class="n">27</span><span>Siemens Industrial Edge</span></a></li><li><a href="#slide-28" data-target="slide-28"><span class="n">28</span><span>Closed-loop 적용 사례</span></a></li><li><a href="#slide-29" data-target="slide-29"><span class="n">29</span><span>SECTION 05 · MLOps CI/CD</span></a></li><li><a href="#slide-30" data-target="slide-30"><span class="n">30</span><span>MLOps CI/CD 자동화</span></a></li><li><a href="#slide-31" data-target="slide-31"><span class="n">31</span><span>GitHub Actions 워크플로</span></a></li><li><a href="#slide-32" data-target="slide-32"><span class="n">32</span><span>보안 · 거버넌스 · 로드맵</span></a></li><li><a href="#slide-33" data-target="slide-33"><span class="n">33</span><span>Key Takeaways</span></a></li></ol></nav>
+<div class="ver" style="padding-top:16px"><a href="../index.html" style="color:var(--accent)">&larr; 전체 덱 목록</a></div>
+</aside>
+<main><div class="slide-wrap" id="slide-1"><section class="frag frag--dark frag--center">
+  <span aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(60% 80% at 80% 10%,rgba(59,130,246,.20),transparent 60%),radial-gradient(50% 60% at 12% 100%,rgba(139,92,246,.18),transparent 60%);pointer-events:none"></span>
+  <div class="brandbar" style="position:relative"><span class="sq"><i></i><i></i><i></i><i></i></span>Microsoft Korea</div>
+  <span class="feyebrow" style="position:relative;margin-top:18px;color:var(--msft-blue)">AZURE HYBRID CLOUD</span>
+  <h1 class="ftitle" style="position:relative;margin-top:10px">Edge-to-Cloud<br>MLOps Architecture</h1>
+  <p class="flead" style="position:relative;margin:18px auto 0;max-width:60ch">대규모 설비·센서 데이터의 안전한 클라우드 연동과<br><b>Closed-loop MLOps</b> 플랫폼 구축 방안</p>
+  <div class="chips" style="position:relative;justify-content:center;margin-top:26px">
+    <span class="chip">Sanghoon Lee · Sr. Solution Engineer</span>
+    <span class="chip">Kichul Kim · Sr. Solution Engineer</span>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-2"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">02 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(26px,3.4vw,44px)">Agenda</h1>
+    <p class="flead" style="margin:8px auto 0">본 자료에서 다루는 <b>6가지 핵심 영역</b></p>
+  </div>
+  <div class="fgrid c3" style="margin-top:24px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">01</div>
+      <h3 style="margin:6px 0 6px">비즈니스 도전과제 &amp; 아키텍처 개요</h3>
+      <p style="margin:0;color:var(--ink-dim)">Edge 데이터의 클라우드 활용 시 필수 고려사항</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">02</div>
+      <h3 style="margin:6px 0 6px">Hybrid Reference Architecture</h3>
+      <p style="margin:0;color:var(--ink-dim)">On-prem ↔ Azure Closed-loop MLOps 구성도</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">03</div>
+      <h3 style="margin:6px 0 6px">Azure Machine Learning &amp; MLOps 소개</h3>
+      <p style="margin:0;color:var(--ink-dim)">IoT Hub, Event Hubs, Data Box, ADF 등 비교</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-purple)">04</div>
+      <h3 style="margin:6px 0 6px">제조 Edge-to-Cloud Closed-loop 아키텍처</h3>
+      <p style="margin:0;color:var(--ink-dim)">Private/Microsoft Peering, Global Reach</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-purple)">05</div>
+      <h3 style="margin:6px 0 6px">고객 사례 소개</h3>
+      <p style="margin:0;color:var(--ink-dim)">P&amp;G · 3M · Siemens 레퍼런스</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-pink)">06</div>
+      <h3 style="margin:6px 0 6px">MLOps CI/CD 및 도입 로드맵</h3>
+      <p style="margin:0;color:var(--ink-dim)">Fabric, Databricks, CycleCloud, Azure ML</p>
+    </div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-3"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">03 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3.2vw,42px)">비즈니스 도전과제</h1>
+    <p class="flead" style="margin:8px auto 0">왜 Edge-to-Cloud Hybrid 아키텍처가 필요한가</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal" style="border-color:color-mix(in srgb,#f43f5e 40%,transparent)">
+      <div class="chip" style="background:color-mix(in srgb,#f43f5e 18%,transparent);border-color:color-mix(in srgb,#f43f5e 50%,transparent);font-weight:700">⚠ On-premise (Edge) 환경의 한계</div>
+      <ul class="fbul" style="margin-top:14px">
+        <li><b>대용량 데이터</b> — 수천 개 설비/센서의 TB~PB급 시계열 데이터</li>
+        <li><b>연산 자원 한계</b> — Edge GPU/CPU로는 대규모 모델 Training 불가</li>
+        <li><b>데이터 사일로</b> — 공장·라인별 시스템 분산으로 통합 학습 어려움</li>
+        <li><b>폐쇄망 제약</b> — 보안·규제로 인한 인터넷 격리 환경</li>
+      </ul>
+    </div>
+    <div class="fpanel reveal" style="border-color:color-mix(in srgb,#34d399 42%,transparent)">
+      <div class="chip" style="background:color-mix(in srgb,#34d399 18%,transparent);border-color:color-mix(in srgb,#34d399 50%,transparent);font-weight:700">✓ Azure 하이브리드가 제공하는 가치</div>
+      <ul class="fbul" style="margin-top:14px">
+        <li><b>탄력적 연산</b> — GPU/HPC 클러스터로 대규모 Training 가속</li>
+        <li><b>통합 데이터 플랫폼</b> — 전사 데이터 레이크에서 단일 학습 셋 구성</li>
+        <li><b>Closed-loop MLOps</b> — Cloud 학습 → Edge 배포 → 재학습 자동화</li>
+        <li><b>엔터프라이즈 보안</b> — ExpressRoute Private Peering + Defender for Cloud</li>
+      </ul>
+    </div>
+  </div>
+  <p class="fstat-line">대용량 Edge 데이터의 클라우드 활용 = <b>단일 모델 학습 + 분산 추론</b></p>
+</section>
+</div><div class="slide-wrap" id="slide-4"><section class="frag frag--dark frag--center">
+  <span aria-hidden="true" style="position:absolute;left:clamp(10px,3vw,56px);top:50%;transform:translateY(-50%);font-size:clamp(150px,24vw,320px);font-weight:800;line-height:1;color:rgba(59,130,246,.16);pointer-events:none">01</span>
+  <span class="feyebrow" style="position:relative;color:var(--msft-blue)">SECTION 01</span>
+  <h1 class="ftitle" style="margin-top:12px;position:relative">Hybrid Reference<br>Architecture</h1>
+  <p class="flead" style="position:relative;margin:14px auto 0;max-width:64ch">MLOps v2 Classical ML 아키텍처 · 레퍼런스 다이어그램 · Azure ML 중심 MLOps 흐름</p>
+</section>
+</div><div class="slide-wrap" id="slide-5"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">05 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">Hybrid Reference Architecture</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:78ch">On-prem(Edge) ↔ Azure <b>Closed-loop MLOps</b> 구성도 — 현장은 실시간 추론·로컬 저장, 중요한 데이터만 선별 전송, 클라우드는 통합 학습 후 모델을 다시 Edge로 배포</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  subgraph EDGE["🏭 On-premise / Edge (Factory)"]
+    direction TB
+    SEN["Sensors · PLC<br/>SCADA · Vision"] --> IE["Azure IoT Edge<br/>+ Azure Stack HCI"]
+    IE --> INF["Real-time Inference<br/>Edge Model Registry"]
+    IE --> LS[("Local Storage<br/>NAS · SAN · Object")]
+    ARC["Azure Arc-enabled<br/>Servers / K8s"]
+  end
+  subgraph AZ["☁️ Azure Public Cloud"]
+    direction TB
+    ING["IoT Hub · Event Hubs<br/>Stream Analytics · Fabric RTI"] --> LAKE[("ADLS Gen2 · OneLake<br/>Blob · Files · NetApp")]
+    LAKE --> COMP["Fabric · Databricks<br/>CycleCloud HPC"]
+    COMP --> AML["Azure ML · Training<br/>Model Registry · MLflow"]
+  end
+  IE -- "ExpressRoute Private Peering" --> ING
+  LS -. "Data Box (Bulk)" .-> LAKE
+  AML == "Closed-loop: Deploy to Edge (Arc + IoT Edge)" ==> INF
+  SEC["🔐 Purview · Defender for Cloud · Entra ID · Key Vault"]
+  style EDGE fill:#8b5cf615,stroke:#8b5cf6,color:#e8eaf2
+  style AZ fill:#3b82f615,stroke:#3b82f6,color:#e8eaf2
+  style AML fill:#e3008c22,stroke:#e3008c,color:#e8eaf2
+  style INF fill:#14352a,stroke:#34d399,color:#e8eaf2
+  style SEC fill:#1f2937,stroke:#9ca3af,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">5개 계층: Data Ingestion · Storage/Lake · Analytics/Simulation · ML &amp; Ops · Security/Governance — 클릭하면 확대됩니다</div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-6"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">06 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">네트워크 설계 — Azure ExpressRoute</h1>
+    <p class="flead" style="margin:8px auto 0">대규모 Edge 데이터 연동을 위한 전용회선 기반 Hybrid Connectivity</p>
+  </div>
+  <div class="fgrid c3" style="margin-top:20px;align-items:stretch">
+    <div class="fcol fpanel reveal">
+      <div class="h" style="color:var(--msft-blue)">전용 대역폭</div>
+      <div class="d">50 Mbps ~ 100 Gbps (ER Direct), 회선 SLA <b>99.95%</b></div>
+    </div>
+    <div class="fcol fpanel reveal">
+      <div class="h" style="color:var(--msft-blue)">낮고 예측가능한 지연</div>
+      <div class="d">공중망 미경유, <b>Microsoft Global Backbone</b> 사용</div>
+    </div>
+    <div class="fcol fpanel reveal">
+      <div class="h" style="color:var(--msft-blue)">보안 &amp; 컴플라이언스</div>
+      <div class="d">인터넷 미노출, MACsec(ER Direct), 규제 산업 적합</div>
+    </div>
+  </div>
+  <div class="fdiagram reveal" style="margin-top:18px">
+    <pre class="mermaid">
+flowchart LR
+  CN["🏭 Customer Network<br/>Factory / DC<br/>Servers · NAS/SAN · IoT"] --> CE["CE<br/>Router"]
+  CE --> PR["Provider / Meet-me<br/>KT · LGU+ · SKB · Equinix<br/>Megaport · Colt (또는 ER Direct)"]
+  PR -- "BGP Peering · Active-Active (L3)" --> MSEE["Microsoft Edge<br/>(MSEE)"]
+  MSEE --> VN["Azure Region<br/>VNet · Private Peering"]
+  MSEE -. "MS Peering" .-> M365["M365 / SaaS"]
+  style CN fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style MSEE fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style VN fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">ExpressRoute 토폴로지 개념도 · Global Backbone</div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px">
+    <div class="feyebrow" style="color:var(--msft-blue)">ExpressRoute 회선 옵션</div>
+    <ul class="fbul" style="margin-top:10px">
+      <li><b>Provider 모델</b> — 통신사·교환국 경유, 50 Mbps ~ 10 Gbps · 국내외 통신사 다수</li>
+      <li><b>ER Direct</b> — Microsoft Edge에 직접 연동, 10/100 Gbps 포트, 대규모·금융·제조에 적합</li>
+      <li><b>ER Metro</b> — 동일 메트로 내 2개 Peering 위치를 통한 <b>99.99%</b> 가용성 옵션</li>
+    </ul>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-7"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">07 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">ExpressRoute Peering 비교</h1>
+    <p class="flead" style="margin:8px auto 0">Private Peering · Microsoft Peering 구분과 활용 시나리오</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="chip" style="background:color-mix(in srgb,var(--msft-blue) 18%,transparent);border-color:color-mix(in srgb,var(--msft-blue) 50%,transparent);font-weight:700">🔒 Private Peering</div>
+      <p style="margin:14px 0 4px;font-weight:700">연결 대상</p>
+      <p style="margin:0;color:var(--ink-dim)">Azure VNet 내부 IaaS·PaaS 리소스 (Private IP) — IaaS VM, AKS, Storage Private Endpoint, SQL MI 등</p>
+      <p style="margin:14px 0 4px;font-weight:700">주요 특성</p>
+      <ul class="fbul">
+        <li>RFC1918 사설 IP 그대로 사용, NAT 불필요</li>
+        <li>On-prem ↔ VNet 완전 사설 통신 (DC 확장 L3, S2S VPN 대체)</li>
+        <li>Network Latency 5~30 ms (회선 거리 의존)</li>
+      </ul>
+      <p style="margin:12px 0 4px;font-weight:700;color:var(--msft-blue)">최적 시나리오</p>
+      <p style="margin:0;color:var(--ink-dim)">센서 데이터 적재, AML Training cluster 접근, VDI, ERP, 핵심 업무 트래픽</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="chip" style="background:color-mix(in srgb,#22d3ee 18%,transparent);border-color:color-mix(in srgb,#22d3ee 50%,transparent);font-weight:700">🌐 Microsoft Peering</div>
+      <p style="margin:14px 0 4px;font-weight:700">연결 대상</p>
+      <p style="margin:0;color:var(--ink-dim)">Microsoft Public Services (Public IP 기반) — Azure PaaS Public Endpoint</p>
+      <p style="margin:14px 0 4px;font-weight:700">주요 특성</p>
+      <ul class="fbul">
+        <li>Public IP / DNS 해석 필요, NAT 가능</li>
+        <li>Route Filter로 서비스/리전 선택 적용</li>
+        <li>인터넷 우회로 M365 품질·보안 향상 (글로벌 prefixes 시 ER Premium)</li>
+      </ul>
+      <p style="margin:12px 0 4px;font-weight:700;color:#22d3ee">최적 시나리오</p>
+      <p style="margin:0;color:var(--ink-dim)">Blob Public EP, Public API, M365/SaaS</p>
+    </div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px;border-color:color-mix(in srgb,#34d399 40%,transparent)">
+    <div class="feyebrow" style="color:#34d399">✓ 권장 구성</div>
+    <p style="margin:8px 0 0">ER 회선 1개에 <b>Private Peering + (선택) Microsoft Peering</b>을 동시에 활성화 → IaaS/PaaS 통신과 M365/SaaS 트래픽을 단일 회선으로 처리. Microsoft Peering 구성으로 Private Endpoint Inbound의 <b>Hidden Cost 절감</b> 가능.</p>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-8"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">08 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">글로벌 연결 — Global Reach &amp; Virtual WAN</h1>
+    <p class="flead" style="margin:8px auto 0">다국가 공장·법인을 Microsoft Global Backbone으로 연결</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">ExpressRoute Global Reach</div>
+      <ul class="fbul" style="margin-top:10px">
+        <li>서로 다른 ER 회선(국가/리전)을 Global Backbone으로 직접 연결</li>
+        <li>한국 본사 ER ↔ 미국/유럽/중국 공장 ER을 <b>풀메시</b> 연결</li>
+        <li>트래픽이 인터넷 미경유 → 보안·지연·예측성 우수</li>
+        <li>MPLS 글로벌망 대체 또는 보완 옵션</li>
+      </ul>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-purple)">Azure Virtual WAN</div>
+      <ul class="fbul" style="margin-top:10px">
+        <li>Hub-and-Spoke로 ER, VPN, SD-WAN, P2S 통합 관리</li>
+        <li>Virtual Hub에 모든 회선 종단 → 라우팅 자동</li>
+        <li>Azure Firewall / Routing Intent로 보안 일원화</li>
+        <li>SD-WAN 파트너(Cisco, VMware, Fortinet) 통합</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fdiagram reveal" style="margin-top:18px">
+    <pre class="mermaid">
+flowchart TB
+  HQ["🇰🇷 Seoul HQ<br/>Korea Central"]
+  US["🇺🇸 USA Plant<br/>East US 2"]
+  EU["🇪🇺 EU Plant<br/>West Europe"]
+  SEA["🌏 SEA Plant<br/>SE Asia"]
+  BB(("Microsoft Global Backbone<br/>+ ExpressRoute Global Reach"))
+  HQ -- "ER Circuit" --> BB
+  US -- "ER Circuit" --> BB
+  EU -- "ER Circuit" --> BB
+  SEA -- "ER Circuit" --> BB
+  style BB fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style HQ fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">글로벌 토폴로지 예시 — 각 위치의 Azure Region에 우회 없이 직접 도달</div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-9"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">09 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">데이터 수집 전략 — 실시간 vs 배치</h1>
+    <p class="flead" style="margin:8px auto 0">워크로드 특성에 따른 Azure 서비스 매트릭스</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="chip" style="background:color-mix(in srgb,#f59e0b 18%,transparent);border-color:color-mix(in srgb,#f59e0b 50%,transparent);font-weight:700">⚡ Real-time / Streaming</div>
+      <p style="margin:14px 0 4px;font-weight:700">Use Case</p>
+      <p style="margin:0;color:var(--ink-dim)">실시간 이상 탐지 / Predictive QC · 설비 alarm·안전 트리거 · Streaming inference 로깅</p>
+      <p style="margin:14px 0 6px;font-weight:700">주요 Azure 서비스</p>
+      <ul class="fbul">
+        <li><b>Azure IoT Hub</b> — 수백만 디바이스 양방향, MQTT/AMQP, X.509</li>
+        <li><b>Azure IoT Edge</b> — Edge gateway, 로컬 추론·필터링·압축</li>
+        <li><b>Azure Event Hubs</b> — 초당 수백만 이벤트, Kafka 호환</li>
+        <li><b>Stream Analytics / Fabric RTI</b> — SQL 기반 실시간 집계·라우팅</li>
+        <li><b>Event Grid</b> — 이벤트 라우팅·서버리스 트리거</li>
+      </ul>
+      <p class="fstat-line" style="text-align:left;padding-top:12px">특장점: <b>Sub-second 지연</b> · 디바이스 ID/보안 · Kafka 친화</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="chip" style="background:color-mix(in srgb,var(--msft-blue) 18%,transparent);border-color:color-mix(in srgb,var(--msft-blue) 50%,transparent);font-weight:700">📦 Batch / Bulk Migration</div>
+      <p style="margin:14px 0 4px;font-weight:700">Use Case</p>
+      <p style="margin:0;color:var(--ink-dim)">과거 이력 데이터 대량 적재(TB~PB) · 일/주 단위 ETL/ELT · 학습용 골든 데이터셋 정기 갱신</p>
+      <p style="margin:14px 0 6px;font-weight:700">주요 Azure 서비스</p>
+      <ul class="fbul">
+        <li><b>Azure Data Box</b> — 오프라인 PB급 전송 (Disk/40·80TB/Heavy)</li>
+        <li><b>Azure Data Factory</b> — 100+ 커넥터, Mapping Data Flow, IR On-prem</li>
+        <li><b>AzCopy / Storage Mover</b> — 고속 파일 복사, 증분/마이그레이션</li>
+        <li><b>Storage Migration Service</b> — Windows 파일서버 → Azure Files</li>
+        <li><b>Azure Migrate (Database)</b> — DB 호환성 평가 + 마이그레이션</li>
+      </ul>
+      <p class="fstat-line" style="text-align:left;padding-top:12px">특장점: <b>대용량 처리</b> · 스케줄링 · 검증·재시도 · 오프라인 옵션</p>
+    </div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-10"><section class="frag frag--dark">
+  <style>
+  .ftbl-wrap{margin-top:18px;overflow-x:auto;border-radius:12px;border:1px solid var(--hair);}
+  .ftbl{border-collapse:collapse;width:100%;min-width:760px;font-size:clamp(12px,1.15vw,14px);}
+  .ftbl th,.ftbl td{padding:9px 12px;text-align:left;border-bottom:1px solid color-mix(in srgb,currentColor 12%,transparent);vertical-align:top;line-height:1.45;}
+  .ftbl thead th{position:sticky;top:0;background:linear-gradient(120deg,#3b82f6,#8b5cf6);color:#fff;font-weight:600;white-space:nowrap;}
+  .ftbl tbody tr:hover{background:color-mix(in srgb,var(--msft-blue) 8%,transparent);}
+  .ftbl td b{color:var(--msft-blue);}
+  .ftbl .rt{color:#f59e0b;font-weight:600;white-space:nowrap;}
+  .ftbl .bt{color:#22d3ee;font-weight:600;white-space:nowrap;}
+  </style>
+  <div style="text-align:center">
+    <span class="fkicker">10 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Azure 데이터 마이그레이션 서비스 상세</h1>
+    <p class="flead" style="margin:8px auto 0">워크로드 유형별 권장 서비스 선택 가이드</p>
+  </div>
+  <div class="ftbl-wrap reveal">
+    <table class="ftbl">
+      <thead><tr><th>서비스</th><th>유형</th><th>적정 데이터량</th><th>지연</th><th>특장점 / Use Case</th></tr></thead>
+      <tbody>
+        <tr><td><b>IoT Hub</b></td><td class="rt">실시간</td><td>초~분당 수백만 msg</td><td>ms 수준</td><td>디바이스 ID·인증, Cloud-to-Device 명령, Module Twin</td></tr>
+        <tr><td><b>IoT Edge</b></td><td class="rt">실시간</td><td>Edge 로컬 처리 후 전송</td><td>ms 수준</td><td>오프라인 동작, 로컬 추론 모듈, ML/Stream Analytics on Edge</td></tr>
+        <tr><td><b>Event Hubs</b></td><td class="rt">실시간</td><td>수백만 events/sec</td><td>ms~수십ms</td><td>Kafka 호환, Capture로 ADLS 자동 적재</td></tr>
+        <tr><td><b>Stream Analytics</b></td><td class="rt">실시간</td><td>스트리밍 처리</td><td>초 단위</td><td>SQL 기반 windowing/aggregation, Power BI 직결</td></tr>
+        <tr><td><b>Fabric RTI</b></td><td class="rt">실시간</td><td>수십 GB/일 ~</td><td>초 단위</td><td>Eventstream + Eventhouse(KQL) 통합, OneLake 적재</td></tr>
+        <tr><td><b>Azure Data Factory</b></td><td class="bt">배치</td><td>GB ~ PB</td><td>분~시간</td><td>100+ 커넥터, ETL/ELT, CDC, Mapping Data Flow</td></tr>
+        <tr><td><b>Storage Mover</b></td><td class="bt">배치</td><td>TB ~ PB</td><td>지속 동기화</td><td>NFS/SMB → Azure Files/Blob 다중 작업 관리</td></tr>
+        <tr><td><b>AzCopy</b></td><td class="bt">배치</td><td>MB ~ TB</td><td>수동/스케줄</td><td>CLI 고속 복사, 권장 단일 노드 도구</td></tr>
+        <tr><td><b>Data Box</b> (Disk/80TB/Heavy)</td><td class="bt">오프라인</td><td>수 TB ~ 1 PB+</td><td>수일</td><td>폐쇄망/저대역망, AES-256 암호화, PB급 일괄</td></tr>
+        <tr><td><b>Azure Migrate / DMS</b></td><td class="bt">배치(DB)</td><td>DB 수십 ~ TB</td><td>분~시간</td><td>SQL/Oracle/MySQL 평가·이전, 다운타임 최소화</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-11"><section class="frag frag--dark">
+  <style>
+  .ftbl2-wrap{margin-top:18px;overflow-x:auto;border-radius:12px;border:1px solid var(--hair);}
+  .ftbl2{border-collapse:collapse;width:100%;min-width:820px;font-size:clamp(12px,1.1vw,13.5px);}
+  .ftbl2 th,.ftbl2 td{padding:9px 12px;text-align:left;border-bottom:1px solid color-mix(in srgb,currentColor 12%,transparent);vertical-align:top;line-height:1.45;}
+  .ftbl2 thead th{position:sticky;top:0;background:linear-gradient(120deg,#8b5cf6,#e3008c);color:#fff;font-weight:600;white-space:nowrap;}
+  .ftbl2 tbody tr:hover{background:color-mix(in srgb,var(--msft-purple) 8%,transparent);}
+  .ftbl2 td b{color:var(--msft-purple);}
+  .ftbl2 .az{color:#22d3ee;font-weight:600;}
+  </style>
+  <div style="text-align:center">
+    <span class="fkicker">11 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">스토리지 매핑 — On-prem ↔ Azure</h1>
+    <p class="flead" style="margin:8px auto 0">기존 스토리지 유형별 권장 Azure 서비스 및 통합 옵션</p>
+  </div>
+  <div class="ftbl2-wrap reveal">
+    <table class="ftbl2">
+      <thead><tr><th>On-prem 유형</th><th>예시</th><th>권장 Azure 서비스</th><th>적정 워크로드</th><th>특장점</th></tr></thead>
+      <tbody>
+        <tr><td><b>NAS (Files)</b></td><td>NetApp, Isilon, Windows FS</td><td class="az">Azure NetApp Files / Files</td><td>공유 파일, AI 학습 dataset</td><td>엔터프라이즈 성능·SnapMirror, SMB Lift&amp;Shift</td></tr>
+        <tr><td><b>SAN (Block)</b></td><td>Pure, EMC, NetApp SAN</td><td class="az">Managed Disks / Elastic SAN</td><td>DB, VM 부트/데이터, Tier1</td><td>Premium SSD v2, Ultra Disk, 다중 호스트 공유</td></tr>
+        <tr><td><b>Object Storage</b></td><td>MinIO, Ceph, S3-호환</td><td class="az">Blob Storage (ADLS Gen2)</td><td>Data Lake, 백업, 로그</td><td>Hot/Cool/Cold/Archive, Lifecycle, HNS, AzCopy</td></tr>
+        <tr><td><b>Backup / Archive</b></td><td>Tape, VTL, Veeam Repo</td><td class="az">Blob Archive / Azure Backup</td><td>장기보관, 컴플라이언스</td><td>~1¢/GB, Immutable, Veeam·Commvault 연동</td></tr>
+        <tr><td><b>HPC Parallel FS</b></td><td>Lustre, GPFS, BeeGFS</td><td class="az">Managed Lustre / ANF</td><td>AI Training, CAE/CFD</td><td>AML/CycleCloud 직결, sub-ms 병렬 IO</td></tr>
+        <tr><td><b>File Server (Win)</b></td><td>Windows File Server</td><td class="az">Azure Files + File Sync</td><td>공유 폴더, 부서 파일</td><td>캐시·클라우드 티어링, AD 통합</td></tr>
+        <tr><td><b>DB Storage</b></td><td>SQL/Oracle on SAN</td><td class="az">SQL MI / PostgreSQL Flex</td><td>트랜잭션, OLTP/OLAP</td><td>Azure Migrate/DMS, Online migration, Hyperscale</td></tr>
+        <tr><td><b>Streaming / Time-series</b></td><td>Kafka, Historian</td><td class="az">Event Hubs + Fabric Eventhouse</td><td>시계열 IoT, 실시간 분석</td><td>Kafka 호환, KQL 분석, OneLake 적재</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-12"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">12 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">데이터 분석 &amp; 시뮬레이션 플랫폼</h1>
+    <p class="flead" style="margin:8px auto 0">시나리오별 Azure 데이터/AI 서비스 포지셔닝</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 6px;color:#22d3ee">▣ Microsoft Fabric</h3>
+      <p style="margin:0;color:var(--ink-dim)">SaaS 통합 분석 플랫폼 — OneLake 단일 저장소 위에서 Data Engineering, Warehouse, Real-Time Intelligence, Power BI, Data Science 통합</p>
+      <p style="margin:8px 0 0;font-size:13px"><b style="color:#22d3ee">Use case</b> · 전사 레이크하우스, BI, 시계열 IoT 분석(RTI), Copilot 분석</p>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 6px;color:#f59e0b">▣ Azure Databricks</h3>
+      <p style="margin:0;color:var(--ink-dim)">Lakehouse + 협업 노트북, Mosaic AI · MLflow 내장. 대규모 ETL, ML 학습/서빙, GenAI 미세조정에 최적</p>
+      <p style="margin:8px 0 0;font-size:13px"><b style="color:#f59e0b">Use case</b> · 수십~수백 TB ETL, ML/DL Training, Feature Store, LLM 파인튜닝</p>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 6px;color:var(--msft-purple)">▣ Azure CycleCloud + HPC</h3>
+      <p style="margin:0;color:var(--ink-dim)">HPC 클러스터 오케스트레이션 — Slurm/PBS/LSF, ND/HBv GPU/CPU, InfiniBand. CAE/CFD/EDA 시뮬레이션과 대규모 분산 학습</p>
+      <p style="margin:8px 0 0;font-size:13px"><b style="color:var(--msft-purple)">Use case</b> · 제품 시뮬레이션(유동/구조/충돌), 신약 분자 시뮬, 분산 AI Training</p>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 6px;color:var(--msft-blue)">▣ Azure Machine Learning</h3>
+      <p style="margin:0;color:var(--ink-dim)">엔드투엔드 ML 라이프사이클 — AutoML, Designer, Pipelines, Endpoints, Responsible AI, Prompt Flow</p>
+      <p style="margin:8px 0 0;font-size:13px"><b style="color:var(--msft-blue)">Use case</b> · 학습/배포/모니터링 표준화, MLOps, Edge용 모델 패키징</p>
+    </div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px;border-color:color-mix(in srgb,var(--msft-pink) 40%,transparent)">
+    <h3 style="margin:0 0 6px;color:var(--msft-pink)">▣ Azure AI Foundry</h3>
+    <p style="margin:0;color:var(--ink-dim)">Generative AI 앱 개발 플랫폼 — Model Catalog, Agent Service, Evaluation, Content Safety. <b>Use case</b> · 제조 도메인 코파일럿, 시각/언어 멀티모달, Edge SLM 배포</p>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-13"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">13 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">End-to-End MLOps 운영 스택</h1>
+    <p class="flead" style="margin:8px auto 0">Cloud Training ↔ Edge Inference 의 운영 컴포넌트</p>
+  </div>
+  <div class="fgrid c4" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">1 · Data Layer</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">ADLS Gen2 · OneLake · Blob · NetApp Files · Purview Catalog</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-purple)">2 · Compute / Training</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">Azure ML Compute (NDv5, ND H100) · Databricks · CycleCloud Slurm · Managed Lustre</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-pink)">3 · MLOps Layer</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">Azure ML Pipelines · MLflow Registry · GitHub Actions · Prompt Flow · Responsible AI</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:#34d399">4 · Edge / Operations</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">Azure Arc · IoT Edge · AKS Edge Essentials · Azure Stack HCI · Defender for IoT</p>
+    </div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px">
+    <div class="feyebrow" style="color:var(--msft-blue)">권장 운영 패턴</div>
+    <ul class="fbul" style="margin-top:10px">
+      <li>Training은 Azure ML Pipeline + AML Compute(ND H100) 또는 CycleCloud HPC로 자동 스케줄 (<b>Spot/Low-priority로 비용 절감</b>)</li>
+      <li>Model Registry → Approval Gate → Container Image Build → Edge Module 배포까지 GitHub Actions/Azure DevOps로 일원화</li>
+      <li>Edge Inference 모니터링은 Azure Monitor + Log Analytics + Prometheus, Drift는 AML Data Drift Detector로 자동 트리거</li>
+    </ul>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-14"><section class="frag frag--dark frag--center">
+  <span aria-hidden="true" style="position:absolute;left:clamp(10px,3vw,56px);top:50%;transform:translateY(-50%);font-size:clamp(150px,24vw,320px);font-weight:800;line-height:1;color:rgba(139,92,246,.16);pointer-events:none">02</span>
+  <span class="feyebrow" style="position:relative;color:var(--msft-purple)">SECTION 02</span>
+  <h1 class="ftitle" style="margin-top:12px;position:relative">Azure Machine Learning<br>&amp; MLOps 소개</h1>
+  <p class="flead" style="position:relative;margin:14px auto 0;max-width:64ch">MLOps v2 Classical ML 아키텍처 · 레퍼런스 다이어그램 · Azure ML 중심 MLOps 흐름</p>
+</section>
+</div><div class="slide-wrap" id="slide-15"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">15 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Azure Machine Learning</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:80ch">데이터 준비(Storage·DB·Fabric) → <b>Azure ML (MLOps 9단계)</b> → 배포·운영(Managed Endpoint·Arc·IoT Edge). 제조뿐 아니라 어떤 산업의 ML 프로젝트에도 동일하게 적용되는 일반 패턴</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  subgraph P1["① 데이터 준비"]
+    direction TB
+    S1["Storage · ADLS Gen2 / Blob"]
+    S2["Database · Azure SQL / Cosmos"]
+    S3["Fabric · OneLake / Feature Store"]
+  end
+  P1 --> AML["② Azure Machine Learning<br/>MLOps Workspace<br/>(9단계 파이프라인)"]
+  AML --> P3["③ 배포 및 운영<br/>Managed Endpoint · Arc K8s · IoT Edge"]
+  P3 == "Closed-loop: 추론 로그 · Drift → Retraining" ==> AML
+  style P1 fill:#3b82f615,stroke:#3b82f6,color:#e8eaf2
+  style AML fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style P3 fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">↻ 드리프트 감지 시 재학습 트리거 → 학습 파이프라인 재실행 → 재배포</div>
+  </div>
+  <div class="fgrid c3" style="margin-top:20px;align-items:stretch">
+    <div class="fpanel reveal"><b style="color:var(--msft-blue)">1 · Data Asset</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">데이터 등록 · 버전/계보(Lineage) · Datastore 연결</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-blue)">2 · Preprocessing</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">정제 · 결측/이상치 · Feature 생성</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-blue)">3 · Training Pipeline</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">분산 학습 · AutoML · HPO 튜닝</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-purple)">4 · Experiment Tracking</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">메트릭·파라미터·아티팩트 (MLflow)</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-purple)">5 · Evaluation</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">성능 검증 · 책임있는 AI · 승인 게이트</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-purple)">6 · Model Registry</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">카탈로그 등록 · 스테이징→프로덕션</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-pink)">7 · Deployment Package</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">컨테이너 이미지 · 환경·종속성</p></div>
+    <div class="fpanel reveal"><b style="color:#34d399">8 · Monitoring · Drift</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">데이터/모델 드리프트 · 품질 지표</p></div>
+    <div class="fpanel reveal"><b style="color:#34d399">9 · Retraining</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">드리프트 트리거 재학습 → 재배포</p></div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-16"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">16 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">Azure ML &amp; MLOps 레퍼런스 아키텍처</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:80ch">Microsoft 공식 MLOps v2 표준 — Inner Loop(모델 개발) → CI → CD(Staging→승인→Production) → Monitoring → 재학습. <b>ML 프로젝트의 표준 운영 매뉴얼</b></p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  DE[("Data estate<br/>ADLS Gen2 · SQL · Cosmos<br/>Event Hubs · Fabric · Feature store")]
+  DE --> IL
+  subgraph IL["① Model development · Inner Loop"]
+    direction LR
+    EDA["EDA"] --> FE["Feature eng"] --> TR["Train"] --> EV["Evaluate ·<br/>Responsible AI"] --> RG["Register model"]
+    RG -. "↻ Iterate" .-> EDA
+  end
+  IL --> CI["② Continuous Integration<br/>build · test · model registration"]
+  CI --> CD
+  subgraph CD["③ Continuous Deployment · Outer Loop"]
+    direction LR
+    ST["Staging / Test<br/>QA · Smoke · RAI"] --> GA{"Gated<br/>approval"} --> PR["Production<br/>Batch / Real-time · Arc / K8s"]
+  end
+  CD --> MON["④ Monitoring<br/>App Insights · Azure Monitor<br/>Model &amp; data drift · Triggers"]
+  MON == "재학습 (Retrain)" ==> IL
+  style IL fill:#3b82f615,stroke:#3b82f6,color:#e8eaf2
+  style CD fill:#8b5cf615,stroke:#8b5cf6,color:#e8eaf2
+  style MON fill:#14352a,stroke:#34d399,color:#e8eaf2
+  style GA fill:#e3008c22,stroke:#e3008c,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">Roles: Data engineer · Data scientist · ML engineer · Infrastructure team · 클릭하면 확대됩니다</div>
+  </div>
+  <p class="fstat-line">Reference: <b>learn.microsoft.com/azure/architecture/ai-ml/guide/machine-learning-operations-v2</b> (Classical ML)</p>
+</section>
+</div><div class="slide-wrap" id="slide-17"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">17 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">MLOps 레퍼런스 — Azure 서비스 매핑</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">앞의 표준 아키텍처를 <b>Azure 서비스 관점</b>으로 풀어낸 그림 — 데이터 저장소부터 모델 개발, CI/CD, 운영 배포, 모니터링, 재학습까지 역할 기준으로 연결</p>
+  </div>
+  <figure class="fshot fshot--zoom reveal" style="margin:20px auto 0;max-width:1080px">
+    <img src="img/s17-1.webp" loading="lazy" alt="Azure ML MLOps v2 레퍼런스 아키텍처 — Azure 서비스 매핑">
+    <figcaption>Inner Loop(모델 개발) → Continuous Integration → Continuous Deployment(Staging → 승인 → Production) → Monitoring → 재학습 · 클릭하면 확대됩니다</figcaption>
+  </figure>
+  <div class="fgrid c3" style="margin-top:18px;align-items:stretch">
+    <div class="fpanel reveal"><b style="color:var(--msft-blue)">① Data estate</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">학습·추론 데이터가 모이는 영역 — Storage·SQL·Event Hubs·Fabric</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-purple)">② Inner Loop</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">Secure AML Workspace에서 EDA·Feature·학습·평가·등록</p></div>
+    <div class="fpanel reveal"><b style="color:#34d399">③ CD → 운영</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">승인 게이트 후 Arc/K8s·Managed Endpoint 배포·모니터링·재학습</p></div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-18"><section class="frag frag--dark frag--center">
+  <span aria-hidden="true" style="position:absolute;left:clamp(10px,3vw,56px);top:50%;transform:translateY(-50%);font-size:clamp(150px,24vw,320px);font-weight:800;line-height:1;color:rgba(139,92,246,.16);pointer-events:none">03</span>
+  <span class="feyebrow" style="position:relative;color:var(--msft-purple)">SECTION 03</span>
+  <h1 class="ftitle" style="margin-top:12px;position:relative">제조 Edge-to-Cloud<br>Closed-loop MLOps 아키텍처</h1>
+  <p class="flead" style="position:relative;margin:14px auto 0;max-width:66ch">Closed-loop 흐름 · Azure IoT Edge 디바이스 추론 — ① Edge 데이터 수집과 ② 온프레미스 모델 배포·운영에 집중</p>
+</section>
+</div><div class="slide-wrap" id="slide-19"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">19 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Closed-loop MLOps Pipeline</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:80ch">Cloud Training ↔ Edge Inference 의 지속적 재학습 루프 — 특히 굵게 표시된 <b>①·②·⑥</b> 단계가 제조 현장의 핵심</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  E1["★ ① Edge Data 수집<br/>센서/설비 raw + 추론 결과 로깅"]
+  E2["★ ② Cloud Ingestion<br/>IoT Hub / Event Hubs → Lake"]
+  E3["③ Feature 정제·Labeling<br/>Fabric / Databricks"]
+  E4["④ Model Training<br/>Azure ML / CycleCloud HPC"]
+  E5["⑤ Model Registry &amp; 검증<br/>MLflow · A/B · Shadow · RAI"]
+  E6["★ ⑥ Edge 배포 &amp; 재학습 트리거<br/>Arc + IoT Edge OTA · Drift 감지"]
+  E1 --> E2 --> E3 --> E4 --> E5 --> E6
+  E6 == "Closed-loop Feedback · Drift → 재학습" ==> E1
+  style E1 fill:#e3008c22,stroke:#e3008c,color:#e8eaf2
+  style E2 fill:#e3008c22,stroke:#e3008c,color:#e8eaf2
+  style E6 fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">가운데 ③~⑤는 앞 섹션의 Azure ML 표준이 그대로 적용 · 클릭하면 확대됩니다</div>
+  </div>
+  <div class="fgrid c3" style="margin-top:20px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">자동화 (CI/CD/CT)</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">Azure ML Pipelines + GitHub Actions로 코드/데이터/모델 변화 시 자동 학습·배포</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-purple)">품질 게이트</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">성능 메트릭, Data Drift, Fairness, Bias 자동 검증 후에만 Prod 승격</p>
+    </div>
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:#34d399">엣지 운영</div>
+      <p style="margin:8px 0 0;color:var(--ink-dim);font-size:13.5px">Azure Arc로 글로벌 공장 K8s/서버 통합 관리, IoT Edge로 모듈 OTA 업데이트</p>
+    </div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-20"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">20 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">제조 Edge-to-Cloud Closed-loop MLOps 아키텍처</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">현장 수집 → 클라우드 수집·메달리온 레이크 → Azure ML 학습·추론 → Edge 배포 → 피드백 재학습의 전체 흐름</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  subgraph L1["① 온프레미스 제조 Edge"]
+    direction TB
+    SRC["PLC · 센서 · 카메라 · MES"] --> GW["엣지 게이트웨이<br/>filtering / windowing<br/>Store-and-forward"]
+    GW --> EINF["실시간 Edge Inference"]
+  end
+  subgraph L2["② 클라우드 수집 · 데이터 플랫폼"]
+    direction TB
+    ING2["Azure IoT Hub · Event Hubs"] --> MED[("ADLS Gen2 · System of Record<br/>🥉 Bronze raw → 🥈 Silver 정제 → 🥇 Gold 학습셋")]
+    MED -. "Shortcut" .-> FAB["Fabric OneLake<br/>분석 · Power BI (Optional)"]
+  end
+  subgraph L3["③ Azure ML / MLOps 추론"]
+    direction TB
+    AMLW["Azure ML Workspace<br/>학습·평가·등록 · MLflow"] --> PKG["Deployment Package"]
+  end
+  subgraph L4["④ 배포 · 추론 · 피드백"]
+    direction TB
+    ARC2["Azure Arc K8s · IoT Edge Module"] --> OPS["이상탐지 · 품질예측<br/>예지보전 · 설비 상태"]
+  end
+  GW -- "중요 데이터 선별" --> ING2
+  MED --> AMLW
+  PKG == "OTA 배포" ==> ARC2
+  OPS == "추론 로그 · 작업자 피드백 · Drift → 재학습" ==> AMLW
+  style L1 fill:#8b5cf615,stroke:#8b5cf6,color:#e8eaf2
+  style L2 fill:#3b82f615,stroke:#3b82f6,color:#e8eaf2
+  style L3 fill:#e3008c15,stroke:#e3008c,color:#e8eaf2
+  style L4 fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">System of Record = ADLS Gen2 · Optional Analytics = Fabric · Closed-loop = Edge feedback → Retraining · 클릭하면 확대됩니다</div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px">
+    <div class="feyebrow" style="color:#34d399">⑤ 핵심 최적화 전략</div>
+    <div class="chips" style="margin-top:10px">
+      <span class="chip">Edge filtering / windowing / compression</span>
+      <span class="chip">Parquet/Delta + partitioning</span>
+      <span class="chip">OneLake Shortcut로 복사 최소화</span>
+      <span class="chip">VPN / ExpressRoute + Private Endpoint</span>
+      <span class="chip">Cloud GPU autoscale / scheduled training</span>
+      <span class="chip">Incremental retraining &amp; model versioning</span>
+      <span class="chip">Edge inference로 latency · egress 최소화</span>
+    </div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-21"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">21 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">Azure IoT Edge 디바이스에서의 ML 추론</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">Azure ML 학습·저장 → IoT Hub Module Twin 배포 구성 → 모델 파일 Edge 다운로드 → Edge 모듈 로컬 추론(Web API)</p>
+  </div>
+  <div class="fgrid imgL reveal" style="margin-top:20px;align-items:center">
+    <figure class="fshot fshot--zoom" style="margin:0">
+      <img src="img/s21-1.webp" loading="lazy" alt="IoT Edge ML 추론 데이터 흐름">
+      <figcaption>모델 배포·추론 데이터 흐름 · 클릭하면 확대됩니다</figcaption>
+    </figure>
+    <div>
+      <div class="feyebrow" style="color:var(--msft-blue)">주요 데이터 흐름</div>
+      <ol class="fbul" style="margin-top:10px;list-style:decimal;padding-left:20px">
+        <li><b>Azure ML → Blob</b> — 모델 학습 후 모델 파일 저장</li>
+        <li><b>IoT Hub → Module Twin</b> — Edge 모듈에 배포 구성(모델 메타) 전달</li>
+        <li><b>HTTP 다운로드</b> — Blob → 공유 로컬 스토리지로 모델 내려받기</li>
+        <li><b>공유 → 모듈 로컬</b> — AI Loader 모듈 저장소로 복사</li>
+        <li><b>모델 파일 로드</b> — *.tflite · *.onnx 를 Edge 모듈에 로드</li>
+        <li><b>Client → Web API</b> — 현장 추론 요청·응답 (로컬 엔드포인트)</li>
+      </ol>
+    </div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px">
+    <div class="feyebrow" style="color:var(--msft-purple)">Edge 모듈(AI Loader) 구성</div>
+    <div class="chips" style="margin-top:10px">
+      <span class="chip">Python AI Loader · Flask Web API</span>
+      <span class="chip">Module Twin · OpenCV · PIL</span>
+      <span class="chip">Azure IoT device SDK</span>
+      <span class="chip">TensorFlow Lite / ONNX Runtime</span>
+      <span class="chip">Linux 컨테이너 · IoT Edge Runtime (agent·hub)</span>
+    </div>
+  </div>
+  <p class="fstat-line">Reference: <b>learn.microsoft.com/azure/architecture/guide/iot/machine-learning-inference-iot-edge</b></p>
+</section>
+</div><div class="slide-wrap" id="slide-22"><section class="frag frag--dark frag--center">
+  <span aria-hidden="true" style="position:absolute;left:clamp(10px,3vw,56px);top:50%;transform:translateY(-50%);font-size:clamp(150px,24vw,320px);font-weight:800;line-height:1;color:rgba(226,0,140,.14);pointer-events:none">04</span>
+  <span class="feyebrow" style="position:relative;color:var(--msft-pink)">SECTION 04</span>
+  <h1 class="ftitle" style="margin-top:12px;position:relative">고객 사례 소개</h1>
+  <p class="flead" style="position:relative;margin:14px auto 0;max-width:66ch"><b>P&amp;G · 3M · Siemens</b> — 실제 제조 현장의 Edge-to-Cloud MLOps 레퍼런스</p>
+  <div class="chips" style="position:relative;justify-content:center;margin-top:22px">
+    <span class="chip">① 재학습 자동화 중심 (P&amp;G)</span>
+    <span class="chip">② 오프라인 Edge 추론 중심 (3M)</span>
+    <span class="chip">③ 파트너 생태계 통합 (Siemens)</span>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-23"><section class="frag frag--dark frag--center">
+  <span class="fkicker">23 / 33</span>
+  <div class="brandbar" style="justify-content:center;margin-top:4px"><span style="font-size:28px;font-weight:800;letter-spacing:.02em;background:linear-gradient(120deg,#3b82f6,#e3008c);-webkit-background-clip:text;background-clip:text;color:transparent">P&amp;G</span></div>
+  <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px);margin-top:14px">CASE 01 · Procter &amp; Gamble</h1>
+  <p class="flead" style="margin:14px auto 0;max-width:74ch">전 세계 <b>35개국 이상</b>의 공장에서 신규·노후 장비가 혼재 — IT/OT 데이터 표준화와 일관된 모델 배포가 과제. <b>Azure IoT Operations + Azure Arc</b>로 현장 수집 → 클라우드 분석 → 예측 모델 Edge 재배포 구조를 구축</p>
+  <div class="chips" style="justify-content:center;margin-top:22px">
+    <span class="chip">OEE(설비 종합 효율) 개선</span>
+    <span class="chip">이상 징후 조기 감지</span>
+    <span class="chip">비계획 정지·품질 이슈 감소</span>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-24"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">24 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">P&amp;G — Azure IoT Operations + Azure Arc Closed-loop</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">목적: OEE 향상 · 비계획 다운타임 감소 — IT/OT 표준화 → 클라우드 예측 모델 → Azure Arc로 Edge 재배포</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  OT["제조 설비 · OT 데이터<br/>센서·PLC·MES · 35개국 공장"] --> AIO["① Azure IoT Operations (Edge)<br/>Arc K8s · MQTT 브로커 · IT/OT 표준 수집"]
+  AIO --> EI["② Edge 실시간 추론<br/>품질 모니터링 · 이상탐지"]
+  AIO --> LAKE["③ Azure 데이터 레이크 / 클라우드 분석<br/>전사 적재 · 예측·처방 분석"]
+  LAKE --> DS["④ 데이터 사이언티스트<br/>예측·처방 모델 · K8s 네이티브 학습"]
+  DS --> ARC["⑤ Azure Arc / Workload Orchestration<br/>모델 빌드·배포 · 사이트별 버전 관리"]
+  ARC --> DEP["⑥ Edge로 모델 배포<br/>표준 컨테이너 배포"]
+  DEP --> EI
+  EI == "⑦ 재학습·재배포 피드백 루프" ==> LAKE
+  style AIO fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style ARC fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style EI fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">현장 → 클라우드 학습 → Edge 재배포 Closed-loop · 클릭하면 확대됩니다</div>
+  </div>
+  <div class="fgrid imgR reveal" style="margin-top:18px;align-items:center">
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">핵심 포인트</div>
+      <ul class="fbul" style="margin-top:10px">
+        <li>IT/OT 경계의 데이터 표준화를 <b>Azure IoT Operations</b>로 해소 (2022년~ 다년 협업)</li>
+        <li>K8s 네이티브 MQTT 브로커가 Edge↔클라우드 양방향 메시징 평면</li>
+        <li>Azure ML/CI-CD가 모델 빌드·패키징, <b>Azure Arc</b>로 Edge 배포</li>
+        <li>Workload Orchestration으로 사이트별 설정·버전·업그레이드 관리</li>
+      </ul>
+    </div>
+    <div class="fstats" style="flex-direction:column;gap:14px">
+      <div style="text-align:center">
+        <div class="v" style="font-size:clamp(40px,7vw,72px);color:#34d399">90%↓</div>
+        <div class="l">신규 모델 버전 배포 시간 단축</div>
+      </div>
+      <p style="margin:0;text-align:center;color:var(--ink-dim);font-size:13.5px">+ 비계획 설비 정지 대폭 감소<br>(Azure Arc 표준화 배포)</p>
+    </div>
+  </div>
+  <p class="fstat-line">Reference: <b>microsoft.com/en/customers/story/25077-procter-and-gamble-iot-operations</b></p>
+</section>
+</div><div class="slide-wrap" id="slide-25"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">25 / 33</span>
+    <div class="brandbar" style="justify-content:center;margin-top:2px"><span style="font-size:26px;font-weight:800;color:#e3008c">3M</span></div>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px);margin-top:8px">CASE 02 · Edge 우선 분석·추론</h1>
+    <p class="flead" style="margin:10px auto 0;max-width:78ch">제조 이상 징후 예측을 위해 <b>분석을 제조 라인 가까이</b>에서 수행 — 클라우드 학습 + 라인 옆 Azure IoT Edge 추론. <b>Azure SQL Edge</b>가 IoT Edge 모듈로 배포되어 현장에서 저장·처리·예측</p>
+  </div>
+  <figure class="fshot fshot--zoom reveal" style="margin:18px auto 0;max-width:900px">
+    <img src="img/s25-1.webp" loading="lazy" alt="3M Edge 우선 분석·추론 구조">
+    <figcaption>데이터가 있는 곳으로 컴퓨팅·모델을 가져간 Edge-first 구조 · 클릭하면 확대됩니다</figcaption>
+  </figure>
+</section>
+</div><div class="slide-wrap" id="slide-26"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">26 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">3M — Azure IoT Edge + Azure SQL Edge 모델 배포</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">목적: 설비 고장을 <b>수 시간 전 예측</b> · 예지보전 — 설비 센서 + 제품 정보 상관분석 → Edge 저장·추론 → 클라우드 동기화 학습</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  D["제조 라인 데이터<br/>설비 센서 + 제품 정보<br/>2-스트림 상관"] --> SE["① Azure SQL Edge / IoT Edge<br/>라인 옆 Edge 저장"]
+  SE --> AN["② Edge 데이터 분석·예측<br/>라인 옆 저장·분석 후 이상징후 예측"]
+  AN --> SYNC["③ 클라우드로 동기화<br/>내결함성 · 주→분 단위 단축"]
+  SYNC --> TR["④ 클라우드 모델 개발·학습<br/>ML Services"]
+  TR --> VAL["⑤ 모델 학습·검증·등록<br/>예측 모델 고도화"]
+  VAL --> RE["⑥ 검증 모델 Edge 재배포<br/>Azure SQL Edge에 배포"]
+  RE --> SE
+  AN == "⑦ 재학습·재배포 피드백 루프" ==> TR
+  style SE fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style RE fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style AN fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">현장 → 클라우드 학습 → Edge 재배포 · 클릭하면 확대됩니다</div>
+  </div>
+  <div class="fgrid c2" style="margin-top:18px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">핵심 포인트</div>
+      <ul class="fbul" style="margin-top:10px">
+        <li>설비 센서 데이터와 제품 정보를 상관분석해 이상 징후 조기 포착</li>
+        <li>네트워크 제한 현장에 적합한 <b>Edge-first</b> 설계</li>
+        <li>Azure SQL Edge를 IoT Edge로 배포 — 라인 옆에서 저장·추론</li>
+        <li>내결함성 동기화로 전송 시간 <b>주 단위 → 분 단위</b></li>
+        <li>클라우드(Azure ML · HDInsight · Databricks) 학습 → Edge 재배포</li>
+      </ul>
+    </div>
+    <div class="fpanel reveal" style="display:flex;flex-direction:column;justify-content:center;text-align:center;border-color:color-mix(in srgb,#34d399 40%,transparent)">
+      <div class="feyebrow" style="color:#34d399">사전예측</div>
+      <p style="margin:10px 0 0">Edge에서 제조 데이터를 <b>로컬 분석</b>해 라인 이상을 사전에 감지<br><span style="color:var(--ink-dim)">다운타임 절감 · 운영 효율 개선</span></p>
+    </div>
+  </div>
+  <p class="fstat-line">Reference: <b>microsoft.com/en/customers/story/844496-3m-manufacturing-azure-sql-edge</b></p>
+</section>
+</div><div class="slide-wrap" id="slide-27"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">27 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">Siemens Industrial Edge + Azure AI 레퍼런스</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">Microsoft &amp; Siemens 공식 레퍼런스 — Azure ML 학습·패키징 → IoT Hub → Siemens AI Model Manager · Industrial Edge · AI Inference Server → 모니터링·환류</p>
+  </div>
+  <div class="fgrid c2 reveal" style="margin-top:20px;align-items:start">
+    <figure class="fshot fshot--zoom" style="margin:0">
+      <img src="img/s27-1.webp" loading="lazy" alt="Siemens 메인 아키텍처">
+      <figcaption>① 메인 아키텍처 — Azure ML → IoT Hub → Siemens AIMM·AIIS 엣지 실행 → Azure Monitor 환류 (10단계 흐름)</figcaption>
+    </figure>
+    <figure class="fshot fshot--zoom" style="margin:0">
+      <img src="img/s27-2.webp" loading="lazy" alt="Siemens 옵저버빌리티 아키텍처">
+      <figcaption>② 옵저버빌리티 — OT 텔레메트리 → OpenTelemetry Collector + Auth Proxy(Entra ID) → App Insights · Azure Monitor</figcaption>
+    </figure>
+  </div>
+  <p class="fstat-line">Reference: <b>learn.microsoft.com/azure/architecture/example-scenario/manufacturing/azure-ai-siemens-industrial-edge</b></p>
+</section>
+</div><div class="slide-wrap" id="slide-28"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">28 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Closed-loop MLOps 적용 사례</h1>
+    <p class="flead" style="margin:8px auto 0">Azure 기반 Edge-to-Cloud MLOps 실제 도입 사례</p>
+  </div>
+  <div class="fgrid c3" style="margin-top:22px;align-items:stretch">
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 2px;color:var(--msft-blue)">ZF Group</h3>
+      <div class="feyebrow" style="font-size:11px">자동차 부품 제조</div>
+      <p style="margin:10px 0 0;font-size:13px"><b>Solution</b> · IoT Hub 수집, Azure ML 예지보전 모델 학습 → IoT Edge 배포</p>
+      <p style="margin:8px 0 0;font-size:13px;color:#34d399"><b>Outcome</b> · 설비 다운타임 감소, 글로벌 50+ 공장 표준화</p>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 2px;color:var(--msft-blue)">Bosch</h3>
+      <div class="feyebrow" style="font-size:11px">제조 / Mobility</div>
+      <p style="margin:10px 0 0;font-size:13px"><b>Solution</b> · Databricks + Azure ML 분석 플랫폼, Bosch IoT Suite 통합</p>
+      <p style="margin:8px 0 0;font-size:13px;color:#34d399"><b>Outcome</b> · 수만 디바이스 품질·에너지 분석, 디지털 서비스 가속</p>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 2px;color:var(--msft-blue)">Schneider Electric</h3>
+      <div class="feyebrow" style="font-size:11px">에너지 / 자동화</div>
+      <p style="margin:10px 0 0;font-size:13px"><b>Solution</b> · EcoStruxure가 Azure IoT + AI에서 실행, Edge 실시간 인사이트</p>
+      <p style="margin:8px 0 0;font-size:13px;color:#34d399"><b>Outcome</b> · 에너지 효율화·예지보전 SaaS 제공</p>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 2px;color:var(--msft-purple)">PepsiCo</h3>
+      <div class="feyebrow" style="font-size:11px">식음료 제조</div>
+      <p style="margin:10px 0 0;font-size:13px"><b>Solution</b> · Frito-Lay 공장 Azure IoT + ML, 비전 AI 감자 품질 검사 + 재학습 루프</p>
+      <p style="margin:8px 0 0;font-size:13px;color:#34d399"><b>Outcome</b> · 수율 개선, 생산라인 운영 시간 확보</p>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 2px;color:var(--msft-purple)">Heineken</h3>
+      <div class="feyebrow" style="font-size:11px">식음료 제조</div>
+      <p style="margin:10px 0 0;font-size:13px"><b>Solution</b> · Azure 기반 Brewing Operations 플랫폼, 양조 공정 데이터 통합 → AI 의사결정</p>
+      <p style="margin:8px 0 0;font-size:13px;color:#34d399"><b>Outcome</b> · 품질 일관성·에너지 효율, 글로벌 양조장 표준화</p>
+    </div>
+    <div class="fpanel reveal">
+      <h3 style="margin:0 0 2px;color:var(--msft-pink)">AGL · TotalEnergies · ABB</h3>
+      <div class="feyebrow" style="font-size:11px">에너지 / 산업</div>
+      <p style="margin:10px 0 0;font-size:13px"><b>Solution</b> · OT 데이터 → ADLS Gen2 → Synapse/Fabric 분석, Azure ML 운영 최적화</p>
+      <p style="margin:8px 0 0;font-size:13px;color:#34d399"><b>Outcome</b> · 에너지 효율·안전성 향상, 운영 KPI 가시화</p>
+    </div>
+  </div>
+  <p class="fstat-line">출처: Microsoft Customer Stories · 사례별 솔루션 구성 요약 (공개 정보 기반)</p>
+</section>
+</div><div class="slide-wrap" id="slide-29"><section class="frag frag--dark frag--center">
+  <span aria-hidden="true" style="position:absolute;left:clamp(10px,3vw,56px);top:50%;transform:translateY(-50%);font-size:clamp(150px,24vw,320px);font-weight:800;line-height:1;color:rgba(226,0,140,.14);pointer-events:none">05</span>
+  <span class="feyebrow" style="position:relative;color:var(--msft-pink)">SECTION 05</span>
+  <h1 class="ftitle" style="margin-top:12px;position:relative">MLOps CI/CD &amp; 거버넌스</h1>
+  <p class="flead" style="position:relative;margin:14px auto 0;max-width:66ch">GitHub Actions 기반 MLOps 자동화 · 보안/거버넌스 · 단계별 도입 로드맵</p>
+  <div class="chips" style="position:relative;justify-content:center;margin-top:22px">
+    <span class="chip">CI/CD 파이프라인</span>
+    <span class="chip">GitHub Actions 워크플로</span>
+    <span class="chip">보안 · 거버넌스</span>
+    <span class="chip">도입 로드맵</span>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-30"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">30 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">MLOps CI/CD — GitHub Actions Closed-loop</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">코드·데이터 변경 → 자동 학습·검증 → Azure ML / Edge 배포 → 운영 모니터링 → 드리프트 감지 시 재학습 트리거</p>
+  </div>
+  <div class="fgrid c4 reveal" style="margin-top:20px;align-items:stretch">
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--ink-dim)">SOURCE</div>
+      <h4 style="margin:6px 0 6px">GitHub Repository</h4>
+      <p style="margin:0;font-size:13px">ML 코드 · 파이프라인 정의 · 환경/데이터 config (Git 버전 관리)</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 40%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-blue)">CI</div>
+      <h4 style="margin:6px 0 6px">GitHub Actions · 학습</h4>
+      <p style="margin:0;font-size:13px">lint·test → 환경/데이터셋/컴퓨트 등록 → 학습 파이프라인 실행 · 모델 등록</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-purple) 40%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-purple)">CD</div>
+      <h4 style="margin:6px 0 6px">GitHub Actions · 배포</h4>
+      <p style="margin:0;font-size:13px">모델 검증·승인 게이트 → Online Endpoint / IoT Edge 모듈 배포</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,#34d399 40%,transparent)">
+      <div class="feyebrow" style="color:#34d399">RUN</div>
+      <h4 style="margin:6px 0 6px">Azure ML · Edge Runtime</h4>
+      <p style="margin:0;font-size:13px">실시간/배치 추론 · Azure Monitor 텔레메트리 · 데이터 드리프트 감지</p>
+    </div>
+  </div>
+  <div class="fdiagram reveal" style="margin-top:18px">
+    <pre class="mermaid">
+flowchart LR
+  G["GitHub Repo<br/>코드·config"] --> CI["Actions CI<br/>학습·등록"]
+  CI --> CD["Actions CD<br/>검증·배포"]
+  CD --> RT["Azure ML / Edge<br/>추론 서빙"]
+  RT --> MON["Azure Monitor<br/>드리프트 감지"]
+  MON == "재학습 트리거" ==> CI
+  style CI fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style CD fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style MON fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">Closed-loop CI/CD · 클릭하면 확대됩니다</div>
+  </div>
+</section>
+</div><div class="slide-wrap" id="slide-31"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">31 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">GitHub Actions MLOps 워크플로 (실전 예시)</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">Azure/mlops-v2-gha-demo — NYC Taxi 회귀 예제 · <code>workflow_dispatch</code>로 트리거되는 엔드투엔드 학습 파이프라인</p>
+  </div>
+  <div class="fgrid imgR reveal" style="margin-top:18px;align-items:center">
+    <div class="fdiagram" style="margin:0">
+      <pre class="mermaid">
+flowchart TB
+  T["workflow_dispatch<br/>수동/이벤트 트리거"] --> ENV["set-env<br/>환경변수·시크릿 로드"]
+  ENV --> CFG["get-config<br/>config-infra YAML 파싱"]
+  CFG --> RE["register-environment"]
+  CFG --> RD["register-dataset"]
+  CFG --> RC["create-compute"]
+  RE --> RUN["run-training-pipeline<br/>Azure ML Job 제출"]
+  RD --> RUN
+  RC --> RUN
+  RUN --> REG["모델 등록"]
+  style T fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style RUN fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style REG fill:#14352a,stroke:#34d399,color:#e8eaf2
+      </pre>
+      <div class="fdiagram-cap">병렬 등록 → 학습 Job 제출 · 클릭하면 확대됩니다</div>
+    </div>
+    <figure class="fshot fshot--zoom" style="margin:0">
+      <img src="img/s31-1.webp" loading="lazy" alt="GitHub Actions 실행 결과">
+      <figcaption>GitHub Actions 실행 결과 — 각 Job의 성공/실패가 한눈에</figcaption>
+    </figure>
+  </div>
+  <p class="fstat-line">Reference: <b>github.com/Azure/mlops-v2-gha-demo</b> · MLOps v2 가속기 GitHub Actions 데모</p>
+</section>
+</div><div class="slide-wrap" id="slide-32"><section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">32 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">보안·거버넌스 &amp; 단계별 도입 로드맵</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">Zero Trust 다계층 보안 + 4~6주 단위로 가치를 검증하며 확장하는 5단계 도입 경로</p>
+  </div>
+  <div class="fgrid c2 reveal" style="margin-top:18px;align-items:start">
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">보안 · 거버넌스 5계층</div>
+      <ul class="fbul" style="margin-top:10px">
+        <li><b>Identity</b> · Microsoft Entra ID · Managed Identity · RBAC 최소권한</li>
+        <li><b>Network</b> · Private Endpoint · VNet 격리 · ExpressRoute Private Peering</li>
+        <li><b>Data</b> · 저장/전송 암호화 · Key Vault · Purview 데이터 거버넌스</li>
+        <li><b>Workload</b> · Defender for Cloud · 정책(Policy)·규정 준수</li>
+        <li><b>OT/Edge</b> · Defender for IoT · Arc 거버넌스 · 디바이스 인증</li>
+      </ul>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-pink)">도입 로드맵 5단계</div>
+      <ul class="fbul" style="margin-top:10px">
+        <li><b>① Connectivity</b> · ExpressRoute·vWAN 하이브리드 연결 <span style="color:var(--ink-dim)">(4~6주)</span></li>
+        <li><b>② Data Ingestion</b> · 실시간·배치 수집 파이프라인 <span style="color:var(--ink-dim)">(6~8주)</span></li>
+        <li><b>③ Analytics &amp; Pilot</b> · 데이터 플랫폼 + 첫 모델 PoC <span style="color:var(--ink-dim)">(8~12주)</span></li>
+        <li><b>④ MLOps &amp; Edge</b> · CI/CD 자동화 + Edge 배포 <span style="color:var(--ink-dim)">(8~10주)</span></li>
+        <li><b>⑤ Scale</b> · 전사 확장·Closed-loop 운영 <span style="color:var(--ink-dim)">(지속)</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="fstat-line">작게 시작해 단계마다 가치를 검증하고 확장 — <b>Land &amp; Expand</b></p>
+</section>
+</div><div class="slide-wrap" id="slide-33"><section class="frag frag--dark frag--center">
+  <span class="feyebrow" style="color:var(--msft-pink)">KEY TAKEAWAYS</span>
+  <h1 class="ftitle" style="margin-top:10px;font-size:clamp(26px,3.4vw,46px)">핵심 정리</h1>
+  <div class="fgrid c2 reveal" style="margin:24px auto 0;max-width:1000px;text-align:left">
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 40%,transparent)">
+      <h4 style="margin:0 0 6px;color:var(--msft-blue)">① Hybrid 는 선택이 아닌 필수</h4>
+      <p style="margin:0;font-size:14px">데이터 중력·지연·규제 때문에 Edge-to-Cloud 하이브리드가 제조 AI의 기본 전제</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 40%,transparent)">
+      <h4 style="margin:0 0 6px;color:var(--msft-blue)">② 실시간·배치 이원화</h4>
+      <p style="margin:0;font-size:14px">스트리밍(IoT Hub·Event Hubs)과 배치(Data Factory)를 용도에 맞게 분리 설계</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-purple) 40%,transparent)">
+      <h4 style="margin:0 0 6px;color:var(--msft-purple)">③ ExpressRoute Private + Microsoft Peering</h4>
+      <p style="margin:0;font-size:14px">안정적·보안된 하이브리드 연결의 핵심 — 트래픽 유형별 피어링 선택</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-purple) 40%,transparent)">
+      <h4 style="margin:0 0 6px;color:var(--msft-purple)">④ 통합 데이터 플랫폼</h4>
+      <p style="margin:0;font-size:14px">ADLS Gen2 · Synapse/Fabric · Databricks로 분석·학습 데이터 일원화</p>
+    </div>
+    <div class="fpanel" style="grid-column:1/-1;border-color:color-mix(in srgb,#34d399 45%,transparent)">
+      <h4 style="margin:0 0 6px;color:#34d399">⑤ Closed-loop MLOps 로 완성</h4>
+      <p style="margin:0;font-size:14px">현장 추론 → 클라우드 재학습 → Edge 재배포의 자동 순환이 지속적 가치 창출의 엔진 (P&amp;G·3M·Siemens 검증)</p>
+    </div>
+  </div>
+  <p class="flead" style="margin:26px auto 0;font-weight:700">Thank you · <span style="color:var(--msft-blue)">Microsoft Korea</span></p>
+</section>
+</div></main>
+</div>
+<div class="deckbar" role="group" aria-label="발표 제어">
+<button class="db-prev" title="이전 슬라이드 (←)" aria-label="이전 슬라이드">&#8249;</button>
+<span class="dbcount">1 / 33</span>
+<button class="db-next" title="다음 슬라이드 (→)" aria-label="다음 슬라이드">&#8250;</button>
+<span class="sep"></span>
+<button class="db-present" title="발표 시작 (전체화면 슬라이드쇼)"><span>&#9654;</span><span class="lbl">발표</span></button>
+<button class="db-presenter" title="발표자 모드 (2화면: 슬라이드 + 발표자 노트)"><span>&#127908;</span><span class="lbl">발표자</span></button>
+<button class="db-fs" title="전체화면 전환" aria-label="전체화면">&#9974;</button>
+</div>
+<div class="present" aria-hidden="true">
+<button class="pbtn pprev" aria-label="이전">&#8249;</button>
+<div class="stagebox"></div>
+<button class="pbtn pnext" aria-label="다음">&#8250;</button>
+<button class="pexit" aria-label="발표 종료 (Esc)">&#10005;</button>
+<div class="pnum"></div>
+</div>
+<div class="presenter-room">
+<div class="pcur"><div class="plabel">현재 슬라이드</div><div class="stagebox pcur-box"></div></div>
+<div class="pnext"><div class="plabel">다음 슬라이드</div><div class="stagebox pnext-box"></div></div>
+<div class="pscript"><div class="plabel">발표자 노트</div><div class="pscript-body"></div></div>
+<div class="pbar">
+<div class="ptime">00:00</div>
+<button class="pp-reset" title="타이머 초기화">&#8635;</button>
+<div class="pcounter">1 / 33</div>
+<div class="grow"></div>
+<button class="pp-prev">&#8249; 이전</button>
+<button class="pp-next accent">다음 &#8250;</button>
+<button class="pp-fs" title="전체화면">&#9974;</button>
+</div>
+</div>
+<script>
+function toggleSide(){document.body.classList.toggle('side-collapsed');}
+const links=[...document.querySelectorAll('nav a')];
+const map=new Map(links.map(a=>[a.dataset.target,a]));
+const obs=new IntersectionObserver((es)=>{
+ es.forEach(e=>{if(e.isIntersecting){
+  links.forEach(a=>a.classList.remove('active'));
+  const a=map.get(e.target.id); if(a){a.classList.add('active');
+   a.scrollIntoView({block:'nearest'});}
+ }});
+},{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('.slide-wrap').forEach(s=>obs.observe(s));
+const rm=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+if(rm){document.querySelectorAll('.slide-wrap').forEach(s=>s.classList.add('in'));}
+else{
+ const rev=new IntersectionObserver((es)=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rev.unobserve(e.target);}});
+ },{rootMargin:'0px 0px -12% 0px',threshold:.12});
+ document.querySelectorAll('.slide-wrap').forEach(s=>rev.observe(s));
+}
+links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').classList.remove('open')));
+(function(){
+ const lb=document.createElement('div');lb.className='lightbox';
+ lb.innerHTML='<span class="lbx">&times;</span><div class="lbcontent"></div>';
+ document.body.appendChild(lb);
+ const lbc=lb.querySelector('.lbcontent');
+ const close=()=>{lb.classList.remove('on');lbc.innerHTML='';};
+ window.__lb={open(node){lbc.innerHTML='';lbc.appendChild(node);lb.classList.add('on');},close};
+ [...document.querySelectorAll('.fshot--zoom img')].forEach(im=>im.addEventListener('click',()=>{
+  const c=new Image();c.src=im.currentSrc||im.src;c.alt=im.alt||'';window.__lb.open(c);
+ }));
+ lb.addEventListener('click',close);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+})();
+</script>
+<script type="module">
+(async()=>{
+ const nodes=[...document.querySelectorAll('.mermaid')];
+ if(!nodes.length) return;
+ try{
+  const {default:mermaid}=await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
+  mermaid.initialize({startOnLoad:false,suppressErrorRendering:true,securityLevel:'loose',theme:'base',
+   fontFamily:'inherit',
+   themeVariables:{
+    background:'transparent',primaryColor:'#1c2030',primaryBorderColor:'#6d5cf6',
+    primaryTextColor:'#e8eaf2',secondaryColor:'#16233f',tertiaryColor:'#3a1430',
+    lineColor:'#8b5cf6',edgeLabelBackground:'#11131c',
+    clusterBkg:'#8b5cf612',clusterBorder:'#6d5cf6',
+    fontSize:'15px'},
+   flowchart:{curve:'basis',htmlLabels:true,padding:14,nodeSpacing:36,rankSpacing:46}});
+  const good=[];
+  for(const el of nodes){
+   const src=el.textContent;
+   try{await mermaid.parse(src);good.push(el);}
+   catch(e){el.classList.add('mmfail');el.innerHTML='<div class="mmfail-note">다이어그램을 표시할 수 없습니다.</div>';}
+  }
+  if(good.length){
+   await mermaid.run({nodes:good});
+   good.forEach(el=>{
+    const svg=el.querySelector('svg');if(!svg)return;
+    svg.style.maxWidth='100%';svg.style.width='100%';svg.removeAttribute('height');
+    const box=el.closest('.fdiagram')||el.parentElement;
+    if(!box||box.querySelector('.fdiagram-zoom'))return;
+    box.classList.add('zoomable');
+    const open=()=>{const c=svg.cloneNode(true);
+     c.style.width='auto';c.style.height='auto';c.style.maxWidth='94vw';c.style.maxHeight='88vh';
+     window.__lb&&window.__lb.open(c);};
+    const btn=document.createElement('button');btn.type='button';btn.className='fdiagram-zoom';
+    btn.textContent='🔍 확대';btn.addEventListener('click',ev=>{ev.stopPropagation();open();});
+    box.appendChild(btn);
+    el.addEventListener('click',open);
+   });
+  }
+ }catch(e){
+  nodes.forEach(m=>{m.style.whiteSpace='pre-wrap';m.style.color='var(--ink-dim)';});
+ }
+})();
+</script>
+<script>window.__NOTES={"1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "", "9": "", "10": "", "11": "", "12": "", "13": "", "14": "■ 발표 스크립트  (약 0분 30초)\n\n지금까지는 \"공장이나 현장에서 만들어지는 데이터를 어떻게 안전하고 효율적으로 클라우드까지 끌어올릴까\" 하는, 연결과 데이터 기반에 대한 이야기를 드렸어요. 이제부터는 그 위에 한 층을 더 얹어보려고 합니다. 모은 데이터로 모델을 학습시키고, 그 모델을 실제 현장에 가져다 쓰고, 결과를 다시 가져와서 모델을 계속 더 좋게 만드는, 이른바 'AI 운영' 영역이에요.\n\n가장 먼저 Azure Machine Learning 과 MLOps 중심으로 설명을 드리겠습니다.\n\n---\n\n\n세 장에 걸쳐서 ① Azure Machine Learning을 중심으로 한 장에 요약한 그림, ② Microsoft가 공식으로 정리한 MLOps 표준 레퍼런스, ③ 그 표준을 실제 Azure 서비스로는 어떻게 구현하는지를 차례대로 보여드리려고 합니다. \n\n■ 추가 상세 설명\n\n- 본 섹션의 목적: 앞 섹션(Hybrid Reference Architecture)에서 다룬 연결·스토리지·데이터 레이크 기반 위에 'AI/ML 운영 계층'을 얹는 것을 설명합니다.\n- 다룰 순서: ① Azure ML 중심 MLOps 한 장 요약 → ② MLOps v2 표준 레퍼런스(Inner/Outer Loop) → ③ 같은 표준을 Azure 서비스로 매핑한 구현 뷰.\n- 청중이 ML 비전문가일 경우: '학습은 클라우드의 GPU에서, 추론은 현장 Edge에서'라는 한 문장으로 전체 구도를 먼저 각인시키는 것이 효과적입니다.", "15": "■ 발표 스크립트  (약 1분 10초)\n\nAzure Machine Learning을 중심으로 MLOps 전체를 한 장에 요약한 그림이에요. 그림이 좀 복잡해 보이실 텐데, 크게 세 덩어리로만 보시면 훨씬 쉽습니다.\n\n왼쪽이 데이터 준비, 가운데가 학습을 담당하는 Azure ML 파이프라인, 그리고 오른쪽이 배포와 운영이에요. 제조에만 해당하는 그림이 아니라 금융이든 이커머스든 헬스케어든, 어떤 산업의 ML 프로젝트에도 똑같이 들어맞는 일반적인 패턴이라고 보시면 됩니다.\n\n먼저 왼쪽 '데이터 준비' 부분부터 볼까요. 모델을 학습시키려면 결국 재료, 즉 데이터가 필요한데, 사실 이 데이터가 한 곳에만 있지는 않잖아요. 대용량 파일을 다루는 Azure Storage(ADLS Gen2), 시스템 운영 데이터가 들어 있는 Azure SQL이나 Cosmos DB, 분석용으로 모아두는 Microsoft Fabric의 OneLake, 그리고 자주 쓰는 입력 변수를 미리 만들어두는 Feature Store까지 — 이 모든 원천 데이터가 Azure ML 안에서는 '데이터 자산(Data Asset)'이라는 이름으로 등록돼서 학습 입력이 됩니다. 어디서 가져온 데이터인지, 언제 버전이 바뀌었는지 같은 기록이 자동으로 남는다는 점이 중요해요.\n\n가운데 'Azure Machine learning 이  MLOps 를 구성하는 핵심 구성요소입니다. 9단계가 빼곡하게 그려져 있는데, 한 호흡으로 따라가보실게요. ①데이터를 자산으로 등록하고, ②전처리로 EDA를 통해 데이터 품질과 특성을 파악하고, Feature 를 생성해서 모델이 학습 가능한 입력 형태로 변환, ③실제 학습을 돌리고, ④학습 결과(정확도라든가 하이퍼파라미터 같은 것들)를 꼼꼼하게 기록하고, ⑤평가 단계에서 성능이 충분한지, 혹시 편향은 없는지 검증하고 나서, ⑥승인된 모델만 '모델 레지스트리'라는 카탈로그에 등록된 다음, ⑦배포용 컨테이너 이미지로 빌드됩니다. 배포된 다음에도 끝이 아니에요. ⑧현장에서 모델이 잘 맞고 있는지 계속 모니터링하다가, 입력 데이터 패턴이 학습할 때와 달라지는 'Drift(드리프트)' 신호가 잡히면 ⑨재학습이 자동으로 트리거돼서 다시 ③번 학습 단계로 돌아갑니다. 이 9번에서 3번으로 돌아오는 환류가 바로 'Closed-loop'의 실체예요.\n\n오른쪽 '배포 및 운영'은 크게 두 갈래로 나뉩니다. 하나는 클라우드 안에서 그대로 서비스하는 경로 — Azure ML의 Managed Endpoint를 써서 실시간 API(Online)나 대량 일괄 처리(Batch) 형태로 모델을 부를 수 있게 만드는 방식이에요. 또 하나는 현장에 직접 가져다 두는 하이브리드·Edge 경로 — Azure Arc로 관리되는 Kubernetes 클러스터나 IoT Edge 디바이스에 컨테이너 형태로 모델을 내려보내서, 네트워크 지연 없이 라인 옆에서 바로 추론하게 하는 방식이죠. 어느 경로를 선택하시든, 운영 중에 생기는 추론 로그·실제 결과·작업자 피드백·드리프트 신호가 다시 Azure ML로 흘러 들어와서 재학습 트리거가 된다는 점은 똑같습니다.\n\n다음 슬라이드에서는 이 9단계가 Microsoft가 공식적으로 정의한 'MLOps' 표준의 Inner Loop / Outer Loop와 어떻게 맞물리는지 같이 살펴볼게요.\n\n\n■ 추가 상세 설명\n\n[Azure Machine Learning MLOps — 일반 레퍼런스 패턴]\n\n데이터 준비 (Data Estate, 왼쪽):\n- Storage Account — ADLS Gen2 · Blob Storage (정형/비정형, 대용량).\n- Database — Azure SQL · Cosmos DB (트랜잭션·운영 데이터).\n- Fabric · Feature Store — OneLake · Lakehouse · Feature 재사용 자산.\n- 모든 원천은 Azure ML Data Asset으로 등록되어 학습 입력으로 자산화됨.\n\nAzure Machine Learning Workspace (가운데, ★ 본 슬라이드 핵심):\n1. Data Asset — 데이터 등록·버전/계보 관리.\n2. Preprocessing — 정제·결측/이상치·재샘플링, Feature 생성.\n3. Training Pipeline — 분산 학습·AutoML·HPO 튜닝.\n4. Experiment Tracking — MLflow 호환 메트릭·파라미터·아티팩트 로깅.\n5. Evaluation — 성능 검증, 책임있는 AI, 승인 게이트.\n6. Model Registry — 카탈로그 등록, 스테이징 → 프로덕션 승격.\n7. Deployment Package — 컨테이너 이미지·환경·종속성 빌드.\n8. Monitoring · Drift — 데이터/모델 드리프트 감지, 성능·품질 모니터링.\n9. Retraining — 드리프트 트리거 → ③ 학습 파이프라인 재실행 → ⑥ 재등록 → ⑦ 재배포.\n\n배포 및 운영 (오른쪽) — 4가지 대표 Deployment Target:\n- Online Endpoint — Azure ML Managed Online Endpoint, 실시간 REST API, autoscale 기반 저지연 추론.\n- Batch Endpoint — Azure ML Batch Endpoint, 대량 데이터에 대한 비동기 스코어링.\n- Arc Kubernetes — Azure Arc-enabled Kubernetes 클러스터에 컨테이너 배포, 멀티클라우드·온프레미스 K8s 통합 운영.\n- IoT Edge — Azure IoT Edge Module로 현장 디바이스에 OTA 배포, 네트워크 지연 없는 로컬 추론.\n\n운영 공통: 모든 배포 대상의 추론 로그·실제 결과·사용자 피드백·드리프트를 Azure ML Monitoring으로 수집 → Retraining 자동 트리거.\n\n업계별 적용 예시:\n- 제조: 이상탐지·예지보전·품질 예측 (주로 IoT Edge + Arc).\n- 금융·이커머스: 사기 탐지·추천·신용 평가 (주로 Online Endpoint).\n- 보험·헬스케어: 청구 심사·리스크 스코어링 (주로 Batch Endpoint).\n\n다음 슬라이드 예고: 이 9단계와 4가지 배포 대상이 Microsoft 공식 MLOps v2 표준의 어떤 부분에 해당하는지 매핑.", "16": "■ 발표 스크립트  (약 1분 40초)\n\n앞 슬라이드에서 보신 '구조를, 이번에는 'MLOps 운영 사이클' 관점에서 다시 그린 그림이에요. Microsoft가 공식 표준으로 정리한 MLOps 레퍼런스 아키텍처를 가져온 것입니다. 'ML 프로젝트의 표준 운영 매뉴얼' 정도로 이해해 주셔도 충분합니다.\n\n흐름을 왼쪽부터 따라가 보겠습니다. 먼저 Data estate는 모델 학습에 필요한 데이터가 모이는 영역입니다. Storage Account나 ADLS Gen2, Azure SQL DB, Cosmos DB, Event Hubs, Microsoft Fabric, 필요하다면 Feature Store까지 포함될 수 있습니다. \n\n이 데이터가 Model development, 즉 Inner Loop로 들어오면 데이터 사이언티스트는 EDA를 통해 데이터 품질과 특성을 파악하고, Feature Engineering으로 학습에 유효한 특징을 만든 뒤, 모델 학습과 평가를 반복합니다. 이 과정에서 성능뿐만 아니라 Responsible AI 관점의 검증도 함께 수행하고, 기준을 통과한 모델은 Register model 단계에서 모델 레지스트리에 등록됩니다.\n\n그다음은 Continuous Integration 단계입니다. 여기서는 GitHub을 통해 코드, 파이프라인, 모델 아티팩트를 기반으로 빌드와 테스트, 모델 등록 과정을 자동화합니다. 중요한 점은 사람이 매번 수동으로 배포 파일을 만드는 것이 아니라, 코드 커밋과 파이프라인을 통해 반복 가능하고 추적 가능한 방식으로 모델을 운영 준비 상태로 만든다는 것입니다.\n\n이후 Continuous Deployment, 즉 Outer Loop로 넘어갑니다. 등록된 모델은 바로 Production에 올라가는 것이 아니라, 먼저 Staging/Test 환경에서 QA, 데이터 체크, Smoke test, Responsible AI 검증을 거칩니다. 그리고 Gated approval, 즉 승인 게이트를 통과한 모델만 Production 환경으로 배포됩니다. 운영 환경은 배치 추론, 실시간 엔드포인트, Kubernetes, Managed endpoint 등 다양한 형태가 될 수 있습니다.\n\n마지막으로 Monitoring 단계에서는 Application Insights와 Azure Monitor 등을 통해 모델 성능, 데이터 드리프트, 인프라 상태, 지연 시간과 가용성을 지속적으로 확인합니다. 만약 데이터 패턴이 바뀌거나 성능 저하가 감지되면 재학습이 트리거되고, 다시 모델 개발 사이클로 돌아갑니다. 이 피드백 구조가 바로 MLOps의 Closed-loop 운영 방식입니다.\n\n정리하면, 이 아키텍처는 데이터 준비부터 모델 개발, CI/CD, 승인 기반 배포, 운영 모니터링, 재학습까지를 하나의 표준 사이클로 관리하는 구조입니다. 실제 Azure 서비스로 이 구조를 어떻게 구현하는지는 다음 슬라이드에서 서비스 구현 뷰로 이어서 설명드리겠습니다.\n\n---\n\nInner Loop = Data Scientist가 모델을 만들고 개선하는 반복 실험 구간\nOuter Loop = ML Engineer/Platform 팀이 검증된 모델을 배포·운영·모니터링하는 자동화 구간\n\n---\n\n■ 추가 상세 설명\n\n[MLOps v2 — Classical Machine Learning 아키텍처]\n개요: Azure Architecture Center MLOps v2 공식 레퍼런스. 데이터 자산 → 모델 개발 Inner Loop → CI/CD Outer Loop → 모니터링 → 재학습이 하나의 closed-loop로 연결됩니다.\n\n앞 슬라이드(15p) 9단계 ↔ 본 슬라이드 매핑:\n- ① Data Asset, ② Preprocessing  →  ① Data estate + ② Inner Loop 전반부 (EDA · Feature engineering).\n- ③ Training, ④ Experiment Tracking, ⑤ Evaluation, ⑥ Model Registry  →  ② Inner Loop 후반부 (Train · Evaluate · Register model).\n- ⑦ Deployment Package  →  ③ Continuous Integration (build · test · register).\n- ⑧ Monitoring · Drift  →  ⑤ Monitoring (App Insights · drift · infra).\n- ⑨ Retraining  →  ④ Continuous Deployment + 재학습 트리거 → Inner Loop 재진입.\n\n구성 요소:\n1. Data estate — Storage / ADLS Gen2, Azure SQL DB, Cosmos DB, Event Hubs, Microsoft Fabric, (선택) Feature store.\n2. Model development (Inner Loop) — Tabular data → EDA → Feature engineering → Train → Evaluate · Responsible AI → Register model.\n3. Continuous Integration — Azure ML model registry, GitHub, Azure DevOps 기반 빌드·테스트·모델 등록 자동화.\n4. Continuous Deployment (Outer Loop) — Staging/Test → Gated approval → Production (Batch/Real-time, Arc/Kubernetes, Managed endpoints).\n5. Monitoring — App Insights, Azure Monitor, 모델·데이터 드리프트, 인프라 모니터링, 알림/스케줄/가용성·지연 트리거.\n6. Administration & setup — Project repos, ML workspaces, Datasets, Compute, User roles & access, Monitors.\n\nRoles: Data engineer · Data scientist · ML engineer · Infrastructure team.\nReference: https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/machine-learning-operations-v2", "17": "■ 발표 스크립트  (약 1분 30초)\n\n이 슬라이드는 앞선 아키텍처를 Azure 서비스 관점에서 풀어낸 그림입니다. \n데이터 저장소부터 모델 개발, CI/CD, 운영 배포, 모니터링, 재학습까지를 Azure 서비스와 역할 기준으로 어떻게 연결할 수 있는지를 보여주는 것입니다.\n\n흐름을 단계별로 보겠습니다. 먼저 ① Data estate는 모델 학습과 추론에 필요한 데이터가 모이는 영역입니다. 여기서 준비된 데이터는 ② Model development, 즉 Inner Loop로 들어갑니다. 이 영역은 Secure Azure Machine Learning Workspace를 중심으로 구성되고, 데이터 사이언티스트가 Tabular data를 기반으로 EDA, Feature Engineering, 모델 생성, 학습, 평가와 Responsible AI 검증을 반복합니다. 기준을 통과한 모델은 Register model 단계를 통해 Azure Machine Learning Model Registry에 등록됩니다.\n\n③ Continuous Integration 단계에서는 등록된 모델과 코드를 기준으로 GitHub 또는 Azure DevOps가 자동화 파이프라인을 실행합니다. 이 과정에서 모델 빌드, 테스트, 등록이 반복 가능하고 추적 가능한 방식으로 관리됩니다. 이후 \n\n④ Model deployment, 즉 Outer Loop로 넘어가면 모델은 바로 운영에 배포되는 것이 아니라, 먼저 Staging/Test 환경에 올라갑니다. 여기서 Quality assurance, Data checks, Unit tests, Smoke tests, Responsible AI 검증을 거치고, 승인 게이트를 통과한 모델만 Production으로 이동합니다.\n\nProduction 환경에서는 업무 특성에 따라 배치 추론이나 실시간 추론으로 배포할 수 있습니다. 클라우드에서는 Azure ML Managed Endpoint를 사용할 수 있고, Kubernetes 기반 운영이 필요하면 Azure Kubernetes Service나 Azure Arc를 활용할 수 있습니다. 즉, 이 구조는 단일 배포 방식이 아니라 고객의 운영 환경에 맞춰 Batch, Online, Kubernetes 기반 배포를 선택할 수 있는 구조입니다.\n\n⑤ Monitoring 영역에서는 Azure Monitor(운영상태: CPU, 네트워크 등) 와 Azure Application Insights(서비스: 응답시간, 요청 수 등) 를 통해 모델과 데이터 상태, 인프라 리소스, 가용성, 지연 시간 등을 지속적으로 확인합니다. 운영 중 데이터 드리프트나 성능 저하, 인프라 문제가 감지되면 ⑥ Automated retrain 흐름으로 이어집니다. 즉, 모니터링 결과가 단순 알림에서 끝나는 것이 아니라, 재학습 트리거로 연결되어 다시 모델 개발과 배포 사이클로 돌아가게 됩니다.\n\n정리하면, 이 슬라이드는 Azure Machine Learning을 중심으로 데이터, 모델 개발, CI/CD, 배포, 모니터링, 재학습을 하나의 Closed-loop MLOps 구조로 연결한 공식 레퍼런스 아키텍처입니다.\n다음 챕터에서는 이 구조를 제조 OT/IT 환경, 특히 현장 Edge 디바이스까지 확장한 Edge-to-Cloud Closed-loop 아키텍처로 이어서 보겠습니다.\n\n■ 추가 상세 설명\n\n[Azure MLOps v2 — Classical ML 레퍼런스 아키텍처 (Azure 서비스 매핑판)]\n* 본 슬라이드의 다이어그램은 16페이지와 동일한 MLOps v2 표준의 '서비스 구현 뷰'로, Microsoft 공식 레퍼런스 문서의 그림을 그대로 사용합니다.\n\n단계별 Azure 서비스 매핑:\n1. Data estate\n   - ADLS Gen2 · Blob Storage (대용량 학습 데이터, raw/curated zone)\n   - Azure SQL Database · Cosmos DB (트랜잭션·운영 데이터)\n   - Azure Event Hubs · IoT Hub (실시간 스트리밍 인입)\n   - Microsoft Fabric · OneLake (Lakehouse, 분석·BI 통합)\n   - (선택) Azure ML Feature Store\n2. Model development (Inner Loop)\n   - Azure Machine Learning Workspace (Notebooks · Compute Cluster · Designer)\n   - MLflow (메트릭·아티팩트 트래킹, Azure ML 호환)\n   - Responsible AI Dashboard (편향·설명가능성 검증)\n3. Continuous Integration\n   - GitHub / GitHub Actions 또는 Azure DevOps Pipelines\n   - Azure ML CLI v2 · SDK v2 (파이프라인 정의/실행)\n   - Azure ML Model Registry (모델 등록·버전 관리)\n   - Azure Container Registry (이미지 빌드·저장)\n4. Continuous Deployment (Outer Loop)\n   - Azure ML Managed Online Endpoint (실시간 REST, autoscale)\n   - Azure ML Managed Batch Endpoint (대량 스코어링)\n   - Azure Arc-enabled Kubernetes (멀티클라우드·온프레미스 K8s 배포)\n   - Azure IoT Edge (엣지 디바이스 OTA 배포)\n   - Approval Gate: Azure DevOps Environments / GitHub Environments\n5. Monitoring\n   - Application Insights (분산 추적·예외·지연)\n   - Azure Monitor · Log Analytics (메트릭·로그 통합)\n   - Azure ML Data/Model Monitor (데이터·모델 드리프트)\n   - Azure Monitor Alerts (트리거: 알림·스케줄·SLA)\n6. Retraining\n   - Azure ML Pipeline 스케줄/이벤트 트리거 → Inner Loop 재실행 → Registry 등록 → CD 재배포\n\nAdministration & setup:\n- Azure DevOps / GitHub Repos (소스 관리)\n- Azure ML Workspace 별 환경 분리 (dev/test/prod)\n- Microsoft Entra ID + RBAC (역할 기반 접근)\n- Azure Key Vault (시크릿·인증서)\n- Azure Policy · Defender for Cloud (거버넌스·보안)\n\nRoles: Data engineer · Data scientist · ML engineer · Infrastructure team.\nReference: https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/machine-learning-operations-v2", "18": "■ 발표 스크립트\n\n(약 0분 20초)\n\n이번 세 번째 섹션에서는 제조 현장에서 Edge to Cloud MLOps 아키텍처에 대해서 살펴보겠습니다.\n중요한 부분은 첫째 'Edge 데이터 수집' — 현장 데이터를 어떻게 안전하게 클라우드까지 끌어올릴 것인가.\n둘째 '온프레미스 모델 배포·운영' — 학습된 모델을 어떻게 현장에서 돌리고 결과를 환류시킬 것인가. 입니다.\n\n\n■ 추가 상세 설명\n\n- 본 섹션의 범위: 표준 MLOps v2의 좌측(Data estate)과 우측(Production/Edge inference)을 제조 OT/IT 환경에 맞춰 구체화. 가운데 학습 부분은 앞 섹션 내용 재사용을 전제.\n- 두 가지 강조 축:\n  1) Edge → Cloud 데이터 수집 — 센서/PLC/카메라/MES 원천을 Azure IoT Operations · IoT Hub · Event Hubs · ADF/Fabric을 통해 ADLS Gen2 Medallion(Bronze/Silver/Gold)으로 적재.\n  2) Cloud → On-prem 모델 배포·운영 — Azure Arc-enabled Kubernetes · Azure IoT Edge로 OTA 배포, 현장 추론, 추론 로그·작업자 피드백·드리프트를 다시 ADLS Gen2로 되먹임.\n- 다음 슬라이드 구성: ①6단계 닫힌 루프 흐름 → ②실제 Azure 서비스 매핑 전체 아키텍처 → ③스윔레인 관점 → ④Edge 디바이스 추론 디테일. 동일 그림을 점점 확대해서 보여드립니다.", "19": "■ 발표 스크립트  (약 1분 5초)\n\n앞에서 보신 표준 MLOps 를 제조 현장 관점으로 가져와 보면, 한 사이클이 6단계로 정리됩니다. 이 슬라이드에서는 그중에서도 굵게 표시된 ①·②·⑥, 세 단계에 좀 더 집중해서 봐 주세요. 가운데 ③~⑤는 앞 섹션의 Azure ML 표준이 그대로 들어가는 부분이라서 짧게만 짚고 넘어가겠습니다.\n\n①Edge Data 수집부터 볼게요. 보통 '데이터 수집'이라고 하면 센서가 측정한 raw 데이터가 기본이 됩니다. 그리고 한가지가 더 있는데요, 이미 현장에서 돌고 있는 모델의 '추론 결과 로그' — 그러니까 모델이 어떻게 판단했고, 실제 결과는 어땠는지 — 이것도 함께 모아야 합니다. 이 추론 로그가 있어야 나중에 모델 성능이 떨어지는 '드리프트'를 감지할 수도 있고, 재학습을 정확한 타이밍에 트리거할 수도 있거든요.\n\n\n②Cloud Ingestion은 Edge에서 올라온 센서 데이터와 추론 로그를 클라우드로 받아들이는 수집 관문입니다. 이 단계의 핵심은 데이터 목적에 따라 채널을 분리하는 것입니다. IoT Hub는 디바이스 연결, 인증, 상태 관리, 모델 배포 명령 같은 디바이스 제어와 관리에 사용하고, Event Hubs는 센서값과 추론 로그처럼 대량으로 발생하는 텔레메트리를 스트리밍으로 수집하는 데 사용합니다. 즉, IoT Hub는 제어 채널, Event Hubs는 데이터 수집 채널로 나누는 설계가 비용과 확장성 측면에서 효율적입니다.\n\n③Feature 정제·라벨링, ④Model Training, ⑤Model Registry·검증은 앞 섹션의 Azure ML Inner Loop와 CI 부분과 동일하고요.\n\n⑥ Edge 배포·재학습 트리거 단계에서는 검증된 모델을 현장 Edge 환경으로 배포합니다. 단일 게이트웨이나 디바이스 중심이라면 IoT Edge로 모델을 실행하고 원격 업데이트할 수 있고, 여러 공장의 서버나 Kubernetes 환경을 중앙에서 관리해야 한다면 Azure Arc를 활용할 수 있습니다. 두 서비스를 반드시 함께 써야 하는 것은 아니며, IoT Edge는 현장 모델 실행과 업데이트, Azure Arc는 분산된 Edge 인프라의 중앙 관리 역할에 가깝습니다. 배포 후에는 센서 데이터와 추론 로그를 모니터링하다가 드리프트나 성능 저하가 감지되면 재학습을 트리거하고, 새 모델을 다시 Edge로 배포하는 Closed-loop가 완성됩니다.\n\n아래쪽의 세 가지 운영 기둥도 중요합니다. 첫째, 자동화 영역에서는 Azure ML Pipelines와 GitHub Actions를 통해 코드, 데이터, 모델 변화가 발생했을 때 학습과 배포를 자동화합니다. 둘째, 품질 게이트에서는 성능 메트릭, 데이터 드리프트, 공정성, 편향 검증을 통과한 모델만 운영 환경으로 승격합니다. 셋째, 엣지 운영에서는 Azure Arc로 여러 현장 환경을 통합 관리하고, IoT Edge를 통해 모델 모듈을 원격 업데이트합니다.\n\n일반 소프트웨어에서는 코드 변경이 파이프라인의 주요 트리거라면, MLOps에서는 코드뿐만 아니라 데이터 변화, 성능 저하, 드리프트 감지만으로도 재학습과 재배포가 자동으로 이어질 수 있습니다. 이 점이 Closed-loop MLOps의 가장 큰 차별점입니다.\n\n\n\n■ 추가 상세 설명\n\nClosed-loop MLOps Pipeline — 6단계 (★ 강조: ① · ② · ⑥):\n1. Edge Data 수집 (★) — 센서/설비 raw 데이터 + Edge inference 결과 로깅.\n2. Cloud Ingestion (★) — IoT Hub(제어·관리) / Event Hubs(대량 스트리밍) → Data Lake Gen2 / OneLake.\n3. Feature 정제·Labeling — Fabric / Databricks · Notebook + Feature Store. (앞 섹션 재사용)\n4. Model Training — Azure ML / CycleCloud HPC · GPU 분산 학습. (앞 섹션 재사용)\n5. Model Registry & 검증 — MLflow Registry · A/B · Shadow 검증, Responsible AI. (앞 섹션 재사용)\n6. Edge 배포 & 재학습 트리거 (★) — Arc + IoT Edge OTA 배포 · Drift 감지 시 (1)단계로.\n\n세 가지 운영 기둥:\n- 자동화 (CI/CD/CT): Azure ML Pipelines + GitHub Actions로 코드/데이터/모델 변화 시 자동 학습·배포.\n- 품질 게이트: 성능 메트릭, Data Drift, Fairness, Bias 자동 검증 후에만 Prod 승격.\n- 엣지 운영: Azure Arc로 글로벌 공장 K8s/서버 통합 관리, IoT Edge로 모듈 OTA 업데이트.\n\n용어 보조: CT(Continuous Training) = 데이터/드리프트 변화에 따라 학습을 자동 재실행하는 MLOps 고유 개념.", "20": "■ 발표 스크립트  (약 4분 30초)\n\n각 단계를 조금 더 자세히 살펴보겠습니다.\n\n먼저 맨 위 첫 번째 레인, 온프레미스 제조 Edge부터 볼게요. 현장의 운영 데이터와 설비 데이터를 수집합니다. 이 데이터들이 데이터 게이트웨이와 엣지 게이트웨이를 거치면서, 모든 원본을 클라우드로 다 보내는 게 아니라 필요한 신호만 걸러내고(filtering) 일정 시간 단위로 묶어서(windowing) 정리합니다. 그리고 네트워크가 잠깐 끊겨도 'Store-and-forward' 방식으로 — 현장에 일단 저장해뒀다가 복구되면 한꺼번에 보내는 방식으로 — 데이터 누락 없이 안정적으로 운영할 수 있게 해줍니다. 그리고 엣지 게이트웨이에서는 이미 배포된 모델로 추론을 돌리고 있는데요, 이 현장 모델의 추론 결과 로그도 함께 수집해서 동일한 방식으로 클라우드로 전송합니다.\n\n\n두 번째 레인은 클라우드 수집·데이터 플랫폼이에요. 맨 위 두 박스를 보면, 왼쪽 박스가 장비·PLC 제어 데이터이고, 오른쪽 박스가 센서 값이나 Edge 추론 결과 스트림입니다. 이 데이터들이 그 아래 두 채널로 나뉘어 들어옵니다. 디바이스 연결·인증·상태 같은 제어성 IoT 데이터는 Azure IoT Hub로 들어오고, 대량의 센서값과 추론 로그 스트리밍은 Event Hubs가 받습니다. 두 채널을 분리하는 이유는, IoT Hub는 디바이스 제어·관리용 양방향 채널이고 Event Hubs는 대량 텔레메트리 수집용 단방향 채널로 역할이 다르기 때문입니다.\n\n수집된 데이터는 ADLS Gen2에 저장하고, Bronze·Silver·Gold로 나누는 Medallion 구조로 단계적으로 정제합니다. Bronze는 센서값, 이미지, 로그 같은 원천 데이터를 그대로 보관하는 단계입니다. Silver는 원천 데이터에서 오류나 중복을 정리하고, 형식을 표준화해 분석 가능한 상태로 만드는 단계입니다. Gold는 모델 학습이나 KPI 분석에 바로 사용할 수 있도록 정리된 최종 데이터셋입니다. 필요한 경우 Fabric OneLake와 Shortcut으로 연결해 Lakehouse에서 분석하거나, Power BI 대시보드로 제공할 수 있습니다.\n\n가운데 세 번째 레인이 Azure ML / MLOps 영역인데, 이 부분의 자세한 9단계 파이프라인은 슬라이드 15에서 이미 다뤘으니 핵심만 짚을게요. Gold 데이터셋을 입력으로 받아서 학습·평가·등록을 거치고, MLflow로 실험을 추적하고, 모니터링·드리프트 감지·재학습 트리거까지 자동화한 다음, 최종 결과물로 'Deployment Package'를 만들어냅니다.\n\n\n여기서 만들어진 모델이 네 번째 레인, 배포·추론·피드백으로 흘러갑니다. Azure ML에서 승인된 모델은 Arc Kubernetes나 IoT Edge Module 를 통해서 현장에 배포돼서, 이상탐지·품질 예측·예지보전·설비 상태 분석을 직접 수행합니다. 그리고 — 여기가 중요한데 — 추론 로그·실제 결과·작업자 피드백·드리프트 신호가 다시 ADLS Gen2로 돌아와 모델 갱신을 트리거해요. 새 모델이 만들어지면 다시 Arc·IoT Edge로 재배포되고요. 이게 'Closed-loop' — 닫힌 고리 형태로 계속 도는 — 피드백 루프의 실체입니다.\n\n(참고) 단일 게이트웨이나 디바이스 중심이라면 IoT Edge로 모델을 실행하고 원격 업데이트할 수 있고, 여러 공장의 서버나 Kubernetes 환경을 중앙에서 관리해야 한다면 Azure Arc를 활용할 수 있습니다. 두 서비스를 반드시 함께 써야 하는 것은 아니며, IoT Edge는 현장 모델 실행과 업데이트, Azure Arc는 분산된 Edge 인프라의 중앙 관리 역할에 가깝습니다.\n\n\n마지막 다섯 번째 레인은 운영 최적화 전략이에요. 실무에서 가장 효과적인 네 가지만 강조드릴게요. 첫째, Edge에서 미리 필터링·압축해서 보낸다 — 클라우드 송신 비용을 줄여줍니다. 둘째, OneLake Shortcut으로 데이터를 복사하지 않고 가리키기만 한다 — 중복 저장 비용과 거버넌스 부담을 동시에 해결하죠. 셋째, VPN이나 ExpressRoute + Private Endpoint로 공용 인터넷이 아닌 사설 경로로 연결한다 — 보안과 안정성을 확보합니다. 넷째, Edge inference로 지연시간(latency)과 클라우드 송신(egress) 비용을 최소화합니다.\n\n\n\n■ 추가 상세 설명\n\n[설계 원칙]\n1. System of Record = ADLS Gen2 (단일 진실의 원천, Single Source of Truth)\n2. Optional Analytics Layer = Fabric OneLake / Lakehouse (Shortcut 기반, 복사 없이 연결)\n3. Closed-loop = Edge feedback → Retraining (드리프트 감지 → 자동 재학습 → 재배포)\n\n[5개 레인 상세]\n1) 온프레미스 제조 Edge: PLC, 센서, 카메라, MES → 데이터 게이트웨이 → 엣지 게이트웨이 (로컬 인퍼런스, filtering/windowing, Store-and-forward로 네트워크 단절 대응)\n2) 클라우드 수집: 입력 데이터(왼쪽 박스=장비·PLC·센서값 / 오른쪽 박스=비전 영상·추론 결과) → IoT Hub(제어·관리) + Event Hubs(대량 스트리밍) → ADF/Fabric Data Factory → ADLS Gen2 Medallion (Bronze/Silver/Gold) + Fabric OneLake(Optional)\n3) Azure ML / MLOps 추론: Data Asset(학습 입력) → ML 파이프라인(학습·평가·등록·MLflow·모니터링·Drift·재학습) → Deployment Package(배포 출력)\n4) 배포·추론·피드백: Azure Arc-enabled Kubernetes + IoT Edge Module로 Edge 추론(이상탐지·품질예측·예지보전·설비상태 분석) → 추론 로그·결과·작업자 피드백·Drift → 재학습 루프\n5) 핵심 최적화 8가지: Edge filtering/windowing/compression · 실시간 분리(Fabric Eventstream) · Parquet/Delta + 파티셔닝 · OneLake Shortcut으로 복사 최소화 · VPN/ExpressRoute + Private Endpoint · Cloud GPU autoscale + scheduled training · Incremental retraining + model versioning · Edge inference로 latency·egress 최소화\n\n[Q&A 예상]\n- \"기존 슬라이드 20과 차이는?\" → 20은 가로 흐름 + 단계별 카드 시각화, 21은 5-레인 스윔레인으로 같은 아키텍처를 다른 각도에서 본 그림이었어서 v26부터 21로 통합.\n- \"왜 Fabric이 Optional?\" → ADLS Gen2가 단일 진실의 원천이고, 분석·BI가 필요한 조직만 Fabric을 Shortcut으로 얹으면 되므로 단계적 도입 가능.\n- \"IoT Hub와 Event Hubs를 꼭 둘 다 써야 하나?\" → 디바이스 양방향 제어가 필요하면 IoT Hub, 대량 텔레메트리만 받으면 Event Hubs 단독도 가능. 본 아키텍처는 두 시나리오를 모두 커버하려 둘 다 배치.", "21": "■ 발표 스크립트  (약 1분 5초)\n\n다음으로 클라우드에서 학습된 모델이 엣지디바이스에 어떻게 배포되어서 운영되는지 조금 더 자세하게 설명드리겠습니다.\n\n①Azure ML이 학습 결과인 모델 파일을 Blob Storage(파일 저장소)에 올려둡니다.\n②IoT Hub가 'Module Twin'이라는 메커니즘으로 어느 모델을 어떤 버전으로 받아야 하는지 배포 구성을 현장 모듈에 전달합니다.\n(Module Twin은 클라우드와 현장 모듈이 같은 설정 정보를 공유하는 JSON 사본이라고 보시면 돼요 )\n\n③Edge 모듈은 그 지시에 따라 Blob에서 HTTP로 모델 파일을 내려받아 공유 로컬 스토리지에 저장하고,\n④로컬 저장소로 한 번 더 복사한 다음, ⑤TFLite나 ONNX 같은 경량 추론 런타임(모바일·엣지 환경에 최적화된 가벼운 모델 형식)으로 메모리에 로드해요.\n⑥마지막으로 현장의 클라이언트 프로그램이 로컬 Web API를 호출하면, 네트워크 없이 즉시 추론 결과를 받게 됩니다.\n\n운영 관점에서. 모델을 교체할 때 'Blob에 파일 새로 올리기 + Module Twin 구성만 바꾸기' 이 두 단계로 끝나기 때문에 원격으로 무중단 OTA 업데이트가 가능하고요,\nIoT Edge Runtime이 컨테이너 격리·자동 재시작·모듈 간 메시지 라우팅을 알아서 관리해주기 때문에 운영 부담이 크게 줄어듭니다.\n\n\n\n■ 추가 상세 설명\n\n[Azure IoT Edge 디바이스에서의 ML 추론 — 온프레미스 운영 디테일]\n* 본 슬라이드의 아키텍처 다이어그램은 Microsoft 공식 레퍼런스 문서의 그림입니다.\n\n주요 데이터 흐름 (Cloud → On-prem 모델 배포):\n1. Azure ML → Blob Storage — 학습된 모델 파일을 Blob Storage에 저장.\n2. Azure IoT Hub → Module Twin — Edge 모듈 Module Twin에 배포 구성·모델 메타데이터 전달.\n3. HTTP 다운로드 — Blob Storage에서 모델 파일을 HTTP로 받아 공유 로컬 스토리지에 저장.\n4. 공유 → 모듈 로컬 스토리지 — AI Loader 모듈 로컬 저장소로 복사.\n5. 모델 파일 로드 — *.tflite, *.onnx를 Edge 모듈에 로드.\n6. Client → Web API — 로컬 엔드포인트 호출로 현장에서 직접 추론.\n\nEdge 모듈(AI Loader) 구성요소:\n- Python AI Loader 코드 — 다운로드·로드·추론 서빙 핵심 모듈.\n- Flask Web API · Module Twin · OpenCV · PIL — 추론 API·구성 동기화·이미지 전처리.\n- Azure IoT device SDK — IoT Hub 통신 및 Module Twin 처리.\n- TensorFlow Lite / ONNX Runtime — 경량 추론 런타임.\n- Linux 컨테이너 · IoT Edge Runtime(Edge agent · Edge hub) — 모듈 배포·실행·메시지 라우팅.\n\n온프레미스 운영 핵심 가치:\n- 학습은 클라우드 GPU, 추론은 현장 Edge — 네트워크 지연·송신 비용 최소화.\n- OTA 모델 교체: Blob 업데이트 + Module Twin 구성 변경만으로 무중단 교체.\n- 컨테이너 격리·자동 재시작·메시지 라우팅은 IoT Edge Runtime이 관리.\n\nReference: https://learn.microsoft.com/azure/architecture/guide/iot/machine-learning-inference-iot-edge", "22": "■ 발표 스크립트\n\n(약 0분 15초)\n\n여기까지가 아키텍처였다면, 이번 섹션에서는 글로벌 고객들이 같은 패턴을 어떻게 구현했고 어떤 효과를 봤는지 사례를 살펴보겠습니다. P&G·3M·Siemens(지멘스) 세 곳입니다. \n\n\n■ 추가 상세 설명\n\n- 사례 선정 의도: 동일한 Azure 기반 Closed-loop라도 ① 재학습 자동화 중심(P&G), ② 오프라인 Edge 추론·빠른 동기화 중심(3M), ③ 파트너 생태계 통합 중심(Siemens)으로 강조점이 다름을 보여주어, 고객 환경별 적합 패턴 선택을 돕는 것.\n- 출처: 모든 수치·구성은 Microsoft 공개 고객 사례(Customer Stories)와 공식 레퍼런스 아키텍처 기반.", "23": "■ 발표 스크립트\n(약 0분 15초)\n첫 번째 사례는 P&G입니다. P&G는 전 세계 35개국 이상의 공장에서 신규 장비와 노후 장비가 함께 운영되면서, IT와 OT 데이터를 표준화하고 모델을 일관되게 배포하는 데 어려움이 있었습니다. 이를 해결하기 위해 Azure IoT Operations와 Azure Arc를 활용해 현장 장비 데이터를 Edge에서 수집하고, 클라우드에서 분석하며, 예측 모델을 다시 현장에 배포하는 구조를 만들었습니다.\n이 구조의 목표는 OEE, 즉 설비 종합 효율을 개선하고, 이상 징후를 더 빨리 감지해 비계획 정지와 품질 이슈를 줄이는 것입니다.\n---\nAzure IoT Operations는 온프렘에서 운영되고 있는 Azure Arc-enabled Kubernetes 클러스터 위에 배포되어, 현장 OT 데이터를 수집·표준화하고 클라우드와 연결하는 Edge 데이터 플랫폼 역할을 합니다.\n---\n■ 추가 상세 설명\n[P&G — Azure IoT Operations + Azure Arc Closed-loop]\n데이터 흐름 (7단계):\n1. 제조 설비·OT 데이터 — 센서·PLC·MES에서 운영 데이터 생성.\n2. Azure IoT Operations(Edge) — Arc 기반 K8s 위 OT 데이터 표준화·수집.\n3. Edge 추론 — 현장 품질 모니터링·이상탐지, 낮은 지연으로 즉시 대응.\n4. Azure Data Lake / 클라우드 분석 — 선별 데이터 적재·예측/처방 분석.\n5. 데이터 사이언티스트 — 예측 모델 신규 생성·재학습.\n6. Azure Arc / Workload Orchestration — 모델·워크로드 배포 중앙 관리.\n7. Edge로 모델 배포 — 업데이트 모델을 공장 Edge에 재배포, 루프 완성.\n핵심 성과: Azure Arc 표준화 배포로 신규 모델 배포 시간 최대 90% 단축, 비계획 설비 정지 감소.\nReference: https://www.microsoft.com/en/customers/story/25077-procter-and-gamble-iot-operations", "24": "■ 발표 스크립트  (약 1분 10초)\n(먼저 제목을 보면 Azure IoT Operation 이 나오는데요, Azure IoT Operations는 온프렘에서 운영되고 있는 Azure Arc-enabled Kubernetes 클러스터 위에 배포되어, 현장 OT 데이터를 수집·표준화하고 클라우드와 연결하는 Edge 데이터 플랫폼 역할을 합니다.)\n(Azure Arc는 온프레미스나 다른 클라우드에 있는 서버·Kubernetes·데이터 서비스를 Azure 관리 체계에 연결해, Azure Portal에서 중앙 관리할 수 있게 해주는 서비스입니다.)\n현장 Edge에서는 모델 추론을 통해 설비나 품질 상태를 실시간으로 모니터링하고, 의미 있는 데이터와 추론 결과 로그를 선별해 전송합니다.\n클라우드에서는 데이터 사이언티스트가 수집된 데이터를 기반으로 예측 모델을 학습·검증하고, Azure ML이나 CI/CD 파이프라인을 통해 모델을 컨테이너 형태로 패키징합니다.\n패키징된 모델은 Azure Arc-enabled Kubernetes와 GitOps 방식으로 각 공장 Edge 환경에 일관되게 배포됩니다. 쉽게 말하면, Git 저장소에 “어떤 모델을 어떤 환경에 배포할지”를 선언해두면, 각 현장 클러스터가 그 설정을 기준으로 자동 동기화되는 방식입니다. 이 구조를 통해 여러 공장에 흩어진 Edge 환경에도 동일한 방식으로 모델을 배포하고 업데이트할 수 있습니다.\n(Workload Orchestration은 그 연결된 환경에 모델이나 애플리케이션을 일관되게 배포하고 업데이트하게 해주는 운영 방식)\n성과 측면에서는 신규 모델 배포 시간이 크게 단축되고, 비계획 정지 감소에도 기여했습니다. \n■ 추가 상세 설명\n[P&G — Azure IoT Operations + Azure Arc Closed-loop]\n데이터 흐름 (7단계):\n1. 제조 설비·OT 데이터 — 센서·PLC·MES에서 운영 데이터 생성.\n2. Azure IoT Operations(Edge) — Arc 기반 K8s 위 OT 데이터 표준화·수집.\n3. Edge 추론 — 현장 품질 모니터링·이상탐지, 낮은 지연으로 즉시 대응.\n4. Azure Data Lake / 클라우드 분석 — 선별 데이터 적재·예측/처방 분석.\n5. 데이터 사이언티스트 — 예측 모델 신규 생성·재학습.\n6. Azure Arc / Workload Orchestration — 모델·워크로드 배포 중앙 관리.\n7. Edge로 모델 배포 — 업데이트 모델을 공장 Edge에 재배포, 루프 완성.\n핵심 성과: Azure Arc 표준화 배포로 신규 모델 배포 시간 최대 90% 단축, 비계획 설비 정지 감소.\nReference: https://www.microsoft.com/en/customers/story/25077-procter-and-gamble-iot-operations\n요약 한 줄:\n- P&G는 Azure IoT Operations와 Azure Arc를 활용해 Edge에서 제조 데이터를 수집·분석하고, 클라우드에서 학습한 예측 모델을 다시 현장 Edge로 배포해 품질 모니터링과 설비 효율을 개선했습니다.\n- Azure IoT Operations: 공장·Edge 현장에서 산업 데이터를 수집·중계·가공해 클라우드나 로컬 앱으로 보내는 Edge 데이터 플랫폼.", "25": "■ 발표 스크립트\n(약 0분 15초)\n두 번째 사례는 3M입니다. 3M은 제조 이상 징후를 예측하기 위해 Edge 기반 분석 구조를 만들었습니다. 핵심은 클라우드에서 모델을 학습하되, 실제 추론뿐 아니라 분석을 제조 라인 가까이에 있는 Azure IoT Edge 디바이스에서 수행한다는 점입니다.\n이때 Azure SQL Edge는 IoT Edge 모듈로 배포되어, 라인 데이터가 있는 현장에서 데이터를 저장·처리하고 예측 결과를 만들어냅니다.\n즉, 모든 데이터를 클라우드로 올린 뒤 분석하는 방식이 아니라, 라인 옆 Edge에서 필요한 분석과 추론을 수행해 더 빠르게 현장 의사결정에 활용할 수 있도록 한 사례입니다. \n■ 추가 상세 설명\n[3M — Azure IoT Edge + Azure SQL Edge 모델 배포]\n배경: 다수 생산 라인의 설비 고장이 비계획 정지·품질 손실로 이어지는 문제. 목표는 '고장 수 시간 전 예측' 예지보전. 설비 센서 + 제품 정보 상관분석으로 이상 징후 조기 포착.\n왜 Edge-first인가: 현장 네트워크가 불안정/제한적 → 라인 옆(Edge)에서 저장·추론. 네트워크 단절 시에도 현장 예측 무중단.\n데이터 흐름 (7단계):\n1. 제조 라인 데이터 — 설비 센서 + 제품 정보 2-스트림 상관분석.\n2. Azure SQL Edge / IoT Edge 디바이스 — 라인 옆 Edge 저장, SQL Edge를 IoT Edge 모듈로 배포.\n3. Edge ML 예측 — 오프라인 로컬 추론, 고장 수 시간 전 예측.\n4. 클라우드로 데이터 동기화 — 연결 복구 시 내결함성 동기화.\n5. Azure ML Studio / Databricks·HDInsight — 클라우드 학습·분석.\n6. 모델 개발·분석 — 개발·평가·등록으로 정확도 고도화.\n7. Edge로 업데이트 모델 배포 — 갱신 모델을 데이터 위치로 재배포.\n핵심 성과: 내결함성 Edge 동기화로 Azure 전송 시간 '주 단위 → 분 단위' 단축.\n비교 포인트: P&G(closed-loop 재학습 자동화 중심) ↔ 3M(오프라인 현장 추론 + 빠른 동기화 중심) = 상호보완 패턴.\nReference: https://www.microsoft.com/en/customers/story/844496-3m-manufacturing-azure-sql-edge", "26": "■ 발표 스크립트  (약 1분 10초)\n\n\n이 사례에서 중요한 포인트는 데이터 분석을 온프레미스에서 한 점입니다.\n\n3M은 제조 라인의 센서 데이터와 제품 정보를 분석해, 문제가 실제로 발생하기 몇 시간 전에 이상 징후를 예측하고자 했습니다. 이를 위해 모든 데이터를 클라우드로 올려 처리하는 대신, 데이터가 생성되는 라인 가까이에 Azure SQL Edge를 IoT Edge 모듈로 배포했습니다. Azure SQL Edge는 Edge 환경에서 데이터를 저장·분석하고, 클라우드에서 학습된 모델을 활용해 현장에서 바로 예측을 수행합니다. 즉, 데이터가 있는 곳으로 컴퓨팅과 모델을 가져간 구조입니다.\n\n모델은 클라우드 학습 환경에서 개발·검증되고, 검증된 모델은 IoT Edge 디바이스의 추론 모듈로 배포됩니다. 이후 Edge에서 생성된 데이터와 예측 결과는 Azure SQL Edge에 저장된 뒤 클라우드로 동기화되어 추가 분석과 모델 개선에 활용됩니다.\n\n이 사례의 의미는, Edge에서 빠르게 데이터를 분석하고 예측한 뒤, 클라우드에서 모델을 고도화하고 다시 Edge로 재배포하는 Closed-loop 패턴을 실제 제조 현장에 적용했다는 점입니다.\n\n\n■ 추가 상세 설명\n\n[3M — Azure IoT Edge + Azure SQL Edge 모델 배포]\n배경: 다수 생산 라인의 설비 고장이 비계획 정지·품질 손실로 이어지는 문제. 목표는 '고장 수 시간 전 예측' 예지보전. 설비 센서 + 제품 정보 상관분석으로 이상 징후 조기 포착.\n\n왜 Edge-first인가: 현장 네트워크가 불안정/제한적 → 라인 옆(Edge)에서 저장·추론. 네트워크 단절 시에도 현장 예측 무중단.\n\n데이터 흐름 (7단계):\n1. 제조 라인 데이터 — 설비 센서 + 제품 정보 2-스트림 상관분석.\n2. Azure SQL Edge / IoT Edge 디바이스 — 라인 옆 Edge 저장, SQL Edge를 IoT Edge 모듈로 배포.\n3. Edge ML 예측 — 오프라인 로컬 추론, 고장 수 시간 전 예측.\n4. 클라우드로 데이터 동기화 — 연결 복구 시 내결함성 동기화.\n5. Azure ML Studio / Databricks·HDInsight — 클라우드 학습·분석.\n6. 모델 개발·분석 — 개발·평가·등록으로 정확도 고도화.\n7. Edge로 업데이트 모델 배포 — 갱신 모델을 데이터 위치로 재배포.\n\n핵심 성과: 내결함성 Edge 동기화로 Azure 전송 시간 '주 단위 → 분 단위' 단축.\n비교 포인트: P&G(closed-loop 재학습 자동화 중심) ↔ 3M(오프라인 현장 추론 + 빠른 동기화 중심) = 상호보완 패턴.\nReference: https://www.microsoft.com/en/customers/story/844496-3m-manufacturing-azure-sql-edge\n\n한 줄 비교:\n- P&G = 클라우드 분석 중심 + Edge 추론. (현장 OT 표준화 + 모델의 글로벌 재배포)\n- 3M  = Edge 분석 중심 + Edge 추론. (제한된 네트워크 환경에서 로컬 분석 + 클라우드 동기화)", "27": "■ 발표 스크립트 (약 1분)\n\n세 번째 사례는 Siemens입니다. P&G·3M처럼 한 고객사의 구축 사례라기보다는, Azure AI 모델을 Siemens Industrial Edge에서 그대로 실행하기 위해 Microsoft와 Siemens가 함께 정의한 공식 레퍼런스 아키텍처예요. 이 슬라이드는 한 페이지에 두 장의 그림을 나란히 배치했는데요. \n\n왼쪽이 ① 모델 학습부터 엣지 배포·추론까지의 메인 데이터 흐름이고, \n오른쪽이 ② 운영 단계에서 그 시스템을 어떻게 들여다보는가 — 즉 옵저버빌리티(Observability, 가시성·관측 가능성) 흐름 — 를 보여주는 보완 다이어그램이에요.\n\n먼저 메인 흐름을 보면, Azure Machine Learning에서 모델을 학습·검증하고, 배포 가능한 형태로 패키징합니다. 이후 모델 관리 서비스를 통해 현장 Edge 환경으로 모델을 전달하고, Edge의 추론 서버에서 실제 생산 데이터를 기반으로 예측을 수행합니다. 추론 결과와 운영 데이터는 다시 Azure Storage로 올라가 추가 분석과 재학습에 활용됩니다. 즉, 클라우드 학습, Edge 배포, 현장 추론, 데이터 환류가 이어지는 Closed-loop 구조입니다.\n\n오른쪽 Observability 흐름은 이 구조를 운영 관점에서 보완합니다. 현장 장비와 Edge 추론 서버에서 발생하는 로그, 메트릭, 트레이스를 OpenTelemetry Collector가 표준 형식으로 수집하고, Azure Monitor와 Application Insights로 전달합니다. 이를 통해 운영자는 모델과 Edge 시스템의 상태, 오류, 지연 시간, 성능을 클라우드에서 확인할 수 있습니다.\n\n이 아키텍처는 제조 현장에서 AI 모델을 단순히 배포하는 것에 그치지 않고, 배포 이후의 운영 상태까지 관측하고 다시 모델 개선으로 연결하는 패턴입니다.\n\n\n\n■ 추가 상세 설명\n\n[① 메인 아키텍처 — Siemens Industrial Edge + Azure AI]\nMicrosoft Learn에 공개된 reference architecture / example scenario로, Siemens Industrial Edge와 Azure AI를 연동하는 표준 구현 패턴입니다.\n데이터 흐름:\n1. Raw training data를 Azure Storage 컨테이너에서 로드합니다.\n2. 데이터 파이프라인이 원천 데이터를 학습 가능한 형식으로 전처리하고 processed dataset storage container에 저장합니다.\n3. Azure Machine Learning 파이프라인이 처리된 데이터를 기반으로 모델을 학습합니다.\n4. 학습된 모델은 model catalog에 저장됩니다.\n5. 검증·패키징 파이프라인이 모델을 검증하고, 통과한 모델을 Siemens AI SDK로 패키징합니다.\n6. 패키징된 모델은 packaged models storage container에 저장되고, Tagging/Delivery 파이프라인이 메타데이터를 태깅한 뒤 Container Registry에도 저장합니다.\n7. Delivery 파이프라인은 Azure IoT Hub와 Event Hubs를 통해 Siemens AIMM과 메시지를 교환하며 신규 모델 배포를 조율합니다.\n8. Siemens AIMM은 SAS 링크로 packaged model을 다운로드하고 Siemens AI Inference Server에 배포합니다.\n9. AI Inference Server는 Edge 장비에서 AI 모델 추론을 실행합니다.\n10. Data Collector / Data Collector Hub가 추론 데이터를 Azure Storage(data landing zone)로 업로드해 재학습에 활용합니다.\nReference: https://learn.microsoft.com/en-us/azure/architecture/example-scenario/manufacturing/azure-ai-siemens-industrial-edge\n\n[② 옵저버빌리티 아키텍처]\n- OT 디바이스 / Siemens AI Inference Server에서 발생하는 로그·메트릭·트레이스를 OpenTelemetry Collector로 수집·정규화.\n- Authentication Proxy가 Entra ID 인증서 기반 서비스 주체로 인증 (Instrumentation Key 미사용).\n- Azure Monitor Exporter가 Application Insights · Azure Monitor Workspace로 전송 → 대시보드·알람·드리프트 추적 기반.\n- Azure DevOps Pipeline이 인증서·SP·역할 부여 자동 발급·갱신, 운영 시점은 Managed Identity.\nReference: https://learn.microsoft.com/en-us/industry/manufacturing/architecture/azure-ai-siemens-industrial-edge", "28": "■ 발표 스크립트  (약 0분 50초)\n\n그밖에도\n\n자동차 부품 ZF Group은 IoT 데이터를 IoT Hub로 모아서 Azure ML로 예지보전 모델을 학습한 뒤에 IoT Edge에 배포해서, 전 세계 50개 이상 공장의 모델 관리를 표준화했어요. Bosch는 Databricks·Azure ML 기반 분석을 자사 IoT Suite와 결합해서 수만 대 디바이스의 품질·에너지 데이터를 다루고 있고요. Schneider Electric은 자사 산업 플랫폼 EcoStruxure를 Azure 위에서 운영하면서 예지보전을 SaaS 형태로 제공하고 있습니다.\n\n식음료 쪽에서는 PepsiCo가 비전 AI로 감자 품질을 자동 검사해서 수율을 개선했고, Heineken은 양조 공정 데이터를 AI 기반 의사결정에 활용해서 글로벌 양조장의 품질을 표준화하고 있어요. 에너지·산업 쪽에서는 호주 AGL, 프랑스 TotalEnergies, 글로벌 ABB가 OT 데이터를 ADLS Gen2와 Fabric으로 모아서 발전·정유 운영을 최적화하고 있고요.\n\n정리하면, 이 아키텍처는 특정 업종에 묶이지 않고 자동차·제조·에너지·식음료 등 다양한 사례로 이미 충분히 검증된 표준 패턴이라는 점입니다.\n\n■ 추가 상세 설명\n\n출처: Microsoft Customer Stories · 사례별 솔루션 구성 요약 (공개 정보 기반)\n\n- ZF Group(자동차 부품): IoT Hub 수집 → Azure ML 예지보전 학습 → IoT Edge 배포. 성과: 설비 다운타임 감소, 글로벌 50+ 공장 모델 표준화.\n- Bosch(제조/Mobility): Databricks + Azure ML 분석 플랫폼, Bosch IoT Suite 통합(Cross-domain). 성과: 수만 디바이스 품질·에너지 분석, 신규 디지털 서비스 출시 가속.\n- Schneider Electric(에너지/자동화): EcoStruxure on Azure IoT+AI, Edge 인사이트 + Cloud 통합 학습. 성과: 고객사 에너지 효율화·예지보전 SaaS 제공.\n- PepsiCo(식음료): Frito-Lay 공장 Azure IoT+ML, 비전 AI 감자 품질 검사, Edge inference + 재학습. 성과: 수율 개선, 생산라인 운영 시간 확보.\n- Heineken(식음료): Azure Brewing Operations 플랫폼, 양조 공정 데이터 통합 → AI 의사결정. 성과: 품질 일관성·에너지 효율, 글로벌 양조장 표준화.\n- AGL / TotalEnergies / ABB(에너지/산업): OT → ADLS Gen2 → Synapse/Fabric, Azure ML 발전·정유 운영 최적화. 성과: 에너지 효율·안전성 향상, 운영 KPI 가시화.", "29": "■ 발표 스크립트\n\n(약 0분 15초)\n\n마지막 다섯 번째 섹션은 '어떻게 자동으로 굴러가게 할 것인가' — 자동화와에 대한 내용입니다..\n\n\n\n■ 추가 상세 설명\n\n- 본 섹션의 목적: 앞에서 본 아키텍처를 '사람의 수작업'이 아니라 코드·파이프라인으로 자동화하는 운영 계층(CI/CD/CT)을 제시.\n- 구성: ① CI/CD 전체 자동화 흐름(GitHub Actions + Azure ML + Edge) → ② 실전 GitHub Actions 워크플로 예제(NYC Taxi 회귀) → ③ 보안·거버넌스 & 5단계 도입 로드맵.\n- 발표 톤: 기술팀 청중이면 워크플로 Job 구조를, 경영진 청중이면 '자동화로 배포 리스크·리드타임을 줄인다'는 가치를 강조.", "30": "■ 발표 스크립트  (약 1분 40초)\n\n이 슬라이드는 GitHub Actions, Azure ML, Edge 배포가 어떻게 하나의 CI/CD 파이프라인으로 연결되는지를 보여줍니다. 크게 보면 위쪽 4개 블록은 정방향 자동화 흐름이고, 아래쪽 Closed-loop 영역은 운영 중 발생한 로그와 드리프트 신호를 다시 재학습으로 연결하는 피드백 흐름입니다.\n\n먼저 ① GitHub Repository에는 학습 코드, Feature Engineering 코드, 추론 코드, Azure ML 파이프라인 정의, Dockerfile, IoT Edge나 Kubernetes 배포 매니페스트가 저장됩니다. 개발자가 코드를 변경하고 PR을 올리거나 머지하면 ② GitHub Actions CI가 실행됩니다. 여기서는 코드 검사, 단위 테스트, 데이터 스키마 검증, Docker 빌드 테스트, 보안 스캔 등을 수행해 코드와 배포 패키지가 기본 품질 기준을 통과하는지 확인합니다.\n\nCI가 통과하면 ③ GitHub Actions CD 단계로 넘어갑니다. 이 단계에서는 GitHub Actions가 Azure에 안전하게 로그인한 뒤 Azure ML 학습 파이프라인을 실행합니다. 학습이 끝난 모델은 평가 기준을 통과한 경우 Azure ML Model Registry에 등록되고, 추론 컨테이너로 빌드되어 Azure Container Registry에 저장됩니다. 이후 배포 매니페스트를 업데이트하고, 최종적으로 IoT Edge 모듈이나 Arc-enabled Kubernetes 환경에 배포됩니다.\n\n④ Azure ML / Edge Runtime은 실제 모델이 운영되는 영역입니다. Azure ML Workspace와 Model Registry는 모델을 관리하고, ACR은 컨테이너 이미지를 저장하며, IoT Edge Module이나 Arc-enabled Kubernetes는 현장 또는 Edge 환경에서 모델을 실행합니다.\n\n아래쪽 Closed-loop입니다. 운영 중 발생하는 추론 로그, 실제 결과, 데이터 드리프트 신호가 ADLS Gen2에 저장되고, 이 데이터가 다시 재학습 트리거가 됩니다. 즉, 코드가 바뀌면 GitHub Repository에서 파이프라인이 시작되고, 데이터나 모델 성능이 바뀌면 Closed-loop에서 재학습이 시작됩니다.\n\n\n\n\n■ 추가 상세 설명\n\n[MLOps CI/CD — GitHub Actions + Azure ML + Edge 배포 자동화]\n전체 흐름(정방향): 코드 변경 → 코드 검증 → 학습 파이프라인 → 모델 평가 → 모델 등록 → 추론 컨테이너 → Edge 배포 → 운영 모니터링.\nClosed-loop(회귀): ④ Runtime → ⑤ 운영 로그·Drift → ⑥ ADLS Gen2 적재 → ⑦ 재학습 트리거 → ③ CD 재실행 → ④ 재배포.\n\n1) GitHub Repository: Training/Feature/Inference 코드, Azure ML pipeline 정의, Dockerfile, IoT Edge manifest, K8s manifest/Helm, IaC(Bicep/Terraform).\n2) GitHub Actions CI (PR/Merge/Release Tag): Code lint, Unit test, Data schema validation, Feature logic test, Inference API test, Docker build test, Security scan.\n3) GitHub Actions CD:\n   - Training CD: Azure Login(OIDC) → Submit Azure ML Pipeline → Gold dataset 읽기 → Train → Evaluate → 품질 기준 통과 모델만 Model Registry 등록.\n   - Deployment CD: 등록·승인 모델 → 추론 컨테이너 빌드 → ACR push → manifest 업데이트 → IoT Edge/Arc K8s 배포 → Smoke test → 모니터링.\n4) Azure ML / Edge Runtime: Azure ML Workspace, Model Registry, ACR, IoT Edge Module / Arc-enabled Kubernetes.\n\n[Closed-loop 재학습 트리거의 종류]\n- Drift 기반: Azure ML Data Drift / Model Performance 알림 → Event Grid → GitHub Actions workflow_dispatch.\n- 스케줄 기반: Azure ML Pipeline schedule(예: nightly/weekly).\n- 데이터 도착 기반: ADLS Gen2 신규 파일 → Event Grid → CD trigger.\n- 수동 승인: GitHub Environments의 Required reviewer 통과 시.\n\n배포 대상 선택 기준:\n- IoT Edge Module: Gateway/장비 단위 추론, PoC, 단순 Edge 배포.\n- Arc-enabled Kubernetes: 공장 단위 Edge AI 플랫폼, 다중 모델, GPU, 고가용성.\n\n참고:\n- Azure ML Model Monitoring은 production inference data와 reference data를 비교해 data drift, prediction drift, data quality, model performance 같은 signal을 계산하고, threshold를 넘으면 Azure ML 또는 Event Grid로 alert를 발생시킬 수 있습니다.\n- Azure 쪽에서는 보통 Azure ML Model Monitor가 drift를 감지하고, 그 결과를 Event Grid 또는 Azure Monitor Alert로 내보낸 뒤, Azure Function/Logic Apps가 후속 작업을 실행합니다.", "31": "■ 발표 스크립트  (약 1분 5초)\n\nGitHub Actions에서 Azure ML 학습 파이프라인이 어떻게 실행되는지 보여주는 예제입니다. Microsoft Learn의 MLOps 샘플인 NYC 택시 요금 예측 회귀 모델 학습 워크플로를 기준으로 구성했습니다.\n\n왼쪽은 워크플로 Job 흐름입니다. 먼저 사용자가 GitHub Actions에서 workflow_dispatch로 수동 실행을 시작하면, 환경과 브랜치 정보를 설정하고, 구성 파일을 읽어 필요한 변수를 로드합니다. 이후 학습에 필요한 환경, 데이터셋, 컴퓨팅 리소스를 등록하고, 마지막으로 Azure ML 학습 파이프라인을 실행합니다. 이 파이프라인 안에서 데이터 준비, 모델 학습, 평가, 모델 등록까지 이어집니다.\n\n오른쪽은 실제 GitHub Actions 실행 결과입니다. 왼쪽에 그린 Job 흐름과 동일하게 각 단계가 순서대로 실행되고, 성공한 단계는 녹색 체크로 표시됩니다. 즉, 이 슬라이드는 개념도가 아니라 실제로 동작하는 자동화 워크플로를 보여주는 예시입니다.\n\n이렇게 GitHub Actions를 통해 Azure ML 학습 파이프라인을 코드 기반으로 반복 실행할 수 있다는 점입니다. 사람이 Azure Portal에서 수동으로 학습을 실행하는 것이 아니라, GitHub Actions가 환경 준비, 데이터셋 등록, 컴퓨팅 준비, 학습 파이프라인 실행까지 자동으로 처리합니다. 실제 운영에서는 이 구조를 기반으로 코드 변경, 데이터 변경, 또는 재학습 트리거에 따라 학습 파이프라인을 자동 실행할 수 있습니다.\n\n\n■ 추가 상세 설명\n\n[GitHub Actions 학습 파이프라인 워크플로 — 실전 예제]\n개요: Microsoft Learn 'GitHub와 Azure ML로 MLOps 설정' 가이드의 실제 워크플로. Azure/mlops-v2-gha-demo 저장소를 포크해 NYC 택시 요금 예측(선형 회귀) end-to-end 파이프라인을 GitHub Actions로 실행. 인증은 OIDC(페더레이션 자격 증명) 권장.\n\n워크플로 Job 흐름 (deploy-model-training-pipeline, on: workflow_dispatch):\n1. workflow_dispatch — GitHub Actions 탭에서 수동 트리거.\n2. set-env-branch — 환경 변수·브랜치 설정.\n3. get-config · read-yaml — config-infra-prod.yml에서 네임스페이스·postfix·location 등 인프라 변수 로드.\n4. (병렬) register-environment · register-dataset · create-compute — 학습용 환경·데이터셋·컴퓨팅 동시 준비.\n5. run-model-training-pipeline — 데이터 준비 → 학습 → 평가 → 모델 등록.\n\n우측 스크린샷은 실제 GitHub Actions 실행 그래프로, 좌측 Job 흐름과 1:1 대응. 모든 Job 성공 시 녹색 표시.\nReference: https://learn.microsoft.com/ko-kr/azure/machine-learning/how-to-setup-mlops-github-azure-ml", "32": "■ 발표 스크립트  (약 1분 5초)\n\n■ 발표 스크립트\n\n마지막은 보안·거버넌스와 단계별 도입 로드맵입니다. 왼쪽은 Zero Trust 기반 보안 체계이고, 오른쪽은 실제 도입 순서입니다.\n\n보안은 다섯 계층으로 나눕니다. Identity는 Entra ID와 Conditional Access로 접근을 통제하고, Network는 ExpressRoute Private Peering, Private Endpoint, Firewall, NSG로 외부 노출을 줄입니다. Data는 고객 관리 키, 이중 암호화, Purview 분류와 DLP로 보호하고, Workload는 Defender for Cloud, Defender for IoT, Sentinel로 위협을 탐지합니다. OT 영역은 Defender for IoT, Azure Arc Policy, Update Manager로 현장 Edge 환경까지 보안 정책과 패치를 관리합니다.\n\n오른쪽 로드맵은 단계적으로 확장하는 방식입니다. 먼저 Connectivity & Landing Zone에서 네트워크와 보안 베이스라인을 만들고, Data Ingestion & Lake에서 IoT Hub, Event Hubs, ADLS Gen2 또는 OneLake로 데이터를 적재합니다. 이후 Analytics & Pilot ML에서 분석과 파일럿 모델을 수행하고, MLOps & Edge 배포에서 AML Pipeline, Arc, IoT Edge OTA를 연결해 Closed-loop 자동화를 구성합니다. 마지막으로 Scale & Optimization에서 글로벌 공장 확장과 비용 최적화를 진행합니다.\n\n핵심은 보안 베이스라인 위에서 작게 시작하고, 파일럿으로 검증한 뒤, 검증된 패턴을 글로벌로 확장하는 것입니다.\n\n\n\n\n■ 추가 상세 설명\n\n보안 & 거버넌스 (Zero Trust 5계층):\n- Identity: Microsoft Entra ID + Conditional Access, Workload Identity(Federated).\n- Network: ExpressRoute Private Peering + Private Endpoint, Azure Firewall, NSG.\n- Data: Customer-managed Key(KV/HSM), Double Encryption, Purview 분류·DLP.\n- Workload: Defender for Cloud, Defender for IoT, Microsoft Sentinel SIEM.\n- OT: Defender for IoT(Edge), Azure Arc Policy, Update Manager 통합 패치.\n\n단계별 도입 로드맵:\n1. Connectivity & Landing Zone (4~6주) — ER Private Peering, Hub VNet, Purview, 보안 베이스라인.\n2. Data Ingestion & Lake (6~8주) — IoT Hub/Event Hubs + ADLS Gen2/OneLake, Data Box 일괄적재.\n3. Analytics & Pilot ML (8~12주) — Fabric/Databricks 분석, Azure ML 파일럿 모델 학습.\n4. MLOps & Edge 배포 (8~10주) — AML Pipeline + Arc + IoT Edge OTA, Closed-loop 자동화.\n5. Scale & Optimization (지속) — 글로벌 공장 확장, CycleCloud HPC, FinOps.\n\n권고: 파일럿(단일 라인)에서 가치 검증 후 글로벌 확장 — 리스크 최소화 접근.", "33": "■ 발표 스크립트\n\n(약 0분 45초)\n\n마지막으로 오늘 내용을 다섯 가지 핵심으로 정리하고 마치겠습니다.\n\n첫째, 하이브리드는 선택이 아니라 필수예요. 대용량 Edge 데이터에는 '클라우드 학습, 현장 분산 추론' 분업이 거의 유일한 답입니다.\n\n둘째, 데이터 수집은 실시간과 배치를 이원화 — 실시간은 IoT Hub·Event Hubs, 배치는 ADF로요.\n\n셋째, 네트워크는 ExpressRoute Private + Microsoft Peering을 단일 회선에 함께 얹고 Global Reach로 글로벌 거점을 연결.\n\n넷째, 분석·시뮬레이션·HPC는 Microsoft Fabric·Databricks·CycleCloud로 통합 — 사일로와 중복 비용을 막을 수 있어요.\n\n다섯째, 오늘 가장 강조드린 Closed-loop MLOps. Azure ML·Arc·IoT Edge로 '학습→배포→드리프트 감지→재학습'을 자동화하는 것 — 이게 제조 AI를 '한 번 만들고 끝나는 프로젝트'가 아니라 '계속 진화하는 운영 체계'로 만드는 핵심이에요.\n\n긴 시간 경청해 주셔서 감사합니다. 질문 편하게 말씀해 주세요.\n\n■ 추가 상세 설명\n\nKEY TAKEAWAYS (5):\n01. Hybrid은 선택이 아닌 필수 — 대용량 Edge 데이터 활용 = 단일 모델 학습 + 분산 추론.\n02. 실시간/배치 이원화 설계 — IoT Hub + Event Hubs(실시간) ↔ ADF 등(배치).\n03. ER Private + Microsoft Peering — VNet 사설 통신 + Public Endpoint를 단일 회선으로, Global Reach로 글로벌 확장.\n04. 통합 데이터 플랫폼 — Fabric · Databricks · CycleCloud로 분석/시뮬레이션/HPC 통합.\n05. Closed-loop MLOps 운영 — Azure ML + Arc + IoT Edge로 학습 → 배포 → Drift → 재학습 자동화.\n\n마무리 팁: Q&A 전환 시, 청중 관심사(보안/비용/PoC 범위)에 따라 슬라이드 33(로드맵) 또는 사례 슬라이드(24~28)로 되돌아가 심화 논의를 유도."};window.__DECK="Azure Hybrid Edge-to-Cloud MLOps";</script>
+<script>
+(function(){
+  var NOTES = window.__NOTES || {};
+  var DECK  = window.__DECK  || 'deck';
+  var slides = [].slice.call(document.querySelectorAll('.slide-wrap'));
+  var total = slides.length;
+  if(!total) return;
+  var state = { index: 0 };
+  var isPresenter = /present=presenter/.test(location.hash);
+
+  var chan = null;
+  try { chan = new BroadcastChannel('deck:'+DECK); } catch(e) { chan = null; }
+  function send(msg){ if(chan){ try{ chan.postMessage(msg); }catch(e){} } }
+
+  function currentScrollIndex(){
+    var mid=window.innerHeight*0.5, best=0, bestD=Infinity;
+    for(var i=0;i<slides.length;i++){
+      var r=slides[i].getBoundingClientRect();
+      if(r.top<=mid && r.bottom>=mid) return i;
+      var c=(r.top+r.bottom)/2, d=Math.abs(c-mid);
+      if(d<bestD){ bestD=d; best=i; }
+    }
+    return best;
+  }
+
+  var DESIGN_W = 1280;
+  function fitInto(box, slideEl){
+    if(!box) return;
+    box.innerHTML='';
+    if(!slideEl) return;
+    var holder=document.createElement('div');
+    holder.className='fit-holder';
+    holder.style.width=DESIGN_W+'px';
+    var node=slideEl.cloneNode(true);
+    node.classList.add('in');
+    holder.appendChild(node);
+    box.appendChild(holder);
+    requestAnimationFrame(function(){
+      var bw=box.clientWidth, bh=box.clientHeight;
+      var nh=holder.scrollHeight||720, nw=DESIGN_W;
+      var s=Math.min(bw/nw, bh/nh);
+      holder.style.transform='scale('+s+')';
+      holder.style.left=Math.max(0,(bw-nw*s)/2)+'px';
+      holder.style.top=Math.max(0,(bh-nh*s)/2)+'px';
+    });
+  }
+
+  var present=document.querySelector('.present');
+  var pStage=present? present.querySelector('.stagebox'):null;
+  var pNum=present? present.querySelector('.pnum'):null;
+  function renderPresent(){
+    fitInto(pStage, slides[state.index]);
+    if(pNum) pNum.textContent=(state.index+1)+' / '+total;
+  }
+  function enterPresent(){
+    document.body.classList.add('presenting');
+    try{ if(!document.fullscreenElement && document.documentElement.requestFullscreen)
+      document.documentElement.requestFullscreen(); }catch(e){}
+    renderPresent();
+  }
+  function exitPresent(){
+    document.body.classList.remove('presenting');
+    if(pStage) pStage.innerHTML='';
+    try{ if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); }catch(e){}
+    if(slides[state.index]) slides[state.index].scrollIntoView({block:'start'});
+  }
+
+  var room=document.querySelector('.presenter-room');
+  var curBox=room? room.querySelector('.pcur-box'):null;
+  var nextBox=room? room.querySelector('.pnext-box'):null;
+  var scriptBody=room? room.querySelector('.pscript-body'):null;
+  var counter=room? room.querySelector('.pcounter'):null;
+  var timeEl=room? room.querySelector('.ptime'):null;
+  function renderPresenter(){
+    fitInto(curBox, slides[state.index]);
+    fitInto(nextBox, slides[state.index+1]||null);
+    var n=NOTES[String(state.index+1)]||'';
+    if(scriptBody){
+      scriptBody.textContent=n||'이 슬라이드에는 발표자 노트가 없습니다.';
+      scriptBody.classList.toggle('empty', !n);
+    }
+    if(counter) counter.textContent=(state.index+1)+' / '+total;
+  }
+
+  var bar=document.querySelector('.deckbar');
+  var barCount=bar? bar.querySelector('.dbcount'):null;
+  function updateBar(){ if(barCount) barCount.textContent=(state.index+1)+' / '+total; }
+
+  var navAt=0;
+  function go(i, opts){
+    opts=opts||{};
+    i=Math.max(0,Math.min(total-1,i));
+    state.index=i;
+    updateBar();
+    if(document.body.classList.contains('presenter')) renderPresenter();
+    else if(document.body.classList.contains('presenting')) renderPresent();
+    else if(opts.scroll!==false && slides[i]){
+      navAt=Date.now();
+      slides[i].scrollIntoView({behavior:opts.smooth===false?'auto':'smooth',block:'start'});
+    }
+    if(!opts.silent) send({t:'goto', i:state.index});
+  }
+  function next(){ go(state.index+1); }
+  function prev(){ go(state.index-1); }
+
+  function toggleFS(){
+    var d=document;
+    if(!d.fullscreenElement){ if(d.documentElement.requestFullscreen) d.documentElement.requestFullscreen(); }
+    else if(d.exitFullscreen){ d.exitFullscreen(); }
+  }
+
+  function openPresenter(){
+    enterPresent();
+    var url=location.pathname+location.search+'#present=presenter';
+    var w=window.open(url,'deckPresenter_'+DECK,'width=1280,height=820');
+    if(!w){ alert('팝업이 차단되었습니다. 발표자 창을 열려면 팝업을 허용해 주세요.'); }
+  }
+
+  if(chan){
+    chan.onmessage=function(ev){
+      var m=ev.data||{};
+      if(m.t==='goto'){ go(m.i,{silent:true,scroll:true}); }
+      else if(m.t==='hello'){ send({t:'goto', i:state.index}); }
+    };
+  }
+
+  document.addEventListener('keydown',function(e){
+    if(e.altKey||e.ctrlKey||e.metaKey) return;
+    var tag=(e.target&&e.target.tagName)||'';
+    if(tag==='SELECT'||tag==='INPUT'||tag==='TEXTAREA') return;
+    var mode = document.body.classList.contains('presenter') ? 'presenter'
+             : document.body.classList.contains('presenting') ? 'present' : 'scroll';
+    if(e.key==='ArrowRight'||e.key==='PageDown'){ next(); if(mode!=='scroll') e.preventDefault(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ prev(); if(mode!=='scroll') e.preventDefault(); }
+    else if(e.key===' '){ if(mode!=='scroll'){ next(); e.preventDefault(); } }
+    else if(e.key==='Escape'){ if(mode==='present') exitPresent(); }
+    else if(e.key==='f'||e.key==='F'){ if(mode!=='scroll') toggleFS(); }
+  });
+
+  if(isPresenter){
+    document.body.classList.add('presenter');
+    var t0=Date.now();
+    function tick(){ if(!timeEl) return; var s=Math.floor((Date.now()-t0)/1000);
+      var mm=String(Math.floor(s/60)).padStart(2,'0'), ss=String(s%60).padStart(2,'0');
+      timeEl.textContent=mm+':'+ss; }
+    setInterval(tick,1000); tick();
+    if(room){
+      var rp=room.querySelector('.pp-prev'), rn=room.querySelector('.pp-next'),
+          rf=room.querySelector('.pp-fs'), rr=room.querySelector('.pp-reset');
+      if(rp) rp.onclick=prev; if(rn) rn.onclick=next; if(rf) rf.onclick=toggleFS;
+      if(rr) rr.onclick=function(){ t0=Date.now(); tick(); };
+    }
+    send({t:'hello'});
+    renderPresenter();
+    window.addEventListener('load', renderPresenter);
+    setTimeout(renderPresenter, 1500);
+    window.addEventListener('resize', renderPresenter);
+    return;
+  }
+
+  if(bar){
+    var b;
+    if((b=bar.querySelector('.db-prev'))) b.onclick=prev;
+    if((b=bar.querySelector('.db-next'))) b.onclick=next;
+    if((b=bar.querySelector('.db-fs'))) b.onclick=toggleFS;
+    if((b=bar.querySelector('.db-present'))) b.onclick=enterPresent;
+    if((b=bar.querySelector('.db-presenter'))) b.onclick=openPresenter;
+  }
+  if(present){
+    present.querySelector('.pprev').onclick=prev;
+    present.querySelector('.pnext').onclick=next;
+    present.querySelector('.pexit').onclick=exitPresent;
+  }
+  var ticking=false;
+  window.addEventListener('scroll',function(){
+    if(document.body.classList.contains('presenting')) return;
+    if(Date.now()-navAt < 700) return;
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){ state.index=currentScrollIndex(); updateBar(); ticking=false; });
+  },{passive:true});
+  window.addEventListener('resize',function(){
+    if(document.body.classList.contains('presenting')) renderPresent();
+  });
+  document.addEventListener('fullscreenchange',function(){
+    if(!document.fullscreenElement && document.body.classList.contains('presenting')) exitPresent();
+  });
+  state.index=currentScrollIndex();
+  updateBar();
+})();
+</script>
+</body></html>

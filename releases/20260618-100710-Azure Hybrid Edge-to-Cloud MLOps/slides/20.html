@@ -1,0 +1,51 @@
+<section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">20 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">제조 Edge-to-Cloud Closed-loop MLOps 아키텍처</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">현장 수집 → 클라우드 수집·메달리온 레이크 → Azure ML 학습·추론 → Edge 배포 → 피드백 재학습의 전체 흐름</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  subgraph L1["① 온프레미스 제조 Edge"]
+    direction TB
+    SRC["PLC · 센서 · 카메라 · MES"] --> GW["엣지 게이트웨이<br/>filtering / windowing<br/>Store-and-forward"]
+    GW --> EINF["실시간 Edge Inference"]
+  end
+  subgraph L2["② 클라우드 수집 · 데이터 플랫폼"]
+    direction TB
+    ING2["Azure IoT Hub · Event Hubs"] --> MED[("ADLS Gen2 · System of Record<br/>🥉 Bronze raw → 🥈 Silver 정제 → 🥇 Gold 학습셋")]
+    MED -. "Shortcut" .-> FAB["Fabric OneLake<br/>분석 · Power BI (Optional)"]
+  end
+  subgraph L3["③ Azure ML / MLOps 추론"]
+    direction TB
+    AMLW["Azure ML Workspace<br/>학습·평가·등록 · MLflow"] --> PKG["Deployment Package"]
+  end
+  subgraph L4["④ 배포 · 추론 · 피드백"]
+    direction TB
+    ARC2["Azure Arc K8s · IoT Edge Module"] --> OPS["이상탐지 · 품질예측<br/>예지보전 · 설비 상태"]
+  end
+  GW -- "중요 데이터 선별" --> ING2
+  MED --> AMLW
+  PKG == "OTA 배포" ==> ARC2
+  OPS == "추론 로그 · 작업자 피드백 · Drift → 재학습" ==> AMLW
+  style L1 fill:#8b5cf615,stroke:#8b5cf6,color:#e8eaf2
+  style L2 fill:#3b82f615,stroke:#3b82f6,color:#e8eaf2
+  style L3 fill:#e3008c15,stroke:#e3008c,color:#e8eaf2
+  style L4 fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">System of Record = ADLS Gen2 · Optional Analytics = Fabric · Closed-loop = Edge feedback → Retraining · 클릭하면 확대됩니다</div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px">
+    <div class="feyebrow" style="color:#34d399">⑤ 핵심 최적화 전략</div>
+    <div class="chips" style="margin-top:10px">
+      <span class="chip">Edge filtering / windowing / compression</span>
+      <span class="chip">Parquet/Delta + partitioning</span>
+      <span class="chip">OneLake Shortcut로 복사 최소화</span>
+      <span class="chip">VPN / ExpressRoute + Private Endpoint</span>
+      <span class="chip">Cloud GPU autoscale / scheduled training</span>
+      <span class="chip">Incremental retraining &amp; model versioning</span>
+      <span class="chip">Edge inference로 latency · egress 최소화</span>
+    </div>
+  </div>
+</section>

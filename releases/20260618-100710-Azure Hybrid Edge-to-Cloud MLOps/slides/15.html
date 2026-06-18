@@ -1,0 +1,36 @@
+<section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">15 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Azure Machine Learning</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:80ch">데이터 준비(Storage·DB·Fabric) → <b>Azure ML (MLOps 9단계)</b> → 배포·운영(Managed Endpoint·Arc·IoT Edge). 제조뿐 아니라 어떤 산업의 ML 프로젝트에도 동일하게 적용되는 일반 패턴</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  subgraph P1["① 데이터 준비"]
+    direction TB
+    S1["Storage · ADLS Gen2 / Blob"]
+    S2["Database · Azure SQL / Cosmos"]
+    S3["Fabric · OneLake / Feature Store"]
+  end
+  P1 --> AML["② Azure Machine Learning<br/>MLOps Workspace<br/>(9단계 파이프라인)"]
+  AML --> P3["③ 배포 및 운영<br/>Managed Endpoint · Arc K8s · IoT Edge"]
+  P3 == "Closed-loop: 추론 로그 · Drift → Retraining" ==> AML
+  style P1 fill:#3b82f615,stroke:#3b82f6,color:#e8eaf2
+  style AML fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style P3 fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">↻ 드리프트 감지 시 재학습 트리거 → 학습 파이프라인 재실행 → 재배포</div>
+  </div>
+  <div class="fgrid c3" style="margin-top:20px;align-items:stretch">
+    <div class="fpanel reveal"><b style="color:var(--msft-blue)">1 · Data Asset</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">데이터 등록 · 버전/계보(Lineage) · Datastore 연결</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-blue)">2 · Preprocessing</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">정제 · 결측/이상치 · Feature 생성</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-blue)">3 · Training Pipeline</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">분산 학습 · AutoML · HPO 튜닝</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-purple)">4 · Experiment Tracking</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">메트릭·파라미터·아티팩트 (MLflow)</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-purple)">5 · Evaluation</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">성능 검증 · 책임있는 AI · 승인 게이트</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-purple)">6 · Model Registry</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">카탈로그 등록 · 스테이징→프로덕션</p></div>
+    <div class="fpanel reveal"><b style="color:var(--msft-pink)">7 · Deployment Package</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">컨테이너 이미지 · 환경·종속성</p></div>
+    <div class="fpanel reveal"><b style="color:#34d399">8 · Monitoring · Drift</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">데이터/모델 드리프트 · 품질 지표</p></div>
+    <div class="fpanel reveal"><b style="color:#34d399">9 · Retraining</b><p style="margin:4px 0 0;color:var(--ink-dim);font-size:13px">드리프트 트리거 재학습 → 재배포</p></div>
+  </div>
+</section>

@@ -1,0 +1,34 @@
+<section class="frag frag--dark">
+  <style>
+  .ftbl-wrap{margin-top:18px;overflow-x:auto;border-radius:12px;border:1px solid var(--hair);}
+  .ftbl{border-collapse:collapse;width:100%;min-width:760px;font-size:clamp(12px,1.15vw,14px);}
+  .ftbl th,.ftbl td{padding:9px 12px;text-align:left;border-bottom:1px solid color-mix(in srgb,currentColor 12%,transparent);vertical-align:top;line-height:1.45;}
+  .ftbl thead th{position:sticky;top:0;background:linear-gradient(120deg,#3b82f6,#8b5cf6);color:#fff;font-weight:600;white-space:nowrap;}
+  .ftbl tbody tr:hover{background:color-mix(in srgb,var(--msft-blue) 8%,transparent);}
+  .ftbl td b{color:var(--msft-blue);}
+  .ftbl .rt{color:#f59e0b;font-weight:600;white-space:nowrap;}
+  .ftbl .bt{color:#22d3ee;font-weight:600;white-space:nowrap;}
+  </style>
+  <div style="text-align:center">
+    <span class="fkicker">10 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Azure 데이터 마이그레이션 서비스 상세</h1>
+    <p class="flead" style="margin:8px auto 0">워크로드 유형별 권장 서비스 선택 가이드</p>
+  </div>
+  <div class="ftbl-wrap reveal">
+    <table class="ftbl">
+      <thead><tr><th>서비스</th><th>유형</th><th>적정 데이터량</th><th>지연</th><th>특장점 / Use Case</th></tr></thead>
+      <tbody>
+        <tr><td><b>IoT Hub</b></td><td class="rt">실시간</td><td>초~분당 수백만 msg</td><td>ms 수준</td><td>디바이스 ID·인증, Cloud-to-Device 명령, Module Twin</td></tr>
+        <tr><td><b>IoT Edge</b></td><td class="rt">실시간</td><td>Edge 로컬 처리 후 전송</td><td>ms 수준</td><td>오프라인 동작, 로컬 추론 모듈, ML/Stream Analytics on Edge</td></tr>
+        <tr><td><b>Event Hubs</b></td><td class="rt">실시간</td><td>수백만 events/sec</td><td>ms~수십ms</td><td>Kafka 호환, Capture로 ADLS 자동 적재</td></tr>
+        <tr><td><b>Stream Analytics</b></td><td class="rt">실시간</td><td>스트리밍 처리</td><td>초 단위</td><td>SQL 기반 windowing/aggregation, Power BI 직결</td></tr>
+        <tr><td><b>Fabric RTI</b></td><td class="rt">실시간</td><td>수십 GB/일 ~</td><td>초 단위</td><td>Eventstream + Eventhouse(KQL) 통합, OneLake 적재</td></tr>
+        <tr><td><b>Azure Data Factory</b></td><td class="bt">배치</td><td>GB ~ PB</td><td>분~시간</td><td>100+ 커넥터, ETL/ELT, CDC, Mapping Data Flow</td></tr>
+        <tr><td><b>Storage Mover</b></td><td class="bt">배치</td><td>TB ~ PB</td><td>지속 동기화</td><td>NFS/SMB → Azure Files/Blob 다중 작업 관리</td></tr>
+        <tr><td><b>AzCopy</b></td><td class="bt">배치</td><td>MB ~ TB</td><td>수동/스케줄</td><td>CLI 고속 복사, 권장 단일 노드 도구</td></tr>
+        <tr><td><b>Data Box</b> (Disk/80TB/Heavy)</td><td class="bt">오프라인</td><td>수 TB ~ 1 PB+</td><td>수일</td><td>폐쇄망/저대역망, AES-256 암호화, PB급 일괄</td></tr>
+        <tr><td><b>Azure Migrate / DMS</b></td><td class="bt">배치(DB)</td><td>DB 수십 ~ TB</td><td>분~시간</td><td>SQL/Oracle/MySQL 평가·이전, 다운타임 최소화</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>

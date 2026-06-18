@@ -1,0 +1,43 @@
+<section class="frag frag--dark">
+  <div style="text-align:center">
+    <span class="fkicker">24 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">P&amp;G — Azure IoT Operations + Azure Arc Closed-loop</h1>
+    <p class="flead" style="margin:8px auto 0;max-width:82ch">목적: OEE 향상 · 비계획 다운타임 감소 — IT/OT 표준화 → 클라우드 예측 모델 → Azure Arc로 Edge 재배포</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  OT["제조 설비 · OT 데이터<br/>센서·PLC·MES · 35개국 공장"] --> AIO["① Azure IoT Operations (Edge)<br/>Arc K8s · MQTT 브로커 · IT/OT 표준 수집"]
+  AIO --> EI["② Edge 실시간 추론<br/>품질 모니터링 · 이상탐지"]
+  AIO --> LAKE["③ Azure 데이터 레이크 / 클라우드 분석<br/>전사 적재 · 예측·처방 분석"]
+  LAKE --> DS["④ 데이터 사이언티스트<br/>예측·처방 모델 · K8s 네이티브 학습"]
+  DS --> ARC["⑤ Azure Arc / Workload Orchestration<br/>모델 빌드·배포 · 사이트별 버전 관리"]
+  ARC --> DEP["⑥ Edge로 모델 배포<br/>표준 컨테이너 배포"]
+  DEP --> EI
+  EI == "⑦ 재학습·재배포 피드백 루프" ==> LAKE
+  style AIO fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
+  style ARC fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
+  style EI fill:#14352a,stroke:#34d399,color:#e8eaf2
+    </pre>
+    <div class="fdiagram-cap">현장 → 클라우드 학습 → Edge 재배포 Closed-loop · 클릭하면 확대됩니다</div>
+  </div>
+  <div class="fgrid imgR reveal" style="margin-top:18px;align-items:center">
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">핵심 포인트</div>
+      <ul class="fbul" style="margin-top:10px">
+        <li>IT/OT 경계의 데이터 표준화를 <b>Azure IoT Operations</b>로 해소 (2022년~ 다년 협업)</li>
+        <li>K8s 네이티브 MQTT 브로커가 Edge↔클라우드 양방향 메시징 평면</li>
+        <li>Azure ML/CI-CD가 모델 빌드·패키징, <b>Azure Arc</b>로 Edge 배포</li>
+        <li>Workload Orchestration으로 사이트별 설정·버전·업그레이드 관리</li>
+      </ul>
+    </div>
+    <div class="fstats" style="flex-direction:column;gap:14px">
+      <div style="text-align:center">
+        <div class="v" style="font-size:clamp(40px,7vw,72px);color:#34d399">90%↓</div>
+        <div class="l">신규 모델 버전 배포 시간 단축</div>
+      </div>
+      <p style="margin:0;text-align:center;color:var(--ink-dim);font-size:13.5px">+ 비계획 설비 정지 대폭 감소<br>(Azure Arc 표준화 배포)</p>
+    </div>
+  </div>
+  <p class="fstat-line">Reference: <b>microsoft.com/en/customers/story/25077-procter-and-gamble-iot-operations</b></p>
+</section>
