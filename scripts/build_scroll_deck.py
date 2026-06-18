@@ -636,7 +636,8 @@ nav a:hover{background:var(--active);}
 nav a.active{background:var(--active);border-left-color:var(--accent);font-weight:600;}
 nav a .n{color:var(--muted);min-width:22px;text-align:right;font-variant-numeric:tabular-nums;}
 main{padding:32px clamp(16px,4vw,64px) 40vh;}
-.slide-wrap{max-width:1180px;margin:0 auto 26px;scroll-margin-top:20px;}
+.slide-wrap{max-width:1180px;margin:0 auto 26px;scroll-margin-top:20px;
+position:relative;aspect-ratio:16/9;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;
 box-shadow:var(--stage-shadow);padding:clamp(24px,3.5vw,48px);min-height:60vh;
 display:flex;flex-direction:column;}
@@ -728,13 +729,16 @@ border-bottom:1px solid var(--border);padding:10px 16px;gap:12px;align-items:cen
 .topbar .t{font-weight:700;font-size:14px;}
 }
 /* === 모델 작성 슬라이드 조각(.frag) 디자인 시스템 === */
-.slide-wrap .frag{position:relative;border-radius:16px;overflow:hidden;
-box-shadow:var(--stage-shadow);min-height:64vh;padding:clamp(28px,4vw,56px);
+.slide-wrap .frag{position:absolute;inset:0;border-radius:16px;overflow:hidden;
+box-shadow:var(--stage-shadow);padding:clamp(22px,3.2vw,46px);
 display:flex;flex-direction:column;
 --msft-purple:#8b5cf6;--msft-blue:#3b82f6;--msft-pink:#e3008c;
 --ink-dim:color-mix(in srgb,currentColor 60%,transparent);
 --hair:color-mix(in srgb,currentColor 16%,transparent);
 --panel:color-mix(in srgb,currentColor 6%,transparent);}
+.slide-wrap .frag>.fitwrap{flex:1 1 auto;min-height:0;width:100%;
+display:flex;flex-direction:column;justify-content:inherit;align-items:inherit;
+transform-origin:center center;}
 .frag--dark{background:#0b0a14;color:#f4f3fb;background-image:
 radial-gradient(120% 90% at 100% 0%,rgba(124,92,255,.22),transparent 55%),
 radial-gradient(90% 80% at 100% 100%,rgba(227,0,140,.16),transparent 60%),
@@ -980,6 +984,37 @@ PRESENT_JS = r"""
   var slides = [].slice.call(document.querySelectorAll('.slide-wrap'));
   var total = slides.length;
   if(!total) return;
+
+  // === 모든 슬라이드 16:9 고정 + 내용 자동 맞춤(넘치면 축소) ===
+  function buildFit(){
+    document.querySelectorAll('.slide-wrap > .frag').forEach(function(frag){
+      if(frag.querySelector(':scope > .fitwrap')) return;
+      var w=document.createElement('div'); w.className='fitwrap';
+      while(frag.firstChild) w.appendChild(frag.firstChild);
+      frag.appendChild(w);
+    });
+  }
+  function fitFrag(frag){
+    var w=frag.querySelector(':scope > .fitwrap'); if(!w) return;
+    w.style.transform='none';
+    var cs=getComputedStyle(frag);
+    var ah=frag.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+    var aw=frag.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+    if(ah<=0||aw<=0) return;
+    var s=Math.min(1, ah/w.scrollHeight, aw/w.scrollWidth);
+    if(isFinite(s)&&s>0&&s<0.999) w.style.transform='scale('+s+')';
+  }
+  function fitAll(){ document.querySelectorAll('.slide-wrap > .frag').forEach(fitFrag); }
+  window.__fitAll=fitAll;
+  buildFit(); fitAll();
+  var _ft; function fitSoon(){ clearTimeout(_ft); _ft=setTimeout(fitAll,60); }
+  window.addEventListener('load', fitAll);
+  window.addEventListener('resize', fitSoon);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitAll);
+  document.querySelectorAll('.slide-wrap img').forEach(function(im){
+    if(!im.complete) im.addEventListener('load', fitSoon, {once:true});
+  });
+
   var state = { index: 0 };
   var isPresenter = /present=presenter/.test(location.hash);
 
@@ -1017,6 +1052,7 @@ PRESENT_JS = r"""
       holder.style.transform='scale('+s+')';
       holder.style.left=Math.max(0,(bw-nw*s)/2)+'px';
       holder.style.top=Math.max(0,(bh-nh*s)/2)+'px';
+      var cf=holder.querySelector('.slide-wrap > .frag'); if(cf) fitFrag(cf);
     });
   }
 
@@ -1499,6 +1535,7 @@ links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').
  }}catch(e){{
   nodes.forEach(m=>{{m.style.whiteSpace='pre-wrap';m.style.color='var(--ink-dim)';}});
  }}
+ if(window.__fitAll) setTimeout(window.__fitAll,60);
 }})();
 </script>
 <script>window.__NOTES={notes_json};window.__DECK={deck_json};</script>

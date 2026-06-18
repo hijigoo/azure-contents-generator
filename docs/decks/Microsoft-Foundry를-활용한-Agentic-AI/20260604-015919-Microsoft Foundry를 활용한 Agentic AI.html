@@ -37,7 +37,8 @@ nav a:hover{background:var(--active);}
 nav a.active{background:var(--active);border-left-color:var(--accent);font-weight:600;}
 nav a .n{color:var(--muted);min-width:22px;text-align:right;font-variant-numeric:tabular-nums;}
 main{padding:32px clamp(16px,4vw,64px) 40vh;}
-.slide-wrap{max-width:1180px;margin:0 auto 26px;scroll-margin-top:20px;}
+.slide-wrap{max-width:1180px;margin:0 auto 26px;scroll-margin-top:20px;
+position:relative;aspect-ratio:16/9;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;
 box-shadow:var(--stage-shadow);padding:clamp(24px,3.5vw,48px);min-height:60vh;
 display:flex;flex-direction:column;}
@@ -129,13 +130,16 @@ border-bottom:1px solid var(--border);padding:10px 16px;gap:12px;align-items:cen
 .topbar .t{font-weight:700;font-size:14px;}
 }
 /* === 모델 작성 슬라이드 조각(.frag) 디자인 시스템 === */
-.slide-wrap .frag{position:relative;border-radius:16px;overflow:hidden;
-box-shadow:var(--stage-shadow);min-height:64vh;padding:clamp(28px,4vw,56px);
+.slide-wrap .frag{position:absolute;inset:0;border-radius:16px;overflow:hidden;
+box-shadow:var(--stage-shadow);padding:clamp(22px,3.2vw,46px);
 display:flex;flex-direction:column;
 --msft-purple:#8b5cf6;--msft-blue:#3b82f6;--msft-pink:#e3008c;
 --ink-dim:color-mix(in srgb,currentColor 60%,transparent);
 --hair:color-mix(in srgb,currentColor 16%,transparent);
 --panel:color-mix(in srgb,currentColor 6%,transparent);}
+.slide-wrap .frag>.fitwrap{flex:1 1 auto;min-height:0;width:100%;
+display:flex;flex-direction:column;justify-content:inherit;align-items:inherit;
+transform-origin:center center;}
 .frag--dark{background:#0b0a14;color:#f4f3fb;background-image:
 radial-gradient(120% 90% at 100% 0%,rgba(124,92,255,.22),transparent 55%),
 radial-gradient(90% 80% at 100% 100%,rgba(227,0,140,.16),transparent 60%),
@@ -1155,6 +1159,7 @@ links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').
  }catch(e){
   nodes.forEach(m=>{m.style.whiteSpace='pre-wrap';m.style.color='var(--ink-dim)';});
  }
+ if(window.__fitAll) setTimeout(window.__fitAll,60);
 })();
 </script>
 <script>window.__NOTES={"1": "안녕하세요 여러분, 오늘 함께해 주셔서 감사합니다!\n저는 마이크로소프트에서 시니어 솔루션 엔지니어로 일하고 있는 김기철입니다.\n\n오늘은 Microsoft Foundry를 활용한 Agentic AI 를 주제로 \n소개해드리고자 합니다.", "2": "지금까지는 업계 동향을 잠시 알아보았고요\n마이크로소프트 파운더리에 대해서 소개드리도록 하겠습니다.", "3": "오늘 소개드릴 Microsoft Foundry는 엔터프라이즈 AI 운영과 애플리케이션 개발을 위한 통합 플랫폼입니다. 작년 MS의 가장 큰 행사중 하나인 Ignite에서 ‘AI 앱과 에이전트 팩토리’로 소개되었습니다.\n\n마이크로소프트 파운더리는 단순한 Foundation 모델 제공을 넘어, AI 에이전트의 개발·배포·운영까지 전 라이프사이클을 지원합니다.\n\n\n---\nMicrosoft Foundry 는 개발자 분들이 AI App이나 Agent 개발을 할 때 필요한 부분을 제공\nMicrosoft Foundry 는 엔터프라이즈 AI 운영, 모델 작성기 및 애플리케이션 개발을 위한 통합 플랫폼\n실제로 Ignite 2025에서 ‘AI 앱과 에이전트 팩토리’로 소개\n\nFoundation 모델 제공을 넘어서 에이전트의 개발 / 배포/ 운영까지 전반적인 라이프사이클을 위한 기능을 제공", "4": "먼저 마이크로 소프트 파운더리가 어느 위치에서 여러분들에게 도움을 드리는지 간단하게 살펴볼게요\n\n실제로 여러분들이 에이전트를 구축을 하실 때는\n조직의 기술 수준과 목적에 따라 IaaS, PaaS, SaaS 등 다양한 방식으로 구축할 수 있음.\n\n내가 밑바닥 부터 모든 인프라를 직접 구성하고 관리하는 경우 IaaS\n관리형 환경에서 코드를 사용하여 애플리케이션과 로직 개발에 더 집중하는 경우 PaaS\n그리고 코드를 거의 사용하지 않고 간단하게 에이전트를 구성하는 경우 SaaS 를 선택할 수 있는데요\n\nMicrosoft Foundry 는 에이전트 설계와 비즈니스 로직에 집중할 수 있는 PaaS 에 해당합니다.\n\n\n---\n\n\nIaaS 는 GPU, 컨테이너, 네트워크 등 바닥부터 모든 인프라를 직접 관리하는 방식이고요\nPaaS는 관리형 환경으로, 인프라 운영 부담을 줄이고 코드를 사용하여 애플리케이션과 로직 개발에 더 집중\nSaaS는 구축된 도구를 사용해 코드를 거의 사용하지 않고 간단히 에이전트를 구성할 수 있는 방식\n\nMicrosoft Foundry 는 에이전트 설계와 비즈니스 로직에 집중할 수 있는 PaaS 에 해당합니다.", "5": "우리가 AI 를 개발할 때 필요한 핵심 요소는 다음과 같습니다\n\n사용 사례에 가장 적합한 최신 기반 모델과 오픈소스 모델에 접근해야 하고요\n에이전트에 지식과 도구를 연결해서 응답에 맥락을 더하고 에이전트가 실제 행동을 가능하게 해야합니다\n또한 중앙에서 오케스트레이션하고 개발할 수 있는 도구도 제공되어야 함.\n그 밖에, 모든 단계에서 가시성과 보안 조치와 컨트롤이 가능해야 합니다.\n또한 필요한 경우 파인튜닝 및\n배포 환경이 필요합니다\n\n파운더리가 이 부분들을 모두 다루고 있습니다.\n\n-----\n\n먼저\n\n각자의 사용 사례에 가장 적합한 최신 기반 모델과 오픈소스 모델에 접근\nAI 앱/에이전트를 다양한 지식 소스와 도구에 연결하여, AI의 응답에 맥락을 더하고 실제 행동을 가능하게 해야함\n에이전트 시스템을 중앙에서 오케스트레이션하고 개발할 수 있는 도구도 제공되어야 함.\n모든 단계에서 가시성과 보안 조치와 컨트롤이 가능해야 합니다.\n또 발전함에 따라 필요하다고 판단이 될 때 파인튜닝을 할 수 있어야 하고요\n마지막으로, 원하는 어디서든 배포할 수 있는 능력이 필요합니다.", "6": "조금 더 구체적으로 전체 에이전트 개발 과정을 보면 다음과 같습니다.\n\n빌드 단계에서는 ~~\n최적화 단계에서는~\n마지막으로 버너넌스 단계로~", "7": "(4분, 1시 50분)\n그럼 파운더리에서 제공하는 서비스들을 살펴보겠습니다.\n\n\n--\n는 이런 AI 개발 라이프사이클을 위한 구성요소를 모두 갖추고 있습니다.", "8": "", "9": "보시는 바와 같이 오픈 ai 모델이나 딥시크, X 의 그록 , 메타의 라마 등등 모델을 사용 가능\n그 밖에 오픈소스롤 포함한 만천개 이상의 최신 모델을 제공하고 있습니다.\n\n\n---\n\n\n서버리스, 관리형, 프로비전드 등 유연한 옵션을 통해 AI 워크로드를 더 빠르게 배포 가능\n또한 엔터프라이즈 환경에 필요한 보안, 거버넌스, 컴플라이언스 기능이 기본으로 제공\n\n\n---\nServerless: 인프라 관리 없이 호출한 만큼만 비용 지불하며 빠르게 배포·테스트하기 좋은 경량 API 방식.\nManaged Compute: 전용 컴퓨트에 모델을 호스팅해 더 안정적 성능과 예측 가능성을 확보하는 중간 규모 운영 옵션.\nProvisioned Throughput (PTU): 처리량을 예약해 가장 안정적·일관된 성능을 제공하며 대규모 프로덕션에 최적화된 엔터프라이즈용 방식.", "10": "다음은 Model Router 기능입니다.\n모델 라우터는 각 작업의 복잡도에 따라 가장 적합한 모델을 자동으로 선택해줍니다.\n\n예를 들어,\n\n* 깊은 추론이 필요한 작업이라면 고성능 모델을 사용하고,\n* 단순한 분류나 포맷팅과 같은 작업이라면 가볍고 저비용 모델을 선택.\n\n실제 테스트 결과, 모든 작업에 GPT-4.1만 사용하는 경우보다\nModel Router를 활용했을 때 비용을 최대 60%까지 절감하면서도 비슷한 정확도를 유지할 수 있었음\n\n즉, 개발자는 더 이상 어떤 모델을 사용할지 계속 고민할 필요가 없고,\n운영자는 비용과 성능을 보다 자동적이고 효율적으로 관리할 수 있음", "11": "조금 더 깊게 들어가보면요, 모델 라우터 자체가 모델\n실시간으로 들어오는 프롬프트를 평가하고, 다음을 기반으로 여러 기본 LLM 중 하나로 라우팅\n\n단순한 프롬프트는 GPT-4.1-mini나 nano와 같은 경량 모델로 라우팅될 수 있고,\n더 복잡하거나 추론이 많은 프롬프트는 GPT-4.1이나 o4와 같은 더 능력 있는 모델로 라우팅됨\n\n이런 방식으로 적절할 때 저렴한 모델을 사용하여 성능과 비용 효율성을 균형 있게 유지.\n\n라우터는 단일 배포 및 채팅 엔드포인트를 제공하기 때문에 일반 단일 모델을 사용하듯이 사용할 수 있음", "12": "", "13": "에이전트 서비스의 설정 화면입니다.\n\n가장 간단하게는 모델을 선택하고\n프롬프트로 에이전트의 역할과 규칙을 정의하고,\n어떤 도구와 지식 베이스를 연결할지를 지정합니다.\n또 필요하면 메모리와 가드레일도 연결해서 에이전트에게 기억력을 주고 컨텐츠 안정성도 가져갈 수 있습니다.\n\n\n\n설정이 완료되면 에이전트는 사용자의 요청을 처리하기 위해 필요한 도구를 언제,\n어떻게 사용할지 스스로 판단하고 작업을 수행합니다.\n\n또한 에이전트가 다른 에이전트를 마치 도구처럼 호출할 수도 있기 때문에,\n이 방식을 통해 멀티 에이전트 시스템도 구축할 수 있습니다.\n\n이렇게 완성된 에이전트는 옆 화면에서 바로 테스트해볼 수 있습니다.\n\n--\n\n가드레일에서 특정 키워드에 대한 필터링이 되도록 \n데이터를 읽었을 때 데이터를 읽으면 더이상 진행이 되지 않도록 할 수 있도록... DLP 서버를 두고 막는 걸로 있는데..\n\n\n\n\n--\n\n프롬프트(Prompt) 를 이용해 에이전트를 정의할 수 있습니다.\n또한 외부 지식(Foundry IQ), 그리고 다양한 도구(Tools) 를 하나의 에이전트 안에 통합할 수 있습니다.\n\n또 필요하면 메모리와 가드레일도 연결할 수 있고요\n이렇게 완성된 에이전트는 옆 화면에서 바로 테스트해볼 수 있습니다.\n\n\n\n----\n\n\n가장 간단하게는 모델을 선택하고 프롬프트(Prompt) 를 이용해 에이전트를 정의하거나, 코드를 통해 더 정교하게 제어할 수도 있음\n또한 외부 지식(Foundry IQ), 그리고 다양한 도구(Tools) 를 하나의 에이전트 안에 통합할 수 있음.\n\n그리고 사용 사례가 복잡해질수록 이를 확장해 멀티 에이전트 구조로 발전시킬 수 있습니다.\n\n---\n\n\nAgent Service는 두 가지 형태의 오케스트레이션을 제공합니다.\n그중 첫 번째는 Agent Orchestration입니다.\n\n프롬프트로 에이전트의 역할과 규칙을 정의하고,\n어떤 도구와 지식 베이스를 연결할지를 지정합니다.\n또 필요하면 메모리와 가드레일도 연결해서 에이전트에게 기억력을 주고 컨텐츠 안정성도 가져갈 수 있습니다.\n\n설정이 완료되면 에이전트는 사용자의 요청을 처리하기 위해 필요한 도구를 언제,\n어떻게 사용할지 스스로 판단하고 작업을 수행합니다.\n\n또한 에이전트가 다른 에이전트를 마치 도구처럼 호출할 수도 있기 때문에,\n이 방식을 통해 멀티 에이전트 시스템도 구축할 수 있습니다.", "14": "", "15": "", "16": "Foundry에는 Hosted Agent라는 기능도 포함\n\nHosted Agent를 사용하면 Microsoft Agent Framework나 LangGraph 같은 프레임워크로 이미 구축한 에이전트를 Foundry Agent Service 위에서 운영할 수 있습니다.\n\n\n---\n\n\n이 기능을 통해 기존의 개발 환경, 코드 구조, 아키텍처를 그대로 유지하면서도,\n배포(Deployment), 운영(Operations), 모니터링(Monitoring), 거버넌스(Governance)는\nFoundry의 관리형 환경(Managed Environment) 에서 처리됩니다.\n\n\n---\n\n\n즉, 이전에 만든 작업을 처음부터 다시 구축할 필요가 없습니다.\n기존 에이전트를 그대로 Foundry 생태계에 가져와 서 운영할 수 있습니다.", "17": "Foundry에서 구축한 모든 에이전트는 한 번의 클릭으로\nM365 Copilot이나 Teams에 직접 배포할 수 있습니다.\n\n물론 또한 API 형태로 배포하여 기존의 웹 애플리케이션, 모바일 앱, 또는 백엔드 시스템과 통합할 수도 있음", "18": "보통 사용자가 에이전트에게 질문할 때 이렇게 단순하게 하지는 않습니다.", "19": "실제 현장의 질문은 이렇게 복잡할때가 많고,\n하나의 시스템에서 한 번의 쿼리로 끝나는 경우는 거의 없습니다.\n\n이럴 때 Foundry IQ 가 검색할때도 에이전틱한 방식으로 적절한 데이터를 가져오는데요.\n관련된 내용은 마지막에 Foundry IQ 를 상세히 소개하는 장표에서 별도로 다루도록 하겠습니다.\n\n\n---\n\nFoundry IQ 는 이런 문제를 Agentic Retrieval 방식으로 풀어내는 구조이고요,\n관련된 내용은 마지막에 Foundry IQ 를 상세히 소개하는 장표에서 별도로 다루도록 하겠습니다.", "20": "3:10~4:00초 (2시 25분)\n\nFoundry IQ 는 Index 뿐 아니라 다양한 날리지 소스와 연결이 되고요\n사용자의 질문을 분석하고 나누는 작업을 한 뒤,\n\n가장 적합한 날리지 소스를 선택하고요, 각각 검색한 다음에\nSLM을 통해서 충분한 답변이 되었는지 판단을 하고, 만족할 때까지\n이터레이션을 돕니다. 그리고 응답할 준비가 되었다고 판단을 하면\n\n데이터를 취합해서 사용자나 에이전트에게 전달을 합니다.\n즉 이 기능 하나만으로 RAG 에이전트를 만들 수 있고요,\n또 에이전트에게 지식을 전달하는 지식레이어로 사용할 수 도있습니다.", "21": "", "22": "Foundry에서는 세 가지 주요 유형의 Tools를 제공합니다.\n\n첫 번째, Configured Tools는 이미 인증과 설정이 완료된 도구입니다.\n예를 들어 Fabric Data Agent나 SharePoint 같은 Microsoft 서비스를 빠르게 연결하고자 할 때 유용합니다.\n\n두 번째, Catalog Tools는 공개된 도구나 MCP 서버로,\nAtlassian, GitHub, Hugging Face, Databricks 등 과 같은 외부 서비스와의 통합 기능이 포함되어 있습니다.\n\n세 번째, Custom Tools는 사용자가 직접 정의하는 도구입니다.\n회사의 내부 API나 온프레미스 시스템을 에이전트가 사용할 수 있는 도구로 노출하고 연결할 수 있습니다.\n\n\n-------\n\n\n\n\nFoundry에서는 세 가지 주요 유형의 Tools를 제공합니다.\n\n첫 번째, Configured Tools는 이미 인증과 설정이 완료된 도구입니다.\n예를 들어 Fabric Data Agent나 SharePoint 같은 Microsoft 서비스를 빠르게 연결하고자 할 때 유용합니다.\n\n두 번째, Catalog Tools는 공개된 도구나 MCP 서버입니다.\n엔드포인트와 인증 정보를 입력하여 직접 연결할 수 있습니다.\n예를 들어서 Atlassian, GitHub, Hugging Face, Databricks, 등  다양한 외부 서비스와의 통합 기능이 포함되어 있습니다.\n\n세 번째, Custom Tools는 사용자가 직접 정의하는 도구입니다.\n회사의 내부 API나 온프레미스 시스템을 에이전트가 사용할 수 있는 도구로 노출할 수 있습니다.\n이를 통해 조직 환경에 완전히 맞춘 엔터프라이즈급 에이전트를 구축할 수 있습니다.\n\n---\n\n\n현재 기본으로 제공하는 MCP 툴을 클릭만으로 연동해서 사용하실 수 있고요\n제공하지 않는 MCP 서버와도 커스텀으로 연동할 수 있습니다.", "23": "(25분, 2시 7분쯤)\n\n특정 상황에서는 파인튜닝이 매우 유용할 수 있습니다.\n\n모델이 특정 도메인의 언어, 문체, 형식을 따라야 하는 경우가 생기거나,\n또한 모델이 복잡한 규칙을 학습해야 하는 상황도 있을 수 있습니다.\n\n그리고 RAG는 검색된 문맥을 모델로 전달하기 때문에, 예상보다 토큰 비용이 훨씬 많이 증가할 수도 있습니다.\n\n이런 경우 파인튜닝을 활용하면 모델이 도메인 특화 용어와 문맥을 더 잘 이해할 수 있습니다. 또한 일관된 톤과 형식으로 응답하도록 만들 수 있고,\n데이터에 맞게 모델을 조정해 토큰 사용량을 줄이는 데도 도움이 됩니다.", "24": "Foundry의 Control Plane을 살펴보겠습니다.\n\nControl Plane은 조직 전반에서 사용 중인 에이전트와 모델을 한곳에서 관찰하고 관리할 수 있는 중앙 제어 계층입니다.\n제공하는 대시보드를 통해서 각 에이전트와 모델의 실행 상태, 사용 현황, 그리고 전반적인 동작을 통합적으로 확인할 수 있습니다.\n\n\n\n---\n\n개발자 관점에서는 “이 에이전트가 지금 얼마나 잘 작동하고 있는가?”를 확인할 수 있는 공간이고,\n운영자 관점에서는 “위험하거나 비효율적인 일이 발생하고 있지 않은가?”를 확인할 수 있는 공간입니다.\n\n모든 정보가 하나의 화면에 표시된다고 보면 될 듯", "25": "평가는 Quality 측면에서 관련 문서를 잘 가져오는지,\n컨텐츠 Risk 및 안정성 측면에서 제일브레이크나 유해한 컨텐츠가 유입되는지\n에이전트 동작 방식에서 정확한 툴을 선택하는지 등 \n\n다양한 관점에서 평가할 수 있는 기능을 제공", "26": "이제 날씨 에이전트(weather agent)를 예로 들어, 실제로 이 과정이 어떻게 동작하는지 살펴보겠습니다.\n\n예를 들어 샌프란시스코의 날씨가 어떤지 물어봤을 때, 에이전트가 관련성 있고 정확한 응답을 제공하는지 확인하고 싶습니다.\n\n첫 번째 단계에서는 에이전트가 사용자 입력 쿼리를 기반으로 의도를 정확히 파악해야 합니다.\n이를 올바르게 수행하는지 확인하기 위해 의도 해석 평가기(intent resolution evaluator)를 제공합니다.\n\n에이전트가 의도를 파악한 다음에는, 응답을 생성하기 위해 적절한 도구들을 호출해야 합니다.\n이 단계에서는 여러 도구 호출 평가기와 운영 메트릭을 활용해 품질과 성공 여부를 측정할 수 있습니다.\n\n마지막 세 번째 단계에서는 작업 준수(task adherence)와 기타 평가기를 사용해,\n에이전트가 실제로 높은 품질의 응답을 제공했는지를 평가할 수 있습니다.\n\n---\n\nNow let’s walk through what this looks like in practice using a weather agent. I know the weather here in San Francisco can be unpredictable in the fall and I want to make sure that my weather agent provides a relevant and accurate response. As the first step the agent needs to resolve the user intent based on the input query. To ensure that it does so correctly we provide an intent resolution evaluator. Once the agent has figured out the intent it needs to call the right set of tools to provide a response. Here we provide several tool call evaluators and operational metrics to measure quality and success. Finally as we get to step three we can use task adherence and other evaluators to measure whether or not the agent provided a high quality response. Good thing I came prepared and brought a jacket and umbrella.", "27": "지금까지의 내용을 바탕으로 에이전트 개발 단계를 정리해보겠습니다.\n먼저, 기본 모델을 활용해 대화, 요약, 변환과 같은 단순 작업부터 시작합니다.\n\n이후 더 구조화된 동작이 필요해지면, Foundry Agent Service를 통해 프롬프트 엔지니어링 기반의 초기 에이전트를 구축할 수 있습니다.\n\n외부 지식이나 시스템 연계가 필요할 경우에는 Foundry IQ를 추가해 RAG 아키텍처를 구성하고 도구를 연결함으로써, 에이전트가 실제 비즈니스 시스템과 상호작용하도록 확장합니다.\n\n에이전트가 실제 사용자에게 제공되기 시작하면, Control Plane을 통해 활동을 시각화하고 비용, 성능, 사용량을 모니터링하며, Evaluations와 Traces를 활용해 품질을 지속적으로 개선합니다.\n\n마지막으로 모델 자체의 성능 향상이 필요할 경우, 파인튜닝을 통해 도메인 특화 모델을 적용할 수 있습니다.\n\n이 과정은 한 번으로 끝나지 않고 반복되며, 에이전트와 전체 서비스는 점진적으로 고도화됩니다.\n\n이것이 바로 Microsoft Foundry를 통한 Agentic AI 도입의 전형적인 여정입니다.\n\n---\n\n\n개발 단계를 보면요,\n가장 먼저 기본 모델만 사용해서 구성을 하시다가\n특화된 ai 가 필요하다고 판단되시면 에이전트 서비스를 이용해서 프롬프트 엔지니어링을 통해 초기 에이전트를 구성하십니다.\n그리고 외부의 지식이나 도구와 호출이 필요히사면 IQ 를 추가해서 RAG 나 Tool과 연계할 수 있고요\n운영 단계에서는 컨트롤 플레인을 통해서 가시성을 확보합니다.\n마지막으로 모델 자체 개선이 필요하다고 판단하시면 파인튜닝 기능을 이용하실 수 있고요\n이 전체적인 루프를 순회하시면서 서비스를 발전해나아가십니다.", "28": "2시 30분", "29": "Generated: 2026-06-03T17:03:16.791991+00:00\n- [Launched] Generally Available: Simple log alerts in Azure Monitor | published: Wed, 03 Jun 2026 02:00:57 Z | link: https://azure.microsoft.com/updates?id=561978\n- [In preview] Public Preview: Code-first observability for Foundry Agents in VS Code | published: Tue, 02 Jun 2026 23:15:29 Z | link: https://azure.microsoft.com/updates?id=563197\n- [Launched] Generally Available: Agent kit for Azure Cosmos DB | published: Tue, 02 Jun 2026 22:30:49 Z | link: https://azure.microsoft.com/updates?id=563022\n- [In preview] Public Preview: Azure SQL updates for early-June | published: Tue, 02 Jun 2026 22:15:55 Z | link: https://azure.microsoft.com/updates?id=563142\n- [In preview] Public Preview: Secure, Modern Access to Azure Files on macOS with MS Entra ID | published: Tue, 02 Jun 2026 22:00:05 Z | link: https://azure.microsoft.com/updates?id=565073"};window.__DECK="Microsoft Foundry를 활용한 Agentic AI";</script>
@@ -1165,6 +1170,37 @@ links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').
   var slides = [].slice.call(document.querySelectorAll('.slide-wrap'));
   var total = slides.length;
   if(!total) return;
+
+  // === 모든 슬라이드 16:9 고정 + 내용 자동 맞춤(넘치면 축소) ===
+  function buildFit(){
+    document.querySelectorAll('.slide-wrap > .frag').forEach(function(frag){
+      if(frag.querySelector(':scope > .fitwrap')) return;
+      var w=document.createElement('div'); w.className='fitwrap';
+      while(frag.firstChild) w.appendChild(frag.firstChild);
+      frag.appendChild(w);
+    });
+  }
+  function fitFrag(frag){
+    var w=frag.querySelector(':scope > .fitwrap'); if(!w) return;
+    w.style.transform='none';
+    var cs=getComputedStyle(frag);
+    var ah=frag.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+    var aw=frag.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+    if(ah<=0||aw<=0) return;
+    var s=Math.min(1, ah/w.scrollHeight, aw/w.scrollWidth);
+    if(isFinite(s)&&s>0&&s<0.999) w.style.transform='scale('+s+')';
+  }
+  function fitAll(){ document.querySelectorAll('.slide-wrap > .frag').forEach(fitFrag); }
+  window.__fitAll=fitAll;
+  buildFit(); fitAll();
+  var _ft; function fitSoon(){ clearTimeout(_ft); _ft=setTimeout(fitAll,60); }
+  window.addEventListener('load', fitAll);
+  window.addEventListener('resize', fitSoon);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitAll);
+  document.querySelectorAll('.slide-wrap img').forEach(function(im){
+    if(!im.complete) im.addEventListener('load', fitSoon, {once:true});
+  });
+
   var state = { index: 0 };
   var isPresenter = /present=presenter/.test(location.hash);
 
@@ -1202,6 +1238,7 @@ links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').
       holder.style.transform='scale('+s+')';
       holder.style.left=Math.max(0,(bw-nw*s)/2)+'px';
       holder.style.top=Math.max(0,(bh-nh*s)/2)+'px';
+      var cf=holder.querySelector('.slide-wrap > .frag'); if(cf) fitFrag(cf);
     });
   }
 

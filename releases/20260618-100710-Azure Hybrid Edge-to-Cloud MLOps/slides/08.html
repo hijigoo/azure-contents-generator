@@ -11,7 +11,6 @@
         <li>서로 다른 ER 회선(국가/리전)을 Global Backbone으로 직접 연결</li>
         <li>한국 본사 ER ↔ 미국/유럽/중국 공장 ER을 <b>풀메시</b> 연결</li>
         <li>트래픽이 인터넷 미경유 → 보안·지연·예측성 우수</li>
-        <li>MPLS 글로벌망 대체 또는 보완 옵션</li>
       </ul>
     </div>
     <div class="fpanel reveal">
@@ -20,25 +19,16 @@
         <li>Hub-and-Spoke로 ER, VPN, SD-WAN, P2S 통합 관리</li>
         <li>Virtual Hub에 모든 회선 종단 → 라우팅 자동</li>
         <li>Azure Firewall / Routing Intent로 보안 일원화</li>
-        <li>SD-WAN 파트너(Cisco, VMware, Fortinet) 통합</li>
       </ul>
     </div>
   </div>
-  <div class="fdiagram reveal" style="margin-top:18px">
-    <pre class="mermaid">
-flowchart TB
-  HQ["🇰🇷 Seoul HQ<br/>Korea Central"]
-  US["🇺🇸 USA Plant<br/>East US 2"]
-  EU["🇪🇺 EU Plant<br/>West Europe"]
-  SEA["🌏 SEA Plant<br/>SE Asia"]
-  BB(("Microsoft Global Backbone<br/>+ ExpressRoute Global Reach"))
-  HQ -- "ER Circuit" --> BB
-  US -- "ER Circuit" --> BB
-  EU -- "ER Circuit" --> BB
-  SEA -- "ER Circuit" --> BB
-  style BB fill:#4aa3e022,stroke:#4aa3e0,color:#eaf2fb
-  style HQ fill:#0078d422,stroke:#0078d4,color:#eaf2fb
-    </pre>
-    <div class="fdiagram-cap">글로벌 토폴로지 예시 — 각 위치의 Azure Region에 우회 없이 직접 도달</div>
+  <div class="fflow reveal" style="justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap">
+    <div class="node">🇰🇷 Seoul HQ · Korea Central</div>
+    <div class="node">🇺🇸 USA · East US 2</div>
+    <div class="node">🇪🇺 EU · West Europe</div>
+    <div class="node">🌏 SEA · SE Asia</div>
+    <span class="arr">→</span>
+    <div class="node" style="border-color:color-mix(in srgb,var(--msft-blue) 55%,transparent);font-weight:700;background:color-mix(in srgb,var(--msft-blue) 12%,transparent)">☁ Microsoft Global Backbone<br>+ ExpressRoute Global Reach</div>
   </div>
+  <p style="text-align:center;color:var(--ink-dim);margin:10px 0 0;font-size:13px">각 위치의 ER 회선이 Global Backbone에 종단 → 인터넷 우회 없이 각 Azure Region에 직접 도달</p>
 </section>
