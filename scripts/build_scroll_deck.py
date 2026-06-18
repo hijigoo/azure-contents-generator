@@ -1065,17 +1065,23 @@ PRESENT_JS = r"""
   var present=document.querySelector('.present');
   var pStage=present? present.querySelector('.stagebox'):null;
   var pNum=present? present.querySelector('.pnum'):null;
+  var presenterLinked=false;
+  function requestFS(){
+    try{ if(!document.fullscreenElement && document.documentElement.requestFullscreen)
+      document.documentElement.requestFullscreen(); }catch(e){}
+  }
   function renderPresent(){
     fitInto(pStage, slides[state.index]);
     if(pNum) pNum.textContent=(state.index+1)+' / '+total;
   }
   function enterPresent(){
+    presenterLinked=false;
     document.body.classList.add('presenting');
-    try{ if(!document.fullscreenElement && document.documentElement.requestFullscreen)
-      document.documentElement.requestFullscreen(); }catch(e){}
     renderPresent();
+    requestFS();
   }
   function exitPresent(){
+    presenterLinked=false;
     document.body.classList.remove('presenting');
     if(pStage) pStage.innerHTML='';
     try{ if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); }catch(e){}
@@ -1127,10 +1133,17 @@ PRESENT_JS = r"""
   }
 
   function openPresenter(){
-    enterPresent();
+    presenterLinked=true;
+    document.body.classList.add('presenting');
+    renderPresent();
     var url=location.pathname+location.search+'#present=presenter';
     var w=window.open(url,'deckPresenter_'+DECK,'width=1280,height=820');
-    if(!w){ alert('팝업이 차단되었습니다. 발표자 창을 열려면 팝업을 허용해 주세요.'); }
+    if(!w){ alert('팝업이 차단되었습니다. 발표자 창을 열려면 팝업을 허용해 주세요.'); presenterLinked=false; }
+    /* Open the popup first, then keep the audience window focused and go
+       fullscreen — requesting fullscreen before window.open() makes the popup
+       steal it back and collapse the view. */
+    try{ window.focus(); }catch(e){}
+    requestFS();
   }
 
   if(chan){
@@ -1199,7 +1212,12 @@ PRESENT_JS = r"""
     if(document.body.classList.contains('presenting')) renderPresent();
   });
   document.addEventListener('fullscreenchange',function(){
-    if(!document.fullscreenElement && document.body.classList.contains('presenting')) exitPresent();
+    if(document.fullscreenElement) return;
+    /* Plain Present mode: exiting fullscreen exits the view. But when a
+       presenter popup is linked, the popup opening transiently drops the
+       opener's fullscreen — keep the single-slide audience view (user exits
+       via Esc / the exit button instead of being kicked back to scroll). */
+    if(!presenterLinked && document.body.classList.contains('presenting')) exitPresent();
   });
   state.index=currentScrollIndex();
   updateBar();
