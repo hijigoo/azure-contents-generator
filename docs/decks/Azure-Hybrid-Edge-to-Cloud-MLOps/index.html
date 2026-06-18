@@ -152,9 +152,15 @@ radial-gradient(90% 80% at 100% 100%,rgba(227,0,140,.08),transparent 60%);}
 font-size:clamp(27px,3.5vw,44px);letter-spacing:-.01em;
 text-wrap:balance;overflow-wrap:break-word;word-break:keep-all;max-width:18ch;
 margin-inline:auto;}
-.frag:not(.frag--center) h1.ftitle{margin-inline:0;max-width:24ch;}
+.frag:not(.frag--center) h1.ftitle{margin-inline:0;max-width:30ch;}
 .frag .fsub{margin:14px 0 0;font-weight:700;font-size:clamp(16px,1.7vw,22px);
 color:var(--msft-purple);line-height:1.3;}
+/* Content slides: one consistent left-aligned header band (kicker stays top-right).
+   Keeps every title starting at the same x so the deck reads evenly, never one-sided. */
+.frag:not(.frag--center) .fhead{text-align:left;margin:0 0 6px;}
+.frag:not(.frag--center) .fhead>.ftitle{margin-inline:0;max-width:30ch;}
+.frag:not(.frag--center) .fhead>.flead,
+.frag:not(.frag--center) .fhead>.fsub{margin-left:0;margin-right:0;max-width:74ch;}
 .frag .feyebrow{font-weight:700;font-size:13px;letter-spacing:.08em;
 text-transform:uppercase;color:var(--msft-purple);}
 .frag .fkicker{position:absolute;top:18px;right:22px;font-size:12px;

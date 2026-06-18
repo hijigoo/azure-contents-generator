@@ -1,8 +1,8 @@
 <section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">06 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">네트워크 설계 — Azure ExpressRoute</h1>
-    <p class="flead" style="margin:8px auto 0">대규모 Edge 데이터 연동을 위한 전용회선 기반 Hybrid Connectivity</p>
+    <p class="flead" style="margin:8px 0 0">대규모 Edge 데이터 연동을 위한 전용회선 기반 Hybrid Connectivity</p>
   </div>
   <div class="fgrid c3" style="margin-top:20px;align-items:stretch">
     <div class="fcol fpanel reveal">
@@ -32,12 +32,5 @@ flowchart LR
     </pre>
     <div class="fdiagram-cap">ExpressRoute 토폴로지 개념도 · Global Backbone</div>
   </div>
-  <div class="fpanel reveal" style="margin-top:16px">
-    <div class="feyebrow" style="color:var(--msft-blue)">ExpressRoute 회선 옵션</div>
-    <ul class="fbul" style="margin-top:10px">
-      <li><b>Provider 모델</b> — 통신사·교환국 경유, 50 Mbps ~ 10 Gbps · 국내외 통신사 다수</li>
-      <li><b>ER Direct</b> — Microsoft Edge에 직접 연동, 10/100 Gbps 포트, 대규모·금융·제조에 적합</li>
-      <li><b>ER Metro</b> — 동일 메트로 내 2개 Peering 위치를 통한 <b>99.99%</b> 가용성 옵션</li>
-    </ul>
-  </div>
+  <p class="fstat-line" style="margin-top:14px"><b>회선 옵션</b> — Provider(통신사 경유, 50M~10G) · <b>ER Direct</b>(MS Edge 직결, 10/100G·대규모) · <b>ER Metro</b>(2개 Peering, <b>99.99%</b>)</p>
 </section>

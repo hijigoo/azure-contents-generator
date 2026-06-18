@@ -152,9 +152,15 @@ radial-gradient(90% 80% at 100% 100%,rgba(227,0,140,.08),transparent 60%);}
 font-size:clamp(27px,3.5vw,44px);letter-spacing:-.01em;
 text-wrap:balance;overflow-wrap:break-word;word-break:keep-all;max-width:18ch;
 margin-inline:auto;}
-.frag:not(.frag--center) h1.ftitle{margin-inline:0;max-width:24ch;}
+.frag:not(.frag--center) h1.ftitle{margin-inline:0;max-width:30ch;}
 .frag .fsub{margin:14px 0 0;font-weight:700;font-size:clamp(16px,1.7vw,22px);
 color:var(--msft-purple);line-height:1.3;}
+/* Content slides: one consistent left-aligned header band (kicker stays top-right).
+   Keeps every title starting at the same x so the deck reads evenly, never one-sided. */
+.frag:not(.frag--center) .fhead{text-align:left;margin:0 0 6px;}
+.frag:not(.frag--center) .fhead>.ftitle{margin-inline:0;max-width:30ch;}
+.frag:not(.frag--center) .fhead>.flead,
+.frag:not(.frag--center) .fhead>.fsub{margin-left:0;margin-right:0;max-width:74ch;}
 .frag .feyebrow{font-weight:700;font-size:13px;letter-spacing:.08em;
 text-transform:uppercase;color:var(--msft-purple);}
 .frag .fkicker{position:absolute;top:18px;right:22px;font-size:12px;
@@ -408,18 +414,18 @@ border-radius:14px;padding:clamp(14px,2vw,22px);box-shadow:0 10px 30px rgba(7,16
   <span aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(60% 80% at 80% 10%,rgba(0,120,212,.20),transparent 60%),radial-gradient(50% 60% at 12% 100%,rgba(0,120,212,.18),transparent 60%);pointer-events:none"></span>
   <div class="brandbar" style="position:relative"><span class="sq"><i></i><i></i><i></i><i></i></span>Microsoft Korea</div>
   <span class="feyebrow" style="position:relative;margin-top:18px;color:var(--msft-blue)">AZURE HYBRID CLOUD</span>
-  <h1 class="ftitle" style="position:relative;margin-top:10px">Edge-to-Cloud<br>MLOps Architecture</h1>
-  <p class="flead" style="position:relative;margin:18px auto 0;max-width:60ch">대규모 설비·센서 데이터의 안전한 클라우드 연동과<br><b>Closed-loop MLOps</b> 플랫폼 구축 방안</p>
-  <div class="chips" style="position:relative;justify-content:center;margin-top:26px">
+  <h1 class="ftitle" style="position:relative;margin:10px 0 0">Edge-to-Cloud<br>MLOps Architecture</h1>
+  <p class="flead" style="position:relative;margin:18px 0 0;max-width:60ch">대규모 설비·센서 데이터의 안전한 클라우드 연동과<br><b>Closed-loop MLOps</b> 플랫폼 구축 방안</p>
+  <div class="chips" style="position:relative;justify-content:flex-start;margin-top:26px">
     <span class="chip">Sanghoon Lee · Sr. Solution Engineer</span>
     <span class="chip">Kichul Kim · Sr. Solution Engineer</span>
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-2"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">02 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(26px,3.4vw,44px)">Agenda</h1>
-    <p class="flead" style="margin:8px auto 0">본 자료에서 다루는 <b>6가지 핵심 영역</b></p>
+    <p class="flead" style="margin:8px 0 0">본 자료에서 다루는 <b>6가지 핵심 영역</b></p>
   </div>
   <div class="fgrid c3" style="margin-top:24px;align-items:stretch">
     <div class="fpanel reveal">
@@ -455,10 +461,10 @@ border-radius:14px;padding:clamp(14px,2vw,22px);box-shadow:0 10px 30px rgba(7,16
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-3"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">03 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3.2vw,42px)">비즈니스 도전과제</h1>
-    <p class="flead" style="margin:8px auto 0">왜 Edge-to-Cloud Hybrid 아키텍처가 필요한가</p>
+    <p class="flead" style="margin:8px 0 0">왜 Edge-to-Cloud Hybrid 아키텍처가 필요한가</p>
   </div>
   <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
     <div class="fpanel reveal" style="border-color:color-mix(in srgb,#f43f5e 40%,transparent)">
@@ -489,10 +495,10 @@ border-radius:14px;padding:clamp(14px,2vw,22px);box-shadow:0 10px 30px rgba(7,16
   <p class="flead" style="position:relative;margin:14px auto 0;max-width:64ch">MLOps v2 Classical ML 아키텍처 · 레퍼런스 다이어그램 · Azure ML 중심 MLOps 흐름</p>
 </section>
 </div><div class="slide-wrap" id="slide-5"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">05 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">Hybrid Reference Architecture</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:78ch">On-prem(Edge) ↔ Azure <b>Closed-loop MLOps</b> 구성도 — 현장은 실시간 추론·로컬 저장, 중요한 데이터만 선별 전송, 클라우드는 통합 학습 후 모델을 다시 Edge로 배포</p>
+    <p class="flead" style="margin:8px 0 0;max-width:78ch">On-prem(Edge) ↔ Azure <b>Closed-loop MLOps</b> 구성도 — 현장은 실시간 추론·로컬 저장, 중요한 데이터만 선별 전송, 클라우드는 통합 학습 후 모델을 다시 Edge로 배포</p>
   </div>
   <div class="fdiagram reveal">
     <pre class="mermaid">
@@ -524,10 +530,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-6"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">06 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">네트워크 설계 — Azure ExpressRoute</h1>
-    <p class="flead" style="margin:8px auto 0">대규모 Edge 데이터 연동을 위한 전용회선 기반 Hybrid Connectivity</p>
+    <p class="flead" style="margin:8px 0 0">대규모 Edge 데이터 연동을 위한 전용회선 기반 Hybrid Connectivity</p>
   </div>
   <div class="fgrid c3" style="margin-top:20px;align-items:stretch">
     <div class="fcol fpanel reveal">
@@ -557,20 +563,13 @@ flowchart LR
     </pre>
     <div class="fdiagram-cap">ExpressRoute 토폴로지 개념도 · Global Backbone</div>
   </div>
-  <div class="fpanel reveal" style="margin-top:16px">
-    <div class="feyebrow" style="color:var(--msft-blue)">ExpressRoute 회선 옵션</div>
-    <ul class="fbul" style="margin-top:10px">
-      <li><b>Provider 모델</b> — 통신사·교환국 경유, 50 Mbps ~ 10 Gbps · 국내외 통신사 다수</li>
-      <li><b>ER Direct</b> — Microsoft Edge에 직접 연동, 10/100 Gbps 포트, 대규모·금융·제조에 적합</li>
-      <li><b>ER Metro</b> — 동일 메트로 내 2개 Peering 위치를 통한 <b>99.99%</b> 가용성 옵션</li>
-    </ul>
-  </div>
+  <p class="fstat-line" style="margin-top:14px"><b>회선 옵션</b> — Provider(통신사 경유, 50M~10G) · <b>ER Direct</b>(MS Edge 직결, 10/100G·대규모) · <b>ER Metro</b>(2개 Peering, <b>99.99%</b>)</p>
 </section>
 </div><div class="slide-wrap" id="slide-7"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">07 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">ExpressRoute Peering 비교</h1>
-    <p class="flead" style="margin:8px auto 0">Private Peering · Microsoft Peering 구분과 활용 시나리오</p>
+    <p class="flead" style="margin:8px 0 0">Private Peering · Microsoft Peering 구분과 활용 시나리오</p>
   </div>
   <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
     <div class="fpanel reveal">
@@ -600,16 +599,13 @@ flowchart LR
       <p style="margin:0;color:var(--ink-dim)">Blob Public EP, Public API, M365/SaaS</p>
     </div>
   </div>
-  <div class="fpanel reveal" style="margin-top:16px;border-color:color-mix(in srgb,#34d399 40%,transparent)">
-    <div class="feyebrow" style="color:#34d399">✓ 권장 구성</div>
-    <p style="margin:8px 0 0">ER 회선 1개에 <b>Private Peering + (선택) Microsoft Peering</b>을 동시에 활성화 → IaaS/PaaS 통신과 M365/SaaS 트래픽을 단일 회선으로 처리. Microsoft Peering 구성으로 Private Endpoint Inbound의 <b>Hidden Cost 절감</b> 가능.</p>
-  </div>
+  <p class="fstat-line" style="margin-top:12px"><b style="color:#34d399">✓ 권장</b> — ER 회선 1개에 <b>Private + (선택) Microsoft Peering</b> 동시 활성화 → IaaS/PaaS·M365/SaaS 트래픽을 단일 회선으로 처리, Private Endpoint Inbound <b>Hidden Cost 절감</b></p>
 </section>
 </div><div class="slide-wrap" id="slide-8"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">08 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">글로벌 연결 — Global Reach &amp; Virtual WAN</h1>
-    <p class="flead" style="margin:8px auto 0">다국가 공장·법인을 Microsoft Global Backbone으로 연결</p>
+    <p class="flead" style="margin:8px 0 0">다국가 공장·법인을 Microsoft Global Backbone으로 연결</p>
   </div>
   <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
     <div class="fpanel reveal">
@@ -640,10 +636,10 @@ flowchart LR
   <p style="text-align:center;color:var(--ink-dim);margin:10px 0 0;font-size:13px">각 위치의 ER 회선이 Global Backbone에 종단 → 인터넷 우회 없이 각 Azure Region에 직접 도달</p>
 </section>
 </div><div class="slide-wrap" id="slide-9"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">09 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">데이터 수집 전략 — 실시간 vs 배치</h1>
-    <p class="flead" style="margin:8px auto 0">워크로드 특성에 따른 Azure 서비스 매트릭스</p>
+    <p class="flead" style="margin:8px 0 0">워크로드 특성에 따른 Azure 서비스 매트릭스</p>
   </div>
   <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
     <div class="fpanel reveal">
@@ -687,10 +683,10 @@ flowchart LR
   .ftbl .rt{color:#f59e0b;font-weight:600;white-space:nowrap;}
   .ftbl .bt{color:#22d3ee;font-weight:600;white-space:nowrap;}
   </style>
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">10 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Azure 데이터 마이그레이션 서비스 상세</h1>
-    <p class="flead" style="margin:8px auto 0">워크로드 유형별 권장 서비스 선택 가이드</p>
+    <p class="flead" style="margin:8px 0 0">워크로드 유형별 권장 서비스 선택 가이드</p>
   </div>
   <div class="ftbl-wrap reveal">
     <table class="ftbl">
@@ -720,10 +716,10 @@ flowchart LR
   .ftbl2 td b{color:var(--msft-purple);}
   .ftbl2 .az{color:#22d3ee;font-weight:600;}
   </style>
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">11 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">스토리지 매핑 — On-prem ↔ Azure</h1>
-    <p class="flead" style="margin:8px auto 0">기존 스토리지 유형별 권장 Azure 서비스 및 통합 옵션</p>
+    <p class="flead" style="margin:8px 0 0">기존 스토리지 유형별 권장 Azure 서비스 및 통합 옵션</p>
   </div>
   <div class="ftbl2-wrap reveal">
     <table class="ftbl2">
@@ -742,10 +738,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-12"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">12 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">데이터 분석 &amp; 시뮬레이션 플랫폼</h1>
-    <p class="flead" style="margin:8px auto 0">시나리오별 Azure 데이터/AI 서비스 포지셔닝</p>
+    <p class="flead" style="margin:8px 0 0">시나리오별 Azure 데이터/AI 서비스 포지셔닝</p>
   </div>
   <div class="fgrid c2" style="margin-top:22px;align-items:stretch">
     <div class="fpanel reveal">
@@ -775,10 +771,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-13"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">13 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">End-to-End MLOps 운영 스택</h1>
-    <p class="flead" style="margin:8px auto 0">Cloud Training ↔ Edge Inference 의 운영 컴포넌트</p>
+    <p class="flead" style="margin:8px 0 0">Cloud Training ↔ Edge Inference 의 운영 컴포넌트</p>
   </div>
   <div class="fgrid c4" style="margin-top:22px;align-items:stretch">
     <div class="fpanel reveal">
@@ -814,10 +810,10 @@ flowchart LR
   <p class="flead" style="position:relative;margin:14px auto 0;max-width:64ch">MLOps v2 Classical ML 아키텍처 · 레퍼런스 다이어그램 · Azure ML 중심 MLOps 흐름</p>
 </section>
 </div><div class="slide-wrap" id="slide-15"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">15 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Azure Machine Learning</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:80ch">데이터 준비(Storage·DB·Fabric) → <b>Azure ML (MLOps 9단계)</b> → 배포·운영(Managed Endpoint·Arc·IoT Edge). 제조뿐 아니라 어떤 산업의 ML 프로젝트에도 동일하게 적용되는 일반 패턴</p>
+    <p class="flead" style="margin:8px 0 0;max-width:80ch">데이터 준비(Storage·DB·Fabric) → <b>Azure ML (MLOps 9단계)</b> → 배포·운영(Managed Endpoint·Arc·IoT Edge). 제조뿐 아니라 어떤 산업의 ML 프로젝트에도 동일하게 적용되는 일반 패턴</p>
   </div>
   <div class="fflow reveal" style="justify-content:center;gap:14px;margin-top:22px">
     <div class="node" style="text-align:center;min-width:210px;flex:1">
@@ -849,10 +845,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-16"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">16 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">Azure ML &amp; MLOps 레퍼런스 아키텍처</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:80ch">Microsoft 공식 MLOps v2 표준 — Inner Loop(모델 개발) → CI → CD(Staging→승인→Production) → Monitoring → 재학습. <b>ML 프로젝트의 표준 운영 매뉴얼</b></p>
+    <p class="flead" style="margin:8px 0 0;max-width:80ch">Microsoft 공식 MLOps v2 표준 — Inner Loop(모델 개발) → CI → CD(Staging→승인→Production) → Monitoring → 재학습. <b>ML 프로젝트의 표준 운영 매뉴얼</b></p>
   </div>
   <div class="fdiagram reveal">
     <pre class="mermaid">
@@ -882,10 +878,10 @@ flowchart LR
   <p class="fstat-line">Reference: <b>learn.microsoft.com/azure/architecture/ai-ml/guide/machine-learning-operations-v2</b> (Classical ML)</p>
 </section>
 </div><div class="slide-wrap" id="slide-17"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">17 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">MLOps 레퍼런스 — Azure 서비스 매핑</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">앞의 표준 아키텍처를 <b>Azure 서비스 관점</b>으로 풀어낸 그림 — 데이터 저장소부터 모델 개발, CI/CD, 운영 배포, 모니터링, 재학습까지 역할 기준으로 연결</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">앞의 표준 아키텍처를 <b>Azure 서비스 관점</b>으로 풀어낸 그림 — 데이터 저장소부터 모델 개발, CI/CD, 운영 배포, 모니터링, 재학습까지 역할 기준으로 연결</p>
   </div>
   <figure class="fshot fshot--zoom reveal" style="margin:20px auto 0;max-width:1080px">
     <img src="img/s17-1.webp" loading="lazy" alt="Azure ML MLOps v2 레퍼런스 아키텍처 — Azure 서비스 매핑">
@@ -904,10 +900,10 @@ flowchart LR
   <p class="flead" style="position:relative;margin:14px auto 0;max-width:66ch">Closed-loop 흐름 · Azure IoT Edge 디바이스 추론 — ① Edge 데이터 수집과 ② 온프레미스 모델 배포·운영에 집중</p>
 </section>
 </div><div class="slide-wrap" id="slide-19"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">19 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Closed-loop MLOps Pipeline</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:80ch">Cloud Training ↔ Edge Inference 의 지속적 재학습 루프 — 특히 굵게 표시된 <b>①·②·⑥</b> 단계가 제조 현장의 핵심</p>
+    <p class="flead" style="margin:8px 0 0;max-width:80ch">Cloud Training ↔ Edge Inference 의 지속적 재학습 루프 — 특히 굵게 표시된 <b>①·②·⑥</b> 단계가 제조 현장의 핵심</p>
   </div>
   <div class="fdiagram reveal">
     <pre class="mermaid">
@@ -942,10 +938,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-20"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">20 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">제조 Edge-to-Cloud Closed-loop MLOps 아키텍처</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">현장 수집 → 클라우드 수집·메달리온 레이크 → Azure ML 학습·추론 → Edge 배포 → 피드백 재학습의 전체 흐름</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">현장 수집 → 클라우드 수집·메달리온 레이크 → Azure ML 학습·추론 → Edge 배포 → 피드백 재학습의 전체 흐름</p>
   </div>
   <div class="fdiagram reveal">
     <pre class="mermaid">
@@ -993,10 +989,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-21"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">21 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">Azure IoT Edge 디바이스에서의 ML 추론</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">Azure ML 학습·저장 → IoT Hub Module Twin 배포 구성 → 모델 파일 Edge 다운로드 → Edge 모듈 로컬 추론(Web API)</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">Azure ML 학습·저장 → IoT Hub Module Twin 배포 구성 → 모델 파일 Edge 다운로드 → Edge 모듈 로컬 추론(Web API)</p>
   </div>
   <div class="fgrid imgL reveal" style="margin-top:20px;align-items:center">
     <figure class="fshot fshot--zoom" style="margin:0">
@@ -1050,10 +1046,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-24"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">24 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">P&amp;G — Azure IoT Operations + Azure Arc Closed-loop</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">목적: OEE 향상 · 비계획 다운타임 감소 — IT/OT 표준화 → 클라우드 예측 모델 → Azure Arc로 Edge 재배포</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">목적: OEE 향상 · 비계획 다운타임 감소 — IT/OT 표준화 → 클라우드 예측 모델 → Azure Arc로 Edge 재배포</p>
   </div>
   <div class="fgrid c3 reveal" style="margin-top:18px;align-items:stretch">
     <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 42%,transparent)">
@@ -1087,26 +1083,24 @@ flowchart LR
       <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">→ ② Edge 추론으로 환류</p>
     </div>
   </div>
-  <p style="text-align:center;color:var(--ink-dim);margin:12px 0 0;font-size:13.5px">↻ <b style="color:#34d399">Closed-loop</b> — ② Edge 추론 ↔ ③ 클라우드 학습 ↔ ⑥ Edge 재배포가 자동 순환</p>
-  <div class="fstats reveal" style="margin-top:16px;justify-content:center;gap:clamp(24px,5vw,64px)">
-    <div style="text-align:center">
+  <div class="fstats reveal" style="margin-top:18px;justify-content:center;gap:clamp(24px,5vw,64px)">
+    <div>
       <div class="v" style="font-size:clamp(34px,5.5vw,60px);color:#34d399">90%↓</div>
       <div class="l">신규 모델 버전 배포 시간 단축</div>
     </div>
-    <div style="text-align:center">
+    <div>
       <div class="v" style="font-size:clamp(34px,5.5vw,60px);color:var(--msft-blue)">35개국</div>
       <div class="l">공장 IT/OT 표준화 (Azure IoT Operations)</div>
     </div>
   </div>
-  <p class="fstat-line" style="margin-top:14px">IT/OT 경계의 데이터 표준화를 <b>Azure IoT Operations</b>로 해소 · <b>Azure Arc</b> + Workload Orchestration으로 사이트별 모델 배포·버전 관리 → 비계획 설비 정지 대폭 감소</p>
-  <p class="fstat-line" style="margin-top:6px">Reference: <b>microsoft.com/en/customers/story/25077-procter-and-gamble-iot-operations</b></p>
+  <p class="fstat-line" style="margin-top:16px">IT/OT 경계의 데이터 표준화를 <b>Azure IoT Operations</b>로 해소 · <b>Azure Arc</b> + Workload Orchestration으로 사이트별 모델 배포·버전 관리 → 비계획 설비 정지 대폭 감소</p>
 </section>
 </div><div class="slide-wrap" id="slide-25"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">25 / 33</span>
     <div class="brandbar" style="justify-content:center;margin-top:2px"><span style="font-size:26px;font-weight:800;color:#50e6ff">3M</span></div>
     <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px);margin-top:8px">CASE 02 · Edge 우선 분석·추론</h1>
-    <p class="flead" style="margin:10px auto 0;max-width:78ch">제조 이상 징후 예측을 위해 <b>분석을 제조 라인 가까이</b>에서 수행 — 클라우드 학습 + 라인 옆 Azure IoT Edge 추론. <b>Azure SQL Edge</b>가 IoT Edge 모듈로 배포되어 현장에서 저장·처리·예측</p>
+    <p class="flead" style="margin:10px 0 0;max-width:78ch">제조 이상 징후 예측을 위해 <b>분석을 제조 라인 가까이</b>에서 수행 — 클라우드 학습 + 라인 옆 Azure IoT Edge 추론. <b>Azure SQL Edge</b>가 IoT Edge 모듈로 배포되어 현장에서 저장·처리·예측</p>
   </div>
   <figure class="fshot fshot--zoom reveal" style="margin:18px auto 0;max-width:900px">
     <img src="img/s25-1.webp" loading="lazy" alt="3M Edge 우선 분석·추론 구조">
@@ -1114,10 +1108,10 @@ flowchart LR
   </figure>
 </section>
 </div><div class="slide-wrap" id="slide-26"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">26 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">3M — Azure IoT Edge + Azure SQL Edge 모델 배포</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">목적: 설비 고장을 <b>수 시간 전 예측</b> · 예지보전 — 설비 센서 + 제품 정보 상관분석 → Edge 저장·추론 → 클라우드 동기화 학습</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">목적: 설비 고장을 <b>수 시간 전 예측</b> · 예지보전 — 설비 센서 + 제품 정보 상관분석 → Edge 저장·추론 → 클라우드 동기화 학습</p>
   </div>
   <div class="fgrid c3 reveal" style="margin-top:18px;align-items:stretch">
     <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 42%,transparent)">
@@ -1156,10 +1150,10 @@ flowchart LR
   <p class="fstat-line" style="margin-top:6px">Reference: <b>microsoft.com/en/customers/story/844496-3m-manufacturing-azure-sql-edge</b></p>
 </section>
 </div><div class="slide-wrap" id="slide-27"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">27 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">Siemens Industrial Edge + Azure AI 레퍼런스</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">Microsoft &amp; Siemens 공식 레퍼런스 — Azure ML 학습·패키징 → IoT Hub → Siemens AI Model Manager · Industrial Edge · AI Inference Server → 모니터링·환류</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">Microsoft &amp; Siemens 공식 레퍼런스 — Azure ML 학습·패키징 → IoT Hub → Siemens AI Model Manager · Industrial Edge · AI Inference Server → 모니터링·환류</p>
   </div>
   <div class="fgrid c2 reveal" style="margin-top:20px;align-items:start">
     <figure class="fshot fshot--zoom" style="margin:0">
@@ -1174,10 +1168,10 @@ flowchart LR
   <p class="fstat-line">Reference: <b>learn.microsoft.com/azure/architecture/example-scenario/manufacturing/azure-ai-siemens-industrial-edge</b></p>
 </section>
 </div><div class="slide-wrap" id="slide-28"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">28 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Closed-loop MLOps 적용 사례</h1>
-    <p class="flead" style="margin:8px auto 0">Azure 기반 Edge-to-Cloud MLOps 실제 도입 사례</p>
+    <p class="flead" style="margin:8px 0 0">Azure 기반 Edge-to-Cloud MLOps 실제 도입 사례</p>
   </div>
   <div class="fgrid c3" style="margin-top:22px;align-items:stretch">
     <div class="fpanel reveal">
@@ -1232,10 +1226,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-30"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">30 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">MLOps CI/CD — GitHub Actions Closed-loop</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">코드·데이터 변경 → 자동 학습·검증 → Azure ML / Edge 배포 → 운영 모니터링 → 드리프트 감지 시 재학습 트리거</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">코드·데이터 변경 → 자동 학습·검증 → Azure ML / Edge 배포 → 운영 모니터링 → 드리프트 감지 시 재학습 트리거</p>
   </div>
   <div class="fgrid c4 reveal" style="margin-top:20px;align-items:stretch">
     <div class="fpanel">
@@ -1275,10 +1269,10 @@ flowchart LR
   </div>
 </section>
 </div><div class="slide-wrap" id="slide-31"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">31 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">GitHub Actions MLOps 워크플로 (실전 예시)</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">Azure/mlops-v2-gha-demo — NYC Taxi 회귀 예제 · <code>workflow_dispatch</code>로 트리거되는 엔드투엔드 학습 파이프라인</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">Azure/mlops-v2-gha-demo — NYC Taxi 회귀 예제 · <code>workflow_dispatch</code>로 트리거되는 엔드투엔드 학습 파이프라인</p>
   </div>
   <div class="fgrid imgR reveal" style="margin-top:18px;align-items:center">
     <div class="fdiagram" style="margin:0">
@@ -1307,10 +1301,10 @@ flowchart TB
   <p class="fstat-line">Reference: <b>github.com/Azure/mlops-v2-gha-demo</b> · MLOps v2 가속기 GitHub Actions 데모</p>
 </section>
 </div><div class="slide-wrap" id="slide-32"><section class="frag frag--light">
-  <div style="text-align:center">
+  <div class="fhead">
     <span class="fkicker">32 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">보안·거버넌스 &amp; 단계별 도입 로드맵</h1>
-    <p class="flead" style="margin:8px auto 0;max-width:82ch">Zero Trust 다계층 보안 + 4~6주 단위로 가치를 검증하며 확장하는 5단계 도입 경로</p>
+    <p class="flead" style="margin:8px 0 0;max-width:82ch">Zero Trust 다계층 보안 + 4~6주 단위로 가치를 검증하며 확장하는 5단계 도입 경로</p>
   </div>
   <div class="fgrid c2 reveal" style="margin-top:18px;align-items:start">
     <div class="fpanel">
