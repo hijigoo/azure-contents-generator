@@ -370,6 +370,24 @@ grid-template-rows:auto auto 1fr auto;grid-template-areas:"cur" "next" "script" 
 .frag .fshot--zoom img:hover{transform:none;}
 .frag .forbit .ring{animation:none;}
 }
+</style>
+<style>
+/* === 소스 PPT 에서 추출한 덱 테마 === */
+:root{--accent:#8b5cf6;--active:#ECE5FE;}
+.slide-wrap .frag{--msft-blue:#8b5cf6;--msft-purple:#6d28d9;--msft-pink:#8b5cf6;}
+.frag--dark{--msft-blue:#e3008c;--msft-purple:#a78bfa;--msft-pink:#e3008c;
+background:#0b0a14;color:#eef5fc;background-image:
+ radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,#8b5cf6 26%,transparent),transparent 55%),
+ radial-gradient(95% 80% at 0% 100%,color-mix(in srgb,#e3008c 16%,transparent),transparent 60%),
+ linear-gradient(180deg,#0b0a14,#140f28);}
+.frag--light{--msft-blue:#8b5cf6;--msft-purple:#6d28d9;--msft-pink:#6d28d9;
+background:#0e0b1c;color:#0B1F3A;background-image:
+ radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,#8b5cf6 12%,transparent),transparent 58%),
+ radial-gradient(90% 80% at 0% 100%,color-mix(in srgb,#e3008c 9%,transparent),transparent 62%);}
+.frag--plain{--msft-blue:#8b5cf6;--msft-purple:#6d28d9;--msft-pink:#6d28d9;}
+/* 다이어그램은 항상 짙은 네이비 카드 위에 (밝은 슬라이드에서도 또렷하게) */
+.frag .fdiagram .mermaid{background:#0b0a14;border:1px solid color-mix(in srgb,#8b5cf6 30%,transparent);
+border-radius:14px;padding:clamp(14px,2vw,22px);box-shadow:0 10px 30px rgba(7,16,30,.28);}
 </style></head><body>
 <div class="topbar"><button onclick="document.querySelector('aside').classList.toggle('open')">&#9776;</button><span class="t">Microsoft Foundry를 활용한 Agentic AI</span></div>
 <button class="side-open" onclick="toggleSide()" title="사이드바 열기" aria-label="사이드바 열기">&#9776;</button>
@@ -1109,12 +1127,7 @@ links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').
   const {default:mermaid}=await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
   mermaid.initialize({startOnLoad:false,suppressErrorRendering:true,securityLevel:'loose',theme:'base',
    fontFamily:'inherit',
-   themeVariables:{
-    background:'transparent',primaryColor:'#1c2030',primaryBorderColor:'#6d5cf6',
-    primaryTextColor:'#e8eaf2',secondaryColor:'#16233f',tertiaryColor:'#3a1430',
-    lineColor:'#8b5cf6',edgeLabelBackground:'#11131c',
-    clusterBkg:'#8b5cf612',clusterBorder:'#6d5cf6',
-    fontSize:'15px'},
+   themeVariables:{"background": "transparent", "primaryColor": "#23222C", "primaryBorderColor": "#8b5cf6", "primaryTextColor": "#eaf2fb", "secondaryColor": "#271C46", "tertiaryColor": "#15141D", "lineColor": "#e3008c", "edgeLabelBackground": "#08080F", "clusterBkg": "#1F1738", "clusterBorder": "#8b5cf6", "fontSize": "15px"},
    flowchart:{curve:'basis',htmlLabels:true,padding:14,nodeSpacing:36,rankSpacing:46}});
   const good=[];
   for(const el of nodes){

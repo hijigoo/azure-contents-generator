@@ -1,26 +1,42 @@
-<section class="frag frag--dark">
+<section class="frag frag--light">
   <div style="text-align:center">
     <span class="fkicker">24 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">P&amp;G — Azure IoT Operations + Azure Arc Closed-loop</h1>
     <p class="flead" style="margin:8px auto 0;max-width:82ch">목적: OEE 향상 · 비계획 다운타임 감소 — IT/OT 표준화 → 클라우드 예측 모델 → Azure Arc로 Edge 재배포</p>
   </div>
-  <div class="fdiagram reveal">
-    <pre class="mermaid">
-flowchart LR
-  OT["제조 설비 · OT 데이터<br/>센서·PLC·MES · 35개국 공장"] --> AIO["① Azure IoT Operations (Edge)<br/>Arc K8s · MQTT 브로커 · IT/OT 표준 수집"]
-  AIO --> EI["② Edge 실시간 추론<br/>품질 모니터링 · 이상탐지"]
-  AIO --> LAKE["③ Azure 데이터 레이크 / 클라우드 분석<br/>전사 적재 · 예측·처방 분석"]
-  LAKE --> DS["④ 데이터 사이언티스트<br/>예측·처방 모델 · K8s 네이티브 학습"]
-  DS --> ARC["⑤ Azure Arc / Workload Orchestration<br/>모델 빌드·배포 · 사이트별 버전 관리"]
-  ARC --> DEP["⑥ Edge로 모델 배포<br/>표준 컨테이너 배포"]
-  DEP --> EI
-  EI == "⑦ 재학습·재배포 피드백 루프" ==> LAKE
-  style AIO fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
-  style ARC fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
-  style EI fill:#14352a,stroke:#34d399,color:#e8eaf2
-    </pre>
-    <div class="fdiagram-cap">현장 → 클라우드 학습 → Edge 재배포 Closed-loop · 클릭하면 확대됩니다</div>
+  <div class="fgrid c3 reveal" style="margin-top:18px;align-items:stretch">
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 42%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-blue)">① Edge 수집</div>
+      <b style="display:block;margin-top:2px">Azure IoT Operations</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">Arc K8s · MQTT 브로커 · IT/OT 표준 수집 (35개국 공장)</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,#34d399 42%,transparent)">
+      <div class="feyebrow" style="color:#34d399">② Edge 추론</div>
+      <b style="display:block;margin-top:2px">실시간 품질·이상탐지</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">현장 라인 옆에서 즉시 추론</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">③ 클라우드 적재</div>
+      <b style="display:block;margin-top:2px">Data Lake · 분석</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">전사 적재 · 예측·처방 분석</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">④ 모델 개발</div>
+      <b style="display:block;margin-top:2px">데이터 사이언티스트</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">예측·처방 모델 · K8s 네이티브 학습</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-purple) 42%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-purple)">⑤ 빌드·배포</div>
+      <b style="display:block;margin-top:2px">Azure Arc · Orchestration</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">모델 빌드·배포 · 사이트별 버전 관리</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">⑥ Edge 재배포</div>
+      <b style="display:block;margin-top:2px">표준 컨테이너 배포</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">→ ② Edge 추론으로 환류</p>
+    </div>
   </div>
+  <p style="text-align:center;color:var(--ink-dim);margin:12px 0 0;font-size:13.5px">↻ <b style="color:#34d399">Closed-loop</b> — ② Edge 추론 ↔ ③ 클라우드 학습 ↔ ⑥ Edge 재배포가 자동 순환</p>
   <div class="fgrid imgR reveal" style="margin-top:18px;align-items:center">
     <div class="fpanel">
       <div class="feyebrow" style="color:var(--msft-blue)">핵심 포인트</div>

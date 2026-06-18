@@ -1,4 +1,4 @@
-<section class="frag frag--dark">
+<section class="frag frag--light">
   <div style="text-align:center">
     <span class="fkicker">06 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">네트워크 설계 — Azure ExpressRoute</h1>
@@ -26,9 +26,9 @@ flowchart LR
   PR -- "BGP Peering · Active-Active (L3)" --> MSEE["Microsoft Edge<br/>(MSEE)"]
   MSEE --> VN["Azure Region<br/>VNet · Private Peering"]
   MSEE -. "MS Peering" .-> M365["M365 / SaaS"]
-  style CN fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
-  style MSEE fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
-  style VN fill:#14352a,stroke:#34d399,color:#e8eaf2
+  style CN fill:#0078d422,stroke:#0078d4,color:#eaf2fb
+  style MSEE fill:#4aa3e022,stroke:#4aa3e0,color:#eaf2fb
+  style VN fill:#14352a,stroke:#34d399,color:#eaf2fb
     </pre>
     <div class="fdiagram-cap">ExpressRoute 토폴로지 개념도 · Global Backbone</div>
   </div>

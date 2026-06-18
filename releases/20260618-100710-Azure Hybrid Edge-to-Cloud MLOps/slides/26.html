@@ -1,26 +1,42 @@
-<section class="frag frag--dark">
+<section class="frag frag--light">
   <div style="text-align:center">
     <span class="fkicker">26 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">3M — Azure IoT Edge + Azure SQL Edge 모델 배포</h1>
     <p class="flead" style="margin:8px auto 0;max-width:82ch">목적: 설비 고장을 <b>수 시간 전 예측</b> · 예지보전 — 설비 센서 + 제품 정보 상관분석 → Edge 저장·추론 → 클라우드 동기화 학습</p>
   </div>
-  <div class="fdiagram reveal">
-    <pre class="mermaid">
-flowchart LR
-  D["제조 라인 데이터<br/>설비 센서 + 제품 정보<br/>2-스트림 상관"] --> SE["① Azure SQL Edge / IoT Edge<br/>라인 옆 Edge 저장"]
-  SE --> AN["② Edge 데이터 분석·예측<br/>라인 옆 저장·분석 후 이상징후 예측"]
-  AN --> SYNC["③ 클라우드로 동기화<br/>내결함성 · 주→분 단위 단축"]
-  SYNC --> TR["④ 클라우드 모델 개발·학습<br/>ML Services"]
-  TR --> VAL["⑤ 모델 학습·검증·등록<br/>예측 모델 고도화"]
-  VAL --> RE["⑥ 검증 모델 Edge 재배포<br/>Azure SQL Edge에 배포"]
-  RE --> SE
-  AN == "⑦ 재학습·재배포 피드백 루프" ==> TR
-  style SE fill:#3b82f622,stroke:#3b82f6,color:#e8eaf2
-  style RE fill:#8b5cf622,stroke:#8b5cf6,color:#e8eaf2
-  style AN fill:#14352a,stroke:#34d399,color:#e8eaf2
-    </pre>
-    <div class="fdiagram-cap">현장 → 클라우드 학습 → Edge 재배포 · 클릭하면 확대됩니다</div>
+  <div class="fgrid c3 reveal" style="margin-top:18px;align-items:stretch">
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 42%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-blue)">① 라인 데이터</div>
+      <b style="display:block;margin-top:2px">설비 센서 + 제품 정보</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">2-스트림 상관분석</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">② Edge 저장</div>
+      <b style="display:block;margin-top:2px">Azure SQL Edge / IoT Edge</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">라인 옆에서 저장·처리</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,#34d399 42%,transparent)">
+      <div class="feyebrow" style="color:#34d399">③ Edge 분석·예측</div>
+      <b style="display:block;margin-top:2px">이상징후 사전 감지</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">고장을 수 시간 전 예측</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">④ 클라우드 동기화</div>
+      <b style="display:block;margin-top:2px">내결함성 전송</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">전송 시간 <b>주 → 분</b> 단축</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-purple) 42%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-purple)">⑤ 클라우드 학습</div>
+      <b style="display:block;margin-top:2px">모델 학습·검증·등록</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">ML Services · 예측 모델 고도화</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">⑥ Edge 재배포</div>
+      <b style="display:block;margin-top:2px">검증 모델 → Azure SQL Edge</b>
+      <p style="margin:6px 0 0;color:var(--ink-dim);font-size:13px">→ ② Edge 저장으로 환류</p>
+    </div>
   </div>
+  <p style="text-align:center;color:var(--ink-dim);margin:12px 0 0;font-size:13.5px">↻ <b style="color:#34d399">Closed-loop</b> — Edge 분석·예측 ↔ 클라우드 재학습 ↔ Edge 재배포가 자동 순환</p>
   <div class="fgrid c2" style="margin-top:18px;align-items:stretch">
     <div class="fpanel reveal">
       <div class="feyebrow" style="color:var(--msft-blue)">핵심 포인트</div>

@@ -1,4 +1,4 @@
-<section class="frag frag--dark">
+<section class="frag frag--light">
   <div style="text-align:center">
     <span class="fkicker">05 / 33</span>
     <h1 class="ftitle" style="font-size:clamp(24px,3vw,40px)">Hybrid Reference Architecture</h1>
@@ -24,11 +24,11 @@ flowchart LR
   LS -. "Data Box (Bulk)" .-> LAKE
   AML == "Closed-loop: Deploy to Edge (Arc + IoT Edge)" ==> INF
   SEC["🔐 Purview · Defender for Cloud · Entra ID · Key Vault"]
-  style EDGE fill:#8b5cf615,stroke:#8b5cf6,color:#e8eaf2
-  style AZ fill:#3b82f615,stroke:#3b82f6,color:#e8eaf2
-  style AML fill:#e3008c22,stroke:#e3008c,color:#e8eaf2
-  style INF fill:#14352a,stroke:#34d399,color:#e8eaf2
-  style SEC fill:#1f2937,stroke:#9ca3af,color:#e8eaf2
+  style EDGE fill:#0078d415,stroke:#0078d4,color:#eaf2fb
+  style AZ fill:#4aa3e015,stroke:#4aa3e0,color:#eaf2fb
+  style AML fill:#50e6ff22,stroke:#50e6ff,color:#eaf2fb
+  style INF fill:#14352a,stroke:#34d399,color:#eaf2fb
+  style SEC fill:#1f2937,stroke:#9ca3af,color:#eaf2fb
     </pre>
     <div class="fdiagram-cap">5개 계층: Data Ingestion · Storage/Lake · Analytics/Simulation · ML &amp; Ops · Security/Governance — 클릭하면 확대됩니다</div>
   </div>

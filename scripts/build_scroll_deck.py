@@ -26,6 +26,8 @@ import base64
 import json
 import re
 import shutil
+import zipfile
+from collections import Counter
 from html import escape
 from pathlib import Path
 
@@ -426,6 +428,174 @@ def resolve_title(slide: dict, overrides: dict) -> str:
     if slide["auto_title"].strip():
         return slide["auto_title"].strip()
     return f"Slide {slide['num']}"
+
+
+# --------------------------------------------------------------------------- #
+# 테마 추출 (소스 PPT 의 색/배경에서 덱 테마를 도출)
+# --------------------------------------------------------------------------- #
+def _hex_lum(h: str) -> float:
+    h = h.lstrip("#")
+    r, g, b = (int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def _hex_sat(h: str) -> float:
+    h = h.lstrip("#")
+    r, g, b = (int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    mx, mn = max(r, g, b), min(r, g, b)
+    return 0.0 if mx == 0 else (mx - mn) / mx
+
+
+def _mix(hex_a: str, hex_b: str, t: float) -> str:
+    a = hex_a.lstrip("#"); b = hex_b.lstrip("#")
+    out = []
+    for i in (0, 2, 4):
+        ca, cb = int(a[i:i + 2], 16), int(b[i:i + 2], 16)
+        out.append(round(ca + (cb - ca) * t))
+    return "#" + "".join(f"{c:02X}" for c in out)
+
+
+# Foundry(보라) 기본 테마 — 추출 실패 시 폴백
+_FALLBACK_THEME = {
+    "mode": "dark", "paper": "#0e0b1c", "ink": "#f4f3fb",
+    "navy": "#0b0a14", "section": "#140f28",
+    "accent": "#8b5cf6", "accent_deep": "#6d28d9", "accent_cyan": "#e3008c",
+    "accent_soft": "#a78bfa",
+}
+
+
+def extract_theme(pptx_path: Path) -> dict:
+    """PPTX 의 슬라이드 배경/색 사용을 스캔해 덱 테마(밝기·포인트색)를 도출한다.
+
+    - 슬라이드 배경의 밝기 분포로 light/dark 기본 모드 결정
+    - 가장 많이 쓰인 채도 높은 색을 포인트(accent)로 채택
+    - 어두운 배경색(타이틀/섹션용), 밝은 배경색(본문용) 추출
+    """
+    try:
+        z = zipfile.ZipFile(str(pptx_path))
+    except Exception:
+        return dict(_FALLBACK_THEME)
+    names = z.namelist()
+
+    def rd(n: str) -> str:
+        try:
+            return z.read(n).decode("utf-8", "ignore")
+        except Exception:
+            return ""
+
+    theme_acc: list[str] = []
+    for n in names:
+        if n.startswith("ppt/theme/theme") and n.endswith(".xml"):
+            tx = rd(n)
+            for tag in ("accent1", "accent2", "accent3", "accent4", "accent5", "accent6"):
+                m = re.search(rf'<a:{tag}>\s*<a:srgbClr val="([0-9A-Fa-f]{{6}})"', tx)
+                if m:
+                    theme_acc.append("#" + m.group(1).upper())
+            break
+
+    bg_light: Counter = Counter()
+    bg_dark: Counter = Counter()
+    used: Counter = Counter()
+    slide_names = sorted(n for n in names if re.match(r"ppt/slides/slide\d+\.xml$", n))
+    for n in slide_names:
+        sx = rd(n)
+        mbg = re.search(r"<p:bg>.*?</p:bg>", sx, re.S)
+        if mbg:
+            cols = re.findall(r'srgbClr val="([0-9A-Fa-f]{6})"', mbg.group(0))
+            if cols:
+                c = "#" + cols[0].upper()
+                (bg_light if _hex_lum(c) >= 0.5 else bg_dark)[c] += 1
+        for c in re.findall(r'srgbClr val="([0-9A-Fa-f]{6})"', sx):
+            used["#" + c.upper()] += 1
+
+    light_total = sum(bg_light.values())
+    dark_total = sum(bg_dark.values())
+    if light_total == 0 and dark_total == 0:
+        return dict(_FALLBACK_THEME)
+    mode = "light" if light_total >= dark_total else "dark"
+
+    paper = bg_light.most_common(1)[0][0] if bg_light else "#F7FAFC"
+    darks = sorted(bg_dark, key=_hex_lum)
+    navy = darks[0] if darks else "#0B1F3A"
+    section = darks[-1] if darks else navy
+
+    def good_accent(c: str) -> bool:
+        return _hex_sat(c) >= 0.32 and 0.10 <= _hex_lum(c) <= 0.86
+
+    cand = [c for c, _ in used.most_common() if good_accent(c)]
+    for c in theme_acc:
+        if good_accent(c) and c not in cand:
+            cand.append(c)
+    if not cand:
+        cand = ["#0078D4", "#50E6FF", "#004578"]
+
+    accent = cand[0]
+    # 깊은 포인트색: 채도 있는 어두운 후보 우선, 없으면 accent 를 어둡게
+    dark_cands = [c for c in cand if 0.10 <= _hex_lum(c) <= 0.34]
+    accent_deep = dark_cands[0] if dark_cands else _mix(accent, "#001022", 0.42)
+    # 밝은 보조 포인트색(시안 계열): 채도 있는 밝은 후보 우선, 없으면 accent 를 밝게
+    bright_cands = [c for c in cand if 0.58 <= _hex_lum(c) <= 0.92]
+    accent_cyan = bright_cands[0] if bright_cands else _mix(accent, "#FFFFFF", 0.5)
+    accent_soft = _mix(accent, "#FFFFFF", 0.4)
+
+    if not darks:
+        navy = _mix(accent_deep, "#000814", 0.55)
+        section = _mix(accent_deep, "#0A1426", 0.4)
+
+    return {
+        "mode": mode,
+        "paper": paper,
+        "ink": "#0B1F3A" if mode == "light" else "#eef5fc",
+        "navy": navy,
+        "section": section,
+        "accent": accent,
+        "accent_deep": accent_deep,
+        "accent_cyan": accent_cyan,
+        "accent_soft": accent_soft,
+    }
+
+
+def render_theme_css(t: dict) -> str:
+    """추출 테마를 .frag / 셸 CSS 토큰 오버라이드로 변환."""
+    a = t["accent"]; deep = t["accent_deep"]; cyan = t["accent_cyan"]; soft = t["accent_soft"]
+    navy = t["navy"]; section = t["section"]; paper = t["paper"]; ink = t["ink"]
+    light = t["mode"] == "light"
+    return f"""
+/* === 소스 PPT 에서 추출한 덱 테마 === */
+:root{{--accent:{a};--active:{_mix(a, '#FFFFFF', 0.84)};}}
+.slide-wrap .frag{{--msft-blue:{a};--msft-purple:{deep};--msft-pink:{a};}}
+.frag--dark{{--msft-blue:{cyan};--msft-purple:{soft};--msft-pink:{cyan};
+background:{navy};color:#eef5fc;background-image:
+ radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,{a} 26%,transparent),transparent 55%),
+ radial-gradient(95% 80% at 0% 100%,color-mix(in srgb,{cyan} 16%,transparent),transparent 60%),
+ linear-gradient(180deg,{navy},{section});}}
+.frag--light{{--msft-blue:{a};--msft-purple:{deep};--msft-pink:{deep};
+background:{paper};color:{ink if light else '#0B1F3A'};background-image:
+ radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,{a} 12%,transparent),transparent 58%),
+ radial-gradient(90% 80% at 0% 100%,color-mix(in srgb,{cyan} 9%,transparent),transparent 62%);}}
+.frag--plain{{--msft-blue:{a};--msft-purple:{deep};--msft-pink:{deep};}}
+/* 다이어그램은 항상 짙은 네이비 카드 위에 (밝은 슬라이드에서도 또렷하게) */
+.frag .fdiagram .mermaid{{background:{navy};border:1px solid color-mix(in srgb,{a} 30%,transparent);
+border-radius:14px;padding:clamp(14px,2vw,22px);box-shadow:0 10px 30px rgba(7,16,30,.28);}}
+"""
+
+
+def mermaid_theme_json(t: dict) -> str:
+    """Mermaid 초기화용 themeVariables (네이비 카드 + 추출 포인트색)."""
+    a = t["accent"]; cyan = t["accent_cyan"]; navy = t["navy"]
+    return json.dumps({
+        "background": "transparent",
+        "primaryColor": _mix(navy, "#FFFFFF", 0.10),
+        "primaryBorderColor": a,
+        "primaryTextColor": "#eaf2fb",
+        "secondaryColor": _mix(navy, a, 0.22),
+        "tertiaryColor": _mix(navy, "#FFFFFF", 0.04),
+        "lineColor": cyan,
+        "edgeLabelBackground": _mix(navy, "#000000", 0.25),
+        "clusterBkg": _mix(navy, a, 0.16),
+        "clusterBorder": a,
+        "fontSize": "15px",
+    }, ensure_ascii=False)
 
 
 # --------------------------------------------------------------------------- #
@@ -1175,10 +1345,15 @@ def _slide_section_html(s: dict, title: str, total: int, content: dict,
 
 
 def render_version_html(rel: dict, deck: list[dict], titles: dict, versions: list[dict],
-                        content: dict | None = None, fragments: dict | None = None) -> str:
+                        content: dict | None = None, fragments: dict | None = None,
+                        theme: dict | None = None) -> str:
     """한 버전(릴리즈)의 자체완결 HTML. PPT 폴더 안에 <release-id>.html 로 저장."""
     content = content or {}
     fragments = fragments or {}
+    if theme is None:
+        theme = extract_theme(rel["pptx"])
+    theme_css = render_theme_css(theme)
+    mermaid_vars = mermaid_theme_json(theme)
     deck_name = rel["stem"]
     notes_json = json.dumps({str(s["num"]): s.get("notes", "") for s in deck},
                             ensure_ascii=False)
@@ -1208,7 +1383,8 @@ def render_version_html(rel: dict, deck: list[dict], titles: dict, versions: lis
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{escape(deck_name)}</title>
-<style>{CSS}</style></head><body>
+<style>{CSS}</style>
+<style>{theme_css}</style></head><body>
 <div class="topbar"><button onclick="document.querySelector('aside').classList.toggle('open')">&#9776;</button><span class="t">{escape(deck_name)}</span></div>
 <button class="side-open" onclick="toggleSide()" title="사이드바 열기" aria-label="사이드바 열기">&#9776;</button>
 <div class="layout">
@@ -1295,12 +1471,7 @@ links.forEach(a=>a.addEventListener('click',()=>document.querySelector('aside').
   const {{default:mermaid}}=await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
   mermaid.initialize({{startOnLoad:false,suppressErrorRendering:true,securityLevel:'loose',theme:'base',
    fontFamily:'inherit',
-   themeVariables:{{
-    background:'transparent',primaryColor:'#1c2030',primaryBorderColor:'#6d5cf6',
-    primaryTextColor:'#e8eaf2',secondaryColor:'#16233f',tertiaryColor:'#3a1430',
-    lineColor:'#8b5cf6',edgeLabelBackground:'#11131c',
-    clusterBkg:'#8b5cf612',clusterBorder:'#6d5cf6',
-    fontSize:'15px'}},
+   themeVariables:{mermaid_vars},
    flowchart:{{curve:'basis',htmlLabels:true,padding:14,nodeSpacing:36,rankSpacing:46}}}});
   const good=[];
   for(const el of nodes){{
@@ -1423,7 +1594,8 @@ def build(releases_dir: Path, out_dir: Path) -> None:
             titles = load_titles(r["titles_file"])
             content = load_content(r.get("content_file"))
             fragments = load_fragments(r.get("slides_dir"))
-            html = render_version_html(r, deck, titles, vers, content, fragments)
+            theme = extract_theme(r["pptx"])
+            html = render_version_html(r, deck, titles, vers, content, fragments, theme)
             (folder / f"{r['id']}.html").write_text(html, encoding="utf-8")
             if r is vers[0]:  # 최신
                 (folder / "latest.html").write_text(html, encoding="utf-8")
