@@ -1138,12 +1138,19 @@ PRESENT_JS = r"""
     renderPresent();
     var url=location.pathname+location.search+'#present=presenter';
     var w=window.open(url,'deckPresenter_'+DECK,'width=1280,height=820');
-    if(!w){ alert('팝업이 차단되었습니다. 발표자 창을 열려면 팝업을 허용해 주세요.'); presenterLinked=false; }
-    /* Open the popup first, then keep the audience window focused and go
-       fullscreen — requesting fullscreen before window.open() makes the popup
-       steal it back and collapse the view. */
+    if(!w){ alert('팝업이 차단되었습니다. 발표자 창을 열려면 팝업을 허용해 주세요.'); presenterLinked=false; return; }
+    /* The popup steals OS focus the instant it opens, and Chrome drops the
+       opener's fullscreen as soon as it loses focus — that is why the audience
+       window flashes fullscreen then snaps back. Push focus off the popup and
+       back onto the audience window, THEN request fullscreen, all inside this
+       same click gesture so the request still counts as user-initiated. */
+    try{ w.blur(); }catch(e){}
     try{ window.focus(); }catch(e){}
     requestFS();
+    /* Belt-and-suspenders: if the popup grabs focus again a tick later, refocus
+       the audience window so the OS keeps it fullscreen. (Cannot re-request
+       fullscreen here — no gesture — but holding focus prevents the auto-exit.) */
+    setTimeout(function(){ try{ w.blur(); }catch(e){} try{ window.focus(); }catch(e){} }, 250);
   }
 
   if(chan){
