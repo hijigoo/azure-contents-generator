@@ -1,0 +1,31 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">09 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">데이터 수집 전략 — 실시간 vs 배치</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:80ch">워크로드 특성에 따른 Azure 서비스 매트릭스</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:18px;align-items:stretch">
+    <div class="fpanel reveal" style="border-color:color-mix(in srgb,var(--msft-blue) 42%,transparent)">
+      <div class="chip" style="font-weight:700">⚡ Real-time / Streaming</div>
+      <p style="margin:10px 0 4px;color:var(--ink-dim);font-size:13px">실시간 이상탐지·QC · 설비 alarm·안전 트리거 · 추론 결과 로깅</p>
+      <ul class="fbul" style="margin-top:6px">
+        <li><b>IoT Hub</b> — 수백만 디바이스 양방향, MQTT/AMQP, X.509</li>
+        <li><b>IoT Edge</b> — 로컬 추론·필터링·압축</li>
+        <li><b>Event Hubs</b> — 초당 수백만 이벤트, Kafka 호환</li>
+        <li><b>Stream Analytics / Fabric RTI</b> — SQL 기반 실시간 집계·라우팅</li>
+      </ul>
+      <p style="margin:8px 0 0;font-size:12px;color:var(--ink-dim)">Sub-second 지연 · 디바이스 ID/보안 · Kafka 친화</p>
+    </div>
+    <div class="fpanel reveal" style="border-color:color-mix(in srgb,var(--msft-purple) 42%,transparent)">
+      <div class="chip" style="font-weight:700">📦 Batch / Bulk Migration</div>
+      <p style="margin:10px 0 4px;color:var(--ink-dim);font-size:13px">과거 이력 대량 적재(TB~PB) · 일/주 ETL · 학습 골든셋 갱신</p>
+      <ul class="fbul" style="margin-top:6px">
+        <li><b>Data Box</b> — 오프라인 PB급 전송 (Disk/40·80TB/Heavy)</li>
+        <li><b>Data Factory</b> — 100+ 커넥터, Mapping Data Flow, On-prem IR</li>
+        <li><b>AzCopy / Storage Mover</b> — 고속 복사, 증분·마이그레이션</li>
+        <li><b>Migrate (DB) / SMS</b> — DB 평가·이전, 파일서버 → Azure Files</li>
+      </ul>
+      <p style="margin:8px 0 0;font-size:12px;color:var(--ink-dim)">대용량 처리 · 스케줄링 · 검증·재시도 · 오프라인 옵션</p>
+    </div>
+  </div>
+</section>

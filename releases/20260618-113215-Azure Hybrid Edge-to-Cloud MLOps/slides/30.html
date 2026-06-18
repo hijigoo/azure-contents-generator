@@ -1,0 +1,18 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">30 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">MLOps CI/CD · GitHub Actions + Azure ML + Edge</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:84ch">코드 변경 → 검증 → 학습 → 평가 → 등록 → 추론 컨테이너 → Edge 배포 → 모니터링 → 재학습 트리거</p>
+  </div>
+  <div class="fflow reveal" style="margin-top:16px">
+    <div class="node">① GitHub Repository<br><span style="color:var(--ink-dim);font-size:12px">학습/추론 코드·ML pipeline<br>Dockerfile·Edge/K8s manifest·IaC</span></div>
+    <span class="arr">→</span>
+    <div class="node">② GitHub Actions CI<br><span style="color:var(--ink-dim);font-size:12px">lint·unit test·schema 검증<br>Docker build·security scan</span></div>
+    <span class="arr">→</span>
+    <div class="node">③ GitHub Actions CD<br><span style="color:var(--ink-dim);font-size:12px">Azure login(OIDC)·AML 학습<br>모델 등록·ACR push·배포</span></div>
+    <span class="arr">→</span>
+    <div class="node">④ Azure ML / Edge Runtime<br><span style="color:var(--ink-dim);font-size:12px">Workspace·Registry·ACR<br>IoT Edge·Arc K8s</span></div>
+  </div>
+  <p class="fstat-line" style="margin-top:14px"><b>Closed-loop</b> — 추론 로그·실제 결과·Drift signal → ADLS Gen2 → 재학습 트리거 → 학습 파이프라인 재실행 (코드 변경부터 Edge 배포까지 자동화)</p>
+  <p class="fstat-line" style="margin-top:8px;border-color:color-mix(in srgb,var(--msft-purple) 30%,transparent)">재학습 트리거 — <b>Drift</b>(AML Monitor→Event Grid) · <b>스케줄</b>(nightly/weekly) · <b>데이터 도착</b>(ADLS→Event Grid) · <b>수동 승인</b>(GitHub Environments)</p>
+</section>

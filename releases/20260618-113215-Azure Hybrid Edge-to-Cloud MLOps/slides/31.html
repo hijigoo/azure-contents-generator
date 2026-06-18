@@ -1,0 +1,25 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">31 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">GitHub Actions 학습 파이프라인 워크플로 (실전 예제)</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:84ch">workflow_dispatch 수동 실행 → 환경·데이터셋·컴퓨팅 준비 → Azure ML 학습 파이프라인 실행 (NYC Taxi 요금 회귀 예제)</p>
+  </div>
+  <div class="fgrid imgR reveal" style="margin-top:16px;align-items:center">
+    <div>
+      <div class="feyebrow" style="color:var(--msft-blue)">워크플로 Job 흐름</div>
+      <ol class="fbul" style="list-style:decimal;padding-left:18px;margin-top:8px">
+        <li><b>workflow_dispatch</b> — Actions 탭 수동 트리거</li>
+        <li><b>set-env-branch</b> — 환경 변수·브랜치 설정</li>
+        <li><b>get-config · read-yaml</b> — config-infra-prod.yml 로드</li>
+        <li><b>(병렬) register-environment · register-dataset · create-compute</b> — 학습 환경 준비</li>
+        <li><b>run-model-training-pipeline</b> — 데이터 준비 → 학습 → 평가 → 모델 등록</li>
+      </ol>
+      <p style="margin:10px 0 0;font-size:12px;color:var(--ink-dim)">인증은 OIDC(페더레이션 자격 증명) 권장 · Azure/mlops-v2-gha-demo</p>
+    </div>
+    <figure class="fshot fshot--zoom" style="margin:0">
+      <img src="img/s31-1.webp" loading="lazy" alt="실제 GitHub Actions 실행 결과 그래프">
+      <figcaption>실제 GitHub Actions 실행 결과 — Job 흐름과 1:1 대응, 성공 단계는 녹색 체크 · 클릭하면 확대</figcaption>
+    </figure>
+  </div>
+  <p class="fstat-line">개념도가 아닌 <b>실제 동작하는 자동화 워크플로</b> · learn.microsoft.com/azure/machine-learning/how-to-setup-mlops-github-azure-ml</p>
+</section>

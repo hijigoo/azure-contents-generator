@@ -1,0 +1,30 @@
+<section class="frag frag--light">
+  <style>
+    .mtbl{width:100%;border-collapse:collapse;margin-top:16px;font-size:12.5px}
+    .mtbl th,.mtbl td{text-align:left;padding:6px 10px;border-bottom:1px solid color-mix(in srgb,var(--ink) 12%,transparent);vertical-align:top}
+    .mtbl thead th{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-dim);border-bottom:2px solid color-mix(in srgb,var(--msft-blue) 45%,transparent)}
+    .mtbl td b{color:var(--msft-blue)}
+    .mtbl .rt{color:#0f9d6b;font-weight:700}
+    .mtbl .bt{color:var(--msft-purple);font-weight:700}
+  </style>
+  <div class="fhead">
+    <span class="fkicker">10 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">Azure 데이터 마이그레이션 서비스 상세</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:80ch">워크로드 유형별 권장 서비스 선택 가이드</p>
+  </div>
+  <table class="mtbl reveal">
+    <thead><tr><th>서비스</th><th>유형</th><th>적정 데이터량</th><th>지연</th><th>특장점 / Use Case</th></tr></thead>
+    <tbody>
+      <tr><td><b>IoT Hub</b></td><td class="rt">실시간</td><td>초~분당 수백만 msg</td><td>ms 수준</td><td>디바이스 ID·인증, C2D 명령, Module Twin</td></tr>
+      <tr><td><b>IoT Edge</b></td><td class="rt">실시간</td><td>Edge 로컬 처리 후 전송</td><td>ms 수준</td><td>오프라인 동작, 로컬 추론, ML/SA on Edge</td></tr>
+      <tr><td><b>Event Hubs</b></td><td class="rt">실시간</td><td>수백만 events/sec</td><td>ms~수십ms</td><td>Kafka 호환, Capture로 ADLS 자동 적재</td></tr>
+      <tr><td><b>Stream Analytics</b></td><td class="rt">실시간</td><td>스트리밍 처리</td><td>초 단위</td><td>SQL windowing/aggregation, Power BI 직결</td></tr>
+      <tr><td><b>Fabric RTI</b></td><td class="rt">실시간</td><td>수십 GB/일 ~</td><td>초 단위</td><td>Eventstream + Eventhouse(KQL), OneLake 적재</td></tr>
+      <tr><td><b>Data Factory</b></td><td class="bt">배치</td><td>GB ~ PB</td><td>분~시간</td><td>100+ 커넥터, ETL/ELT, CDC, Mapping Data Flow</td></tr>
+      <tr><td><b>Storage Mover</b></td><td class="bt">배치</td><td>TB ~ PB</td><td>지속 동기화</td><td>NFS/SMB → Azure Files/Blob 다중 작업</td></tr>
+      <tr><td><b>AzCopy</b></td><td class="bt">배치</td><td>MB ~ TB</td><td>수동/스케줄</td><td>CLI 고속 복사, 단일 노드 권장 도구</td></tr>
+      <tr><td><b>Data Box</b></td><td class="bt">오프라인</td><td>수 TB ~ 1 PB+</td><td>수일</td><td>폐쇄망/저대역, AES-256, PB급 일괄</td></tr>
+      <tr><td><b>Migrate / DMS</b></td><td class="bt">배치(DB)</td><td>DB 수십 ~ TB</td><td>분~시간</td><td>SQL/Oracle/MySQL 평가·이전, 다운타임 최소화</td></tr>
+    </tbody>
+  </table>
+</section>

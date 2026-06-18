@@ -1,0 +1,33 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">13 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">End-to-End MLOps 운영 스택</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:80ch">Cloud Training ↔ Edge Inference 의 운영 컴포넌트</p>
+  </div>
+  <div class="fgrid c2 reveal" style="margin-top:18px;align-items:stretch">
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">1 · Data Layer</div>
+      <p style="margin:6px 0 0;font-size:13px">ADLS Gen2 · OneLake · Blob · NetApp Files · Purview Catalog</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-blue)">2 · Compute / Training</div>
+      <p style="margin:6px 0 0;font-size:13px">Azure ML Compute(ND H100) · Databricks · CycleCloud Slurm · Managed Lustre</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-purple)">3 · MLOps Layer</div>
+      <p style="margin:6px 0 0;font-size:13px">Azure ML Pipelines · MLflow Registry · GitHub Actions · Prompt Flow · Responsible AI</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--msft-pink)">4 · Edge / Operations</div>
+      <p style="margin:6px 0 0;font-size:13px">Azure Arc · IoT Edge · AKS Edge Essentials · Azure Stack HCI · Defender for IoT</p>
+    </div>
+  </div>
+  <div class="fpanel reveal" style="margin-top:16px;background:color-mix(in srgb,var(--msft-blue) 7%,transparent)">
+    <b style="color:var(--msft-blue)">권장 운영 패턴</b>
+    <ul class="fbul" style="margin-top:8px">
+      <li>Training은 Azure ML Pipeline + AML Compute(ND H100) 또는 CycleCloud HPC로 자동 스케줄 (Spot 절감)</li>
+      <li>Registry → Approval Gate → Image Build → Edge Module 배포까지 GitHub Actions로 일원화</li>
+      <li>Edge 모니터링은 Azure Monitor + Log Analytics, Drift는 AML Data Drift Detector로 자동 트리거</li>
+    </ul>
+  </div>
+</section>

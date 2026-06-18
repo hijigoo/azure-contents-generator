@@ -1,0 +1,33 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">16 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">Azure ML &amp; MLOps 레퍼런스 아키텍처</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:84ch">Inner Loop(모델 개발) → CI → CD(Staging → 승인 → Production) → Monitoring → 재학습 · <b>MLOps v2 Classical ML</b> 표준</p>
+  </div>
+  <div class="fdiagram reveal">
+    <pre class="mermaid">
+flowchart LR
+  DE[("Data estate<br/>ADLS Gen2 · SQL · Cosmos<br/>Event Hubs · Fabric · Feature store")]
+  subgraph INNER["① Model development · Inner Loop"]
+    direction LR
+    EDA["EDA · Feature eng."] --> TR["Train · Evaluate<br/>Responsible AI"] --> RG["Register model"]
+  end
+  CI["② Continuous Integration<br/>GitHub · build · test · register"]
+  subgraph OUTER["③ Continuous Deployment · Outer Loop"]
+    direction LR
+    ST["Staging / Test<br/>QA · Smoke · RAI"] -- "Gated approval" --> PR["Production<br/>Batch · Online · Arc/K8s"]
+  end
+  MON["④ Monitoring<br/>App Insights · Azure Monitor<br/>Model & data drift"]
+  DE --> EDA
+  RG --> CI --> ST
+  PR --> MON
+  MON == "재학습 Retrain" ==> EDA
+  style DE fill:#0078d415,stroke:#0078d4,color:#eaf2fb
+  style INNER fill:#4aa3e012,stroke:#4aa3e0,color:#eaf2fb
+  style OUTER fill:#7b5cff12,stroke:#7b5cff,color:#eaf2fb
+  style CI fill:#50e6ff22,stroke:#50e6ff,color:#eaf2fb
+  style MON fill:#14352a,stroke:#34d399,color:#eaf2fb
+    </pre>
+    <div class="fdiagram-cap">Roles: Data engineer · Data scientist · ML engineer · Infra team — learn.microsoft.com/azure/architecture/ai-ml/guide/machine-learning-operations-v2 · 클릭하면 확대</div>
+  </div>
+</section>

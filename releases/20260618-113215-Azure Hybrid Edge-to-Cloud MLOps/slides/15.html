@@ -1,0 +1,26 @@
+<section class="frag frag--light">
+  <style>
+    .ml9{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+    .ml9 .s{border:1px solid color-mix(in srgb,var(--ink) 12%,transparent);border-radius:10px;padding:8px 10px;background:color-mix(in srgb,var(--paper) 60%,transparent)}
+    .ml9 .s .n{font-size:11px;font-weight:800;color:var(--msft-blue)}
+    .ml9 .s b{display:block;font-size:13px;margin-top:1px}
+    .ml9 .s p{margin:3px 0 0;font-size:11.5px;color:var(--ink-dim);line-height:1.35}
+  </style>
+  <div class="fhead">
+    <span class="fkicker">15 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">Azure Machine Learning</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:84ch">데이터 준비(Storage·DB·Fabric) → <b>Azure ML MLOps 9단계</b> → 배포·운영(Managed Endpoint·Arc·IoT Edge)</p>
+  </div>
+  <div class="ml9 reveal">
+    <div class="s"><span class="n">① Data Asset</span><b>데이터 등록</b><p>버전·계보 관리, Datastore 연결</p></div>
+    <div class="s"><span class="n">② Preprocessing</span><b>전처리·Feature</b><p>정제·결측/이상치·재샘플링</p></div>
+    <div class="s"><span class="n">③ Training</span><b>학습 파이프라인</b><p>분산 학습·AutoML·HPO 튜닝</p></div>
+    <div class="s"><span class="n">④ Experiment</span><b>실험 추적</b><p>메트릭·파라미터, MLflow 호환</p></div>
+    <div class="s"><span class="n">⑤ Evaluation</span><b>평가·승인</b><p>성능 검증, 책임있는 AI 게이트</p></div>
+    <div class="s"><span class="n">⑥ Model Registry</span><b>모델 등록</b><p>카탈로그·스테이징→프로덕션</p></div>
+    <div class="s"><span class="n">⑦ Deployment</span><b>배포 패키지</b><p>컨테이너 이미지·환경·종속성</p></div>
+    <div class="s"><span class="n">⑧ Monitoring</span><b>모니터링·Drift</b><p>데이터/모델 드리프트 감지</p></div>
+    <div class="s" style="border-color:color-mix(in srgb,#34d399 45%,transparent)"><span class="n" style="color:#0f9d6b">⑨ Retraining</span><b>재학습</b><p>드리프트 트리거 → ③ 재실행</p></div>
+  </div>
+  <p class="fstat-line" style="margin-top:14px"><b>입력</b> ADLS Gen2·Azure SQL·Cosmos DB·OneLake·Feature Store → <b>출력</b> Online·Batch·Arc K8s·IoT Edge · <b>Closed-loop</b> 추론 로그·드리프트 → 재학습</p>
+</section>

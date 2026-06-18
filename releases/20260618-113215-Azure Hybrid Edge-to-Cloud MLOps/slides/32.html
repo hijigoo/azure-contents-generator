@@ -1,0 +1,30 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">32 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">보안·거버넌스 &amp; 단계별 도입 로드맵</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:84ch"><b>Zero Trust</b> 보안 원칙 위에서 점진적 확장</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:16px;align-items:stretch">
+    <div class="fpanel reveal">
+      <div class="feyebrow" style="color:var(--msft-blue)">보안 &amp; 거버넌스 (5계층)</div>
+      <ul class="fbul" style="margin-top:8px;font-size:13px">
+        <li><b>Identity</b> — Entra ID + Conditional Access, Workload Identity</li>
+        <li><b>Network</b> — ER Private Peering + Private Endpoint, Firewall, NSG</li>
+        <li><b>Data</b> — CMK(KV/HSM), Double Encryption, Purview·DLP</li>
+        <li><b>Workload</b> — Defender for Cloud·IoT, Sentinel SIEM</li>
+        <li><b>OT</b> — Defender for IoT(Edge), Arc Policy, Update Manager</li>
+      </ul>
+    </div>
+    <div class="fpanel reveal" style="background:color-mix(in srgb,var(--msft-blue) 6%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-purple)">단계별 도입 로드맵</div>
+      <ul class="fbul" style="margin-top:8px;font-size:13px">
+        <li><b>1 · Connectivity &amp; Landing Zone</b> <span style="color:var(--ink-dim)">(4~6주)</span> — ER Private Peering, Hub VNet, Purview</li>
+        <li><b>2 · Data Ingestion &amp; Lake</b> <span style="color:var(--ink-dim)">(6~8주)</span> — IoT Hub/Event Hubs + ADLS/OneLake, Data Box</li>
+        <li><b>3 · Analytics &amp; Pilot ML</b> <span style="color:var(--ink-dim)">(8~12주)</span> — Fabric/Databricks, Azure ML 파일럿</li>
+        <li><b>4 · MLOps &amp; Edge 배포</b> <span style="color:var(--ink-dim)">(8~10주)</span> — AML Pipeline + Arc + IoT Edge OTA</li>
+        <li><b>5 · Scale &amp; Optimization</b> <span style="color:var(--ink-dim)">(지속)</span> — 글로벌 확장, CycleCloud HPC, FinOps</li>
+      </ul>
+    </div>
+  </div>
+  <p class="fstat-line">보안 베이스라인 위에서 <b>작게 시작 → 파일럿 검증 → 글로벌 확장</b> — 리스크 최소화 접근</p>
+</section>

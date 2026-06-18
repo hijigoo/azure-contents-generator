@@ -1,0 +1,38 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">19 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">Closed-loop MLOps Pipeline</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:84ch">Cloud Training ↔ Edge Inference 의 지속적 재학습 루프 (★ = 제조 특화 강조 단계)</p>
+  </div>
+  <div class="fgrid c3 reveal" style="margin-top:16px;align-items:stretch">
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 45%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-blue)">★ ① Edge Data 수집</div>
+      <p style="margin:5px 0 0;font-size:13px">센서/설비 raw + Edge inference 결과 로깅</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,var(--msft-blue) 45%,transparent)">
+      <div class="feyebrow" style="color:var(--msft-blue)">★ ② Cloud Ingestion</div>
+      <p style="margin:5px 0 0;font-size:13px">IoT Hub(제어)/Event Hubs(스트림) → Data Lake·OneLake</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--ink-dim)">③ Feature 정제·Labeling</div>
+      <p style="margin:5px 0 0;font-size:13px">Fabric/Databricks · Notebook + Feature Store</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--ink-dim)">④ Model Training</div>
+      <p style="margin:5px 0 0;font-size:13px">Azure ML / CycleCloud HPC · GPU 분산 학습</p>
+    </div>
+    <div class="fpanel">
+      <div class="feyebrow" style="color:var(--ink-dim)">⑤ Registry &amp; 검증</div>
+      <p style="margin:5px 0 0;font-size:13px">MLflow · A/B · Shadow · Responsible AI</p>
+    </div>
+    <div class="fpanel" style="border-color:color-mix(in srgb,#34d399 45%,transparent)">
+      <div class="feyebrow" style="color:#0f9d6b">★ ⑥ Edge 배포 &amp; 재학습</div>
+      <p style="margin:5px 0 0;font-size:13px">Arc + IoT Edge OTA · Drift 감지 시 ①로 환류</p>
+    </div>
+  </div>
+  <div class="fgrid c3 reveal" style="margin-top:14px;align-items:stretch">
+    <div class="fpanel" style="background:color-mix(in srgb,var(--msft-blue) 7%,transparent)"><b style="color:var(--msft-blue)">자동화 (CI/CD/CT)</b><p style="margin:4px 0 0;font-size:12.5px;color:var(--ink-dim)">Azure ML Pipelines + GitHub Actions로 코드/데이터/모델 변화 시 자동 학습·배포</p></div>
+    <div class="fpanel" style="background:color-mix(in srgb,var(--msft-purple) 7%,transparent)"><b style="color:var(--msft-purple)">품질 게이트</b><p style="margin:4px 0 0;font-size:12.5px;color:var(--ink-dim)">성능·Data Drift·Fairness·Bias 자동 검증 후에만 Prod 승격</p></div>
+    <div class="fpanel" style="background:color-mix(in srgb,var(--msft-pink) 7%,transparent)"><b style="color:var(--msft-pink)">엣지 운영</b><p style="margin:4px 0 0;font-size:12.5px;color:var(--ink-dim)">Azure Arc로 글로벌 공장 통합 관리, IoT Edge로 모듈 OTA</p></div>
+  </div>
+</section>

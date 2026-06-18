@@ -1,0 +1,28 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">07 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(23px,2.9vw,38px)">ExpressRoute Peering 비교</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:80ch">Private Peering · Microsoft Peering 구분과 활용 시나리오</p>
+  </div>
+  <div class="fgrid c2" style="margin-top:18px;align-items:stretch">
+    <div class="fpanel reveal" style="border-color:color-mix(in srgb,var(--msft-blue) 42%,transparent)">
+      <div class="chip" style="font-weight:700">🔒 Private Peering</div>
+      <ul class="fbul" style="margin-top:12px">
+        <li><b>연결 대상</b> — Azure VNet 내부 IaaS·PaaS (Private IP): VM, AKS, Storage PE, SQL MI</li>
+        <li>RFC1918 사설 IP 그대로, NAT 불필요 · On-prem ↔ VNet 완전 사설 통신</li>
+        <li>DC 확장(L3) 개념, Site-to-Site VPN 대체 · Latency 5~30 ms</li>
+        <li><b>최적</b> — 센서 적재, AML Training 접근, VDI, ERP, 핵심 업무 트래픽</li>
+      </ul>
+    </div>
+    <div class="fpanel reveal" style="border-color:color-mix(in srgb,var(--msft-purple) 42%,transparent)">
+      <div class="chip" style="font-weight:700">🌐 Microsoft Peering</div>
+      <ul class="fbul" style="margin-top:12px">
+        <li><b>연결 대상</b> — Microsoft Public Services (Public IP): Azure PaaS Public EP</li>
+        <li>Public IP/DNS 해석 필요, NAT 가능 · Route Filter로 서비스/리전 선택</li>
+        <li>인터넷 우회로 M365 품질·보안 향상 · 글로벌 prefix는 ER Premium</li>
+        <li><b>최적</b> — Blob Public EP, Public API</li>
+      </ul>
+    </div>
+  </div>
+  <p class="fstat-line"><b>권장</b> — ER 회선 1개에 Private + (선택) Microsoft Peering 동시 활성화 → IaaS/PaaS + M365/SaaS를 단일 회선으로 처리, Private Endpoint Inbound Hidden Cost 절감</p>
+</section>

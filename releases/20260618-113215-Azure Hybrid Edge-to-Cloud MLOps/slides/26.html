@@ -1,0 +1,32 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">26 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">3M — Azure IoT Edge + Azure SQL Edge 모델 배포</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:84ch">목적: 설비 고장을 수 시간 전 예측 · 예지보전 — 센서 + 제품 정보 상관분석 → Edge 저장·추론 → 클라우드 동기화 학습</p>
+  </div>
+  <div class="fflow reveal" style="margin-top:16px">
+    <div class="node">① 제조 라인 데이터<br><span style="color:var(--ink-dim);font-size:12px">설비 센서 + 제품 정보 2-스트림</span></div>
+    <span class="arr">→</span>
+    <div class="node">② SQL Edge / IoT Edge<br><span style="color:var(--ink-dim);font-size:12px">라인 옆 저장·분석·예측</span></div>
+    <span class="arr">→</span>
+    <div class="node">③ 클라우드 동기화<br><span style="color:var(--ink-dim);font-size:12px">내결함성 · 주→분 단위</span></div>
+    <span class="arr">→</span>
+    <div class="node">④ 클라우드 학습·검증<br><span style="color:var(--ink-dim);font-size:12px">ML Studio·HDInsight·Databricks</span></div>
+    <span class="arr">⤵</span>
+    <div class="node" style="border-color:color-mix(in srgb,#34d399 45%,transparent)">⑤ Edge로 재배포<br><span style="color:var(--ink-dim);font-size:12px">SQL Edge에 갱신 모델 → 예측</span></div>
+  </div>
+  <div class="fgrid c2 reveal" style="margin-top:16px;align-items:stretch">
+    <div class="fpanel">
+      <b style="color:var(--msft-blue)">핵심 포인트</b>
+      <ul class="fbul" style="margin-top:8px">
+        <li>데이터가 생성되는 라인 옆에서 저장·추론 (Edge-first)</li>
+        <li>Azure SQL Edge를 IoT Edge 모듈로 배포</li>
+        <li>네트워크 제한 현장에 적합 · 단절 시에도 무중단 예측</li>
+      </ul>
+    </div>
+    <div class="fpanel" style="background:color-mix(in srgb,#34d399 8%,transparent)">
+      <div class="feyebrow" style="color:#0f9d6b">사전예측 효과</div>
+      <p style="margin:6px 0 0;font-size:13px">Edge에서 제조 데이터를 로컬 분석 → 라인 이상을 사전 감지 → <b>다운타임 절감 · 운영 효율 개선</b></p>
+    </div>
+  </div>
+</section>

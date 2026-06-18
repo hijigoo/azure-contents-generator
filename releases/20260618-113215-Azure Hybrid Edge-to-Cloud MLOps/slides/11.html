@@ -1,0 +1,26 @@
+<section class="frag frag--light">
+  <style>
+    .stbl{width:100%;border-collapse:collapse;margin-top:16px;font-size:12.5px}
+    .stbl th,.stbl td{text-align:left;padding:6px 10px;border-bottom:1px solid color-mix(in srgb,var(--ink) 12%,transparent);vertical-align:top}
+    .stbl thead th{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-dim);border-bottom:2px solid color-mix(in srgb,var(--msft-blue) 45%,transparent)}
+    .stbl td b{color:var(--msft-blue)}
+  </style>
+  <div class="fhead">
+    <span class="fkicker">11 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,36px)">스토리지 매핑 — On-prem ↔ Azure</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:80ch">기존 스토리지 유형별 권장 Azure 서비스 및 통합 옵션</p>
+  </div>
+  <table class="stbl reveal">
+    <thead><tr><th>On-prem 유형</th><th>권장 Azure 서비스</th><th>프로토콜</th><th>적정 워크로드 / 특장점</th></tr></thead>
+    <tbody>
+      <tr><td><b>NAS (Files)</b><br><span style="color:var(--ink-dim)">NetApp·Isilon·Win FS</span></td><td>Azure NetApp Files / Files</td><td>SMB · NFS</td><td>공유 파일, AI 학습 dataset · SnapMirror, Lift&amp;Shift</td></tr>
+      <tr><td><b>SAN (Block)</b><br><span style="color:var(--ink-dim)">Pure·EMC·NetApp</span></td><td>Managed Disks / Elastic SAN</td><td>iSCSI · NVMe</td><td>DB, VM, Tier1 · Premium SSD v2, Ultra Disk, 다중호스트</td></tr>
+      <tr><td><b>Object</b><br><span style="color:var(--ink-dim)">MinIO·Ceph·S3</span></td><td>Blob Storage (ADLS Gen2)</td><td>REST · S3</td><td>Data Lake, 백업, 로그 · Hot/Cool/Archive, HNS</td></tr>
+      <tr><td><b>Backup / Archive</b><br><span style="color:var(--ink-dim)">Tape·VTL·Veeam</span></td><td>Blob Archive / Azure Backup</td><td>REST</td><td>장기보관·컴플라이언스 · ~1¢/GB, Immutable, Veeam</td></tr>
+      <tr><td><b>HPC Parallel FS</b><br><span style="color:var(--ink-dim)">Lustre·GPFS·BeeGFS</span></td><td>Managed Lustre / ANF</td><td>Lustre · NFS</td><td>AI Training, CAE/CFD · AML/CycleCloud 직결, sub-ms IO</td></tr>
+      <tr><td><b>File Server (Win)</b></td><td>Azure Files + File Sync</td><td>SMB</td><td>공유 폴더 · 캐시·클라우드 티어링, AD 통합</td></tr>
+      <tr><td><b>DB Storage</b><br><span style="color:var(--ink-dim)">SQL/Oracle</span></td><td>Azure SQL MI / PostgreSQL</td><td>TDS · 5432</td><td>OLTP/OLAP · Migrate/DMS, Online, Hyperscale</td></tr>
+      <tr><td><b>Streaming / TS</b><br><span style="color:var(--ink-dim)">Kafka·Historian</span></td><td>Event Hubs + Eventhouse / ADX</td><td>Kafka · REST</td><td>센서 시계열, IIoT · PB급 KQL, 실시간+장기 통합</td></tr>
+    </tbody>
+  </table>
+</section>

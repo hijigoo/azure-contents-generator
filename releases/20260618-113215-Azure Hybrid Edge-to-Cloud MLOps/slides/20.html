@@ -1,0 +1,23 @@
+<section class="frag frag--light">
+  <div class="fhead">
+    <span class="fkicker">20 / 33</span>
+    <h1 class="ftitle" style="font-size:clamp(22px,2.8vw,37px)">제조 Edge-to-Cloud Closed-loop MLOps 아키텍처</h1>
+    <p class="flead" style="margin:8px 0 0;max-width:84ch">현장 수집 → 클라우드 적재·학습 → Edge 추론 → 피드백 재학습의 4-레인 닫힌 루프</p>
+  </div>
+  <div class="fflow reveal" style="margin-top:16px">
+    <div class="node">① 온프레미스 Edge<br><span style="color:var(--ink-dim);font-size:12px">PLC·센서·카메라·MES → 게이트웨이<br>filtering·windowing·Store-and-forward</span></div>
+    <span class="arr">→</span>
+    <div class="node">② 클라우드 수집<br><span style="color:var(--ink-dim);font-size:12px">IoT Hub(제어)·Event Hubs(스트림)<br>ADLS Gen2 Bronze·Silver·Gold</span></div>
+    <span class="arr">→</span>
+    <div class="node">③ Azure ML 추론<br><span style="color:var(--ink-dim);font-size:12px">Data Asset → 학습·평가·등록·MLflow<br>모니터링·Drift → Deployment Package</span></div>
+    <span class="arr">→</span>
+    <div class="node">④ Edge 배포<br><span style="color:var(--ink-dim);font-size:12px">Arc K8s·IoT Edge Module<br>이상탐지·품질예측·예지보전</span></div>
+  </div>
+  <p class="fstat-line" style="margin-top:12px">추론 로그 · 실제 결과 · 작업자 피드백 · Drift → <b>ADLS Gen2 재학습 루프</b> (Closed-loop)</p>
+  <div class="fgrid c4 reveal" style="margin-top:14px;align-items:stretch">
+    <div class="fpanel" style="background:color-mix(in srgb,var(--msft-blue) 7%,transparent)"><b style="font-size:13px;color:var(--msft-blue)">System of Record</b><p style="margin:3px 0 0;font-size:12px;color:var(--ink-dim)">ADLS Gen2 단일 진실의 원천 · Parquet/Delta + 파티셔닝</p></div>
+    <div class="fpanel"><b style="font-size:13px;color:var(--msft-purple)">Optional Analytics</b><p style="margin:3px 0 0;font-size:12px;color:var(--ink-dim)">Fabric OneLake Shortcut으로 복사 최소화</p></div>
+    <div class="fpanel"><b style="font-size:13px">사설 연결</b><p style="margin:3px 0 0;font-size:12px;color:var(--ink-dim)">VPN/ExpressRoute + Private Endpoint</p></div>
+    <div class="fpanel"><b style="font-size:13px;color:#0f9d6b">비용·지연 최적화</b><p style="margin:3px 0 0;font-size:12px;color:var(--ink-dim)">Edge inference로 latency·egress 최소화 · GPU autoscale</p></div>
+  </div>
+</section>
