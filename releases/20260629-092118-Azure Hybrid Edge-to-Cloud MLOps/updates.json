@@ -1,0 +1,149 @@
+{
+  "generated_at": "2026-06-29T00:21:09.942656+00:00",
+  "feeds": [
+    "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+    "https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=AI-AzureAIServicesBlog"
+  ],
+  "items": [
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Migrate from Azure Blueprints by January 31, 2027",
+      "link": "https://azure.microsoft.com/updates?id=564806",
+      "published": "Thu, 25 Jun 2026 16:00:03 Z",
+      "summary": "In September 2023, we announced Azure Blueprints would retire on July 11, 2026. We're extending that timeline to January 31, 2027, with phased retirement beginning July 31, 2026.What's changing?July 31, 2026, you won't be able to create new blueprint defi"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Application Gateway for Containers – Inference gateway",
+      "link": "https://azure.microsoft.com/updates?id=566516",
+      "published": "Wed, 24 Jun 2026 19:00:43 Z",
+      "summary": "Application Gateway for Containers is extending its ingress gateway feature set with new AI gateway capabilities. The new inference gateway capability brings the Kubernetes Gateway API Inference Extension to Application Gateway for Containers, enabling lo"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Generally Available: Azure NetApp Files migration assistant",
+      "link": "https://azure.microsoft.com/updates?id=565480",
+      "published": "Tue, 23 Jun 2026 20:15:55 Z",
+      "summary": "Azure NetApp Files migration assistant (with SnapMirror) provides efficient and cost-effective data migration leveraging ONTAP's built-in replication engine for seamless transition from on-premises or CVO/other cloud providers to Azure NetApp Files (ANF)."
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Azure VMware Solution AV36 Node Retirement now on September 30, 2027",
+      "link": "https://azure.microsoft.com/updates?id=503883",
+      "published": "Sat, 27 Sep 2025 00:30:39 Z",
+      "summary": "Microsoft announced the retirement of the AV36 node type on June 30, 2028, that date has changed to align with VMware’s roadmap. Broadcom will end support for the current AV36 version with vSphere 8 on September 30, 2027, and the AV36 SKU is not compatibl"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure Migrate – GitHub Copilot Modernization integration for at scale code assessments",
+      "link": "https://azure.microsoft.com/updates?id=566145",
+      "published": "Wed, 17 Jun 2026 18:00:18 Z",
+      "summary": "Azure Migrate now integrates with GitHub Copilot\nModernization (public preview) to deliver at scale code insights. This capability brings\ntogether Azure Migrate’s portfolio-level discovery and assessment with GitHub\nCopilot’s context-aware code analysis."
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Azure Databricks native read access to Microsoft OneLake",
+      "link": "https://azure.microsoft.com/updates?id=565733",
+      "published": "Wed, 17 Jun 2026 18:00:18 Z",
+      "summary": "Azure Databricks now supports native read access to data stored in Microsoft OneLake through Unity Catalog. This capability is generally available. Customers can query and analyze data directly in OneLake without moving or copying data, enabling faster ac"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Azure Databricks natively storing data in Microsoft OneLake",
+      "link": "https://azure.microsoft.com/updates?id=565706",
+      "published": "Wed, 17 Jun 2026 18:00:18 Z",
+      "summary": "Azure Databricks can now natively write managed Delta tables to Microsoft OneLake. This capability enables customers to use OneLake as a unified storage layer for Azure Databricks workloads without managing separate storage accounts. By storing data direc"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: ICMP Support for Azure Standard V2 NAT Gateway",
+      "link": "https://azure.microsoft.com/updates?id=565487",
+      "published": "Wed, 17 Jun 2026 16:30:04 Z",
+      "summary": "Azure\nStandardV2 NAT Gateway now supports outbound ICMP Echo Request and Echo Reply\ntraffic, enabling customers to use tools such as ping to quickly validate\noutbound connectivity and troubleshoot network issues from workloads behind\nStandardV2 NAT Gatewa"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: New project templates and template gallery for Azure Functions in VS Code",
+      "link": "https://azure.microsoft.com/updates?id=562497",
+      "published": "Tue, 16 Jun 2026 19:00:15 Z",
+      "summary": "The Azure Functions extension for VS Code now provides a redesigned Create New Project experience in public preview, featuring a rich, visual template gallery that replaces the multi-step Quick Pick wizard with a searchable, filterable view of project tem"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Log Analytics Summary Rules experience",
+      "link": "https://azure.microsoft.com/updates?id=562027",
+      "published": "Tue, 16 Jun 2026 17:15:28 Z",
+      "summary": "A new Azure portal experience for Summary Rules in Log Analytics is now available. Summary Rules enable aggregation of high-volume log data at a defined cadence and store it in summarized tables for improved query performance, reporting, or enhanced data"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Av2-series, F-series, Fs-series, Fsv2-series, G-series, Gs-series, and Lsv2-series Virtual Machines for Azure Batch pools",
+      "link": "https://azure.microsoft.com/updates?id=564774",
+      "published": "Thu, 11 Jun 2026 19:00:41 Z",
+      "summary": "Azure Compute will retire the following Virtual Machine series on November 15, 2028, impacting Azure Batch pools that rely on them:Av2-seriesF-series, Fs-series, Fsv2-seriesG-series, Gs-seriesLsv2-seriesAfter this date:New Batch pools using these VM serie"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: D-series, Ds-series, Dv2-series, Dsv2-series, and Ls-series Virtual Machines for Azure Batch pools",
+      "link": "https://azure.microsoft.com/updates?id=564772",
+      "published": "Thu, 11 Jun 2026 19:00:41 Z",
+      "summary": "Azure Compute will retire the following Virtual Machine series on May 1, 2028, impacting Azure Batch pools that rely on them:D-series, Ds-seriesDv2-series, Dsv2-seriesLs-seriesAfter this date:New Batch pools using these VM series cannot be createdExisting"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: GPv1 and Legacy Blob storage account creation",
+      "link": "https://azure.microsoft.com/updates?id=564441",
+      "published": "Thu, 11 Jun 2026 19:00:41 Z",
+      "summary": "As part of our ongoing efforts to streamline the Azure\nStorage portfolio and deliver enhanced performance, scalability, and cost\nefficiency, we are announcing the retirement of all General purpose v1 (GPv1)\nstorage accounts. This includes legacy blob stor"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: SQL MCP Server",
+      "link": "https://azure.microsoft.com/updates?id=564734",
+      "published": "Thu, 11 Jun 2026 18:45:02 Z",
+      "summary": "SQL MCP Server is now generally available, giving customers\na secure, high-performance way to build agentic solutions with controlled\naccess to production data. Built for SQL and compatible with PostgreSQL and\nAzure Cosmos DB, SQL MCP Server is a dynamic,"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Azure Load Balancer Inbound NAT rule version 1 for Azure VMSS (aka Inbound NAT Pools)",
+      "link": "https://azure.microsoft.com/updates?id=565482",
+      "published": "Thu, 11 Jun 2026 16:15:07 Z",
+      "summary": "Update to our previous communication: We previously\nannounced the retirement of all Inbound NAT rules version 1 resources, which\nincluded both single-VM NAT rules and NAT pools for Virtual Machine Scale\nSets. We have narrowed the scope of this retirement"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: Microsoft Entra server principals on Azure SQL Database",
+      "link": "https://azure.microsoft.com/updates?id=565154",
+      "published": "Wed, 10 Jun 2026 20:45:26 Z",
+      "summary": "Microsoft Entra server principals (logins) for Azure SQL Database is now generally available. You can now use CREATE LOGIN ... FROM EXTERNAL PROVIDER in the virtual master database, bringing parity with SQL logins for your Microsoft Entra identities.With"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Azure Synapse Link for Azure Cosmos DB NoSQL",
+      "link": "https://azure.microsoft.com/updates?id=558560",
+      "published": "Wed, 10 Jun 2026 17:00:06 Z",
+      "summary": "As of March 31, 2026, new Azure Cosmos DB NoSQL accounts can no longer enable Azure Synapse Link. Existing customers will remain fully supported until March 31, 2029, when Azure Synapse Link will reach end of life.We encourage all customers to begin migra"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "Retirement: Azure VPN Client for Linux (Preview) will be retired on August 31, 2026",
+      "link": "https://azure.microsoft.com/updates?id=565393",
+      "published": "Wed, 10 Jun 2026 16:15:16 Z",
+      "summary": "The Azure VPN Client for Linux (Preview) has remained in public preview and does not have a path to general availability (GA). As part of our ongoing efforts to align Azure networking services with current security and reliability standards, this preview"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[In preview] Public Preview: Agent mode for GitHub Copilot in SQL Server Management Studio (SSMS)",
+      "link": "https://azure.microsoft.com/updates?id=562637",
+      "published": "Tue, 09 Jun 2026 23:45:10 Z",
+      "summary": "You can now use Agent mode for GitHub Copilot in SSMS to work with your database: investigating performance problems, tuning queries, reviewing maintenance and configuration, identifying security concerns, troubleshooting errors, and assisting with operat"
+    },
+    {
+      "source": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss",
+      "title": "[Launched] Generally Available: PostgreSQL Hub for Azure Developers",
+      "link": "https://azure.microsoft.com/updates?id=562084",
+      "published": "Tue, 09 Jun 2026 18:45:07 Z",
+      "summary": "PostgreSQL Hub for Azure Developers brings together key AI and application development resources for PostgreSQL on Azure. It includes curated sample apps and solution accelerators, tutorials, and structured learning pathways to help you build everything f"
+    }
+  ]
+}
